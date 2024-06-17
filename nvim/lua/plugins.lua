@@ -43,7 +43,7 @@ return packer.startup(function(use)
 	use ("wbthomason/packer.nvim") -- Have packer manage itself	
 
 	use("folke/tokyonight.nvim")
-	use { "ellisonleao/gruvbox.nvim" }
+	use("ellisonleao/gruvbox.nvim")
 
 	use {
 	  'nvim-telescope/telescope.nvim', tag = '0.1.6',
@@ -54,7 +54,31 @@ return packer.startup(function(use)
 		"pmizio/typescript-tools.nvim",
 		requires = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
 		config = function()
-			require("typescript-tools").setup {}
+			require("typescript-tools").setup {
+				expose_as_code_action = "all",
+				complete_function_calls = true,
+				jsx_close_tag = {
+					enable = true,
+					filetypes = { "javascriptreact", "typescriptreact" },
+				}
+			}
+		end,
+	}
+
+	use({
+    "kylechui/nvim-surround",
+    tag = "*", -- Use for stability; omit to use `main` branch for the latest features
+    config = function()
+        require("nvim-surround").setup({
+            -- Configuration here, or leave empty to use defaults
+        })
+    end
+	})
+
+	use {
+		"aznhe21/actions-preview.nvim",
+		config = function()
+			vim.keymap.set({ "v", "n" }, "gf", require("actions-preview").code_actions)
 		end,
 	}
 
