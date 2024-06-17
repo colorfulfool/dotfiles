@@ -82,6 +82,15 @@ return packer.startup(function(use)
 		end,
 	}
 
+	use {
+		"ms-jpq/coq_nvim",
+		config = function()
+			vim.g.coq_settings = {
+				auto_start = true, -- if you want to start COQ at startup
+			}
+		end,
+	}
+
 	if PACKER_BOOTSTRAP then
 		require("packer").sync()
 	end
