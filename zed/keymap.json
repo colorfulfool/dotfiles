@@ -26,13 +26,20 @@
   {
     "context": "Workspace",
     "bindings": {
-      "cmd-shift-r": "project_symbols::Toggle"
+      "cmd-shift-r": "project_symbols::Toggle",
+      "cmd-shift-t": "task::Spawn"
     }
   },
   {
     "context": "Editor && mode == full",
     "bindings": {
       "cmd-t": "outline::Toggle"
+    }
+  },
+  {
+    "context": "Pane",
+    "bindings": {
+      "cmd-shift-r": "pane::ReopenClosedItem"
     }
   }
 ]

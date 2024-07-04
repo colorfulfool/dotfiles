@@ -35,22 +35,26 @@
   "ui_font_family": "Zed Sans",
   "buffer_font_size": 13,
   "project_panel": {
-    "dock": "right"
+    "dock": "right",
+    "button": false
   },
-  "tabs": {
-    "git_status": true
-  },
+  "notification_panel": { "button": false },
+  "collaboration_panel": { "button": false },
+  "chat_panel": { "button": false },
+  "assistant": { "version": "1", "button": true },
+  "terminal": { "button": false },
+  "tabs": { "git_status": true },
   "git": {
     "inline_blame": {
       "enabled": false
     }
   },
-  "vim": {
-    "use_system_clipboard": "on_yank"
-  },
   "preview_tabs": {
     "enabled": false,
     "enable_preview_from_code_navigation": true
+  },
+  "vim": {
+    "use_system_clipboard": "on_yank"
   },
   "preferred_line_length": 80,
   "tab_size": 2,
