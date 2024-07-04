@@ -1,6 +1,6 @@
 require("plugins")
 
-vim.cmd("colorscheme tokyonight")
+vim.cmd("colorscheme tokyonight-night")
 
 local set = vim.opt -- set options
 set.tabstop = 2
