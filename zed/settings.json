@@ -7,6 +7,10 @@
 // custom settings, run the `open default settings` command
 // from the command palette or from `Zed` application menu.
 {
+  "features": {
+    "copilot": false,
+    "inline_completion_provider": "none"
+  },
   "theme": {
     "mode": "dark",
     "light": "macOS Classic Light",
@@ -39,9 +43,9 @@
     "button": false
   },
   "notification_panel": { "button": false },
-  "collaboration_panel": { "button": false },
+  "collaboration_panel": { "button": false, "dock": "right" },
   "chat_panel": { "button": false },
-  "assistant": { "version": "1", "button": true },
+  "assistant": { "version": "1", "button": false },
   "terminal": { "button": false },
   "tabs": { "git_status": true },
   "git": {
