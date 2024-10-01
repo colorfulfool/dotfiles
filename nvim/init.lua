@@ -19,6 +19,9 @@ vim.keymap.set('n', '<space>fh', builtin.help_tags, {})
 
 vim.api.nvim_set_keymap('t', '<ESC>', '<C-\\><C-n>', {noremap = true})
 
+local bufopts = { noremap = true, silent = true, buffer = bufnr }
+vim.keymap.set("n", "<space>e", vim.diagnostic.open_float, bufopts)
+
 local api = require('typescript-tools.api')
 vim.keymap.set('n', 'gd', api.go_to_source_definition, {})
 
