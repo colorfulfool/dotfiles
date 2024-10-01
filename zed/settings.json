@@ -7,10 +7,6 @@
 // custom settings, run the `open default settings` command
 // from the command palette or from `Zed` application menu.
 {
-  "features": {
-    "copilot": false,
-    "inline_completion_provider": "none"
-  },
   "theme": {
     "mode": "dark",
     "light": "macOS Classic Light",
@@ -18,7 +14,8 @@
   },
   "languages": {
     "Gleam": {
-      "show_inline_completions": false
+      "show_inline_completions": false,
+      "formatter": "language_server"
     },
     "TSX": {
       "show_inline_completions": false
@@ -27,27 +24,53 @@
       "prettier": {
         "allowed": false
       }
+    },
+    "Markdown": {
+      "soft_wrap": "editor_width"
     }
+  },
+  "features": {
+    "copilot": false,
+    "inline_completion_provider": "none"
   },
   "copilot": {
     "disabled_globs": [".env", "*.scss"]
   },
+  "formatter": "prettier",
   "auto_update": false,
   "vim_mode": true,
   "ui_font_size": 15,
   "buffer_font_family": "JetBrains Mono",
-  "ui_font_family": "Zed Sans",
+  "ui_font_family": "JetBrains Mono",
   "buffer_font_size": 13,
   "project_panel": {
     "dock": "right",
     "button": false
   },
-  "notification_panel": { "button": false },
-  "collaboration_panel": { "button": false, "dock": "right" },
-  "chat_panel": { "button": false },
-  "assistant": { "version": "1", "button": false },
-  "terminal": { "button": false },
-  "tabs": { "git_status": true },
+  "notification_panel": {
+    "button": false
+  },
+  "outline_panel": {
+    "button": false
+  },
+  "collaboration_panel": {
+    "button": false,
+    "dock": "right"
+  },
+  "chat_panel": {
+    "button": false
+  },
+  "assistant": {
+    "version": "2",
+    "button": false,
+    "dock": "left"
+  },
+  "terminal": {
+    "button": false
+  },
+  "tabs": {
+    "git_status": true
+  },
   "git": {
     "inline_blame": {
       "enabled": false
@@ -59,6 +82,9 @@
   },
   "vim": {
     "use_system_clipboard": "on_yank"
+  },
+  "indent_guides": {
+    "enabled": false
   },
   "preferred_line_length": 80,
   "tab_size": 2,
