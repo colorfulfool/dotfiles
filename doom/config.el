@@ -91,12 +91,22 @@ _h_ decrease width    _l_ increase width
   ("q" nil))
 
 (map! :leader
-    (:prefix "w"
-      :desc "Hydra resize" :n "SPC" #'doom-window-resize-hydra/body))
+      (:prefix "w"
+       :desc "Hydra resize" :n "SPC" #'doom-window-resize-hydra/body))
 
 (setq which-key-use-C-h-commands 't)
 
 (with-eval-after-load 'evil
-    (defalias #'forward-evil-word #'forward-evil-symbol)
-    ;; make evil-search-word look for symbol rather than word boundaries
-    (setq-default evil-symbol-word-search t))
+  (defalias #'forward-evil-word #'forward-evil-symbol)
+  ;; make evil-search-word look for symbol rather than word boundaries
+  (setq-default evil-symbol-word-search t))
+
+(setq lsp-pyls-plugins-pycodestyle-enabled nil)
+
+(use-package flycheck
+  :config
+  (setq-default flycheck-disabled-checkers '(python-pylint)))
+
+(setq-default flycheck-disabled-checkers '(python-pylint))
+
+(setq lsp-diagnostic-package :none)
