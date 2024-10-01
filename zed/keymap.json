@@ -20,14 +20,18 @@
       "cmd-shift-k": "editor::DeleteLine",
       "cmd-shift-up": "editor::MoveLineUp",
       "cmd-shift-down": "editor::MoveLineDown",
-      "cmd-shift-d": "editor::DuplicateLineDown"
+      "cmd-shift-d": "editor::DuplicateLineDown",
+      "alt-h": null
     }
   },
   {
     "context": "Workspace",
     "bindings": {
       "cmd-shift-r": "project_symbols::Toggle",
-      "cmd-shift-t": "task::Spawn"
+      "cmd-shift-t": "task::Spawn",
+      "alt-h": ["workspace::ActivatePaneInDirection", "Left"],
+      "alt-l": ["workspace::ActivatePaneInDirection", "Right"],
+      "alt-t": "task::Spawn"
     }
   },
   {
