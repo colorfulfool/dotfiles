@@ -31,11 +31,6 @@ window#waybar.hidden {
   color: #cdd6f4;
 }
 
-#workspaces button.active {
-  color: #1e1e2e;
-  background-color: #cdd6f4;
-}
-
 #workspaces button:hover {
  box-shadow: inherit;
  text-shadow: inherit;
@@ -76,23 +71,21 @@ window#waybar.hidden {
 }
 
 #memory {
-  background-color: #fab387;
+  color: #fab387;
 }
 #battery {
-  background-color: #f38ba8;
+  color: #f38ba8;
 }
 @keyframes blink {
   to {
-    background-color: #f38ba8;
-    color: #181825;
+    color: #f38ba8;
   }
 }
 
 #battery.warning,
 #battery.critical,
 #battery.urgent {
-  background-color: #ff0048;
-  color: #181825;
+  color: #ff0048;
   animation-name: blink;
   animation-duration: 0.5s;
   animation-timing-function: linear;
@@ -100,39 +93,39 @@ window#waybar.hidden {
   animation-direction: alternate;
 }
 #battery.charging {
-  background-color: #a6e3a1;
+  color: #a6e3a1;
 }
 
 #backlight {
-  background-color: #fab387;
+  color: #fab387;
 }
 
 #pulseaudio {
-  background-color: #f9e2af;
+  color: #f9e2af;
 }
 
 #network {
-  background-color: #94e2d5;
+  color: #94e2d5;
   padding-right: 17px;
 }
 
 #clock {
   font-family: JetBrainsMono Nerd Font;
-  background-color: #cba6f7;
+  color: #cba6f7;
 }
 
 #custom-power {
-  background-color: #f2cdcd;
+  color: #f2cdcd;
 }
 
 
 tooltip {
-border-radius: 8px;
-padding: 15px;
-background-color: #131822;
+	border-radius: 8px;
+	padding: 15px;
+	background-color: #131822;
 }
 
 tooltip label {
-padding: 5px;
-background-color: #131822;
+	padding: 5px;
+	background-color: #131822;
 }
