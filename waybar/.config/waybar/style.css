@@ -7,7 +7,7 @@
 }
 
 window#waybar {
-  background-color: #181825;
+  background-color: #181818;
   transition-property: background-color;
   transition-duration: 0.5s;
 }
@@ -27,14 +27,14 @@ window#waybar.hidden {
   padding: 6px 18px;
   margin: 6px 3px;
   border-radius: 4px;
-  background-color: #1e1e2e;
+  background-color: #1e1e1e;
   color: #cdd6f4;
 }
 
 #workspaces button:hover {
  box-shadow: inherit;
  text-shadow: inherit;
- color: #1e1e2e;
+ color: #1e1e1e;
  background-color: #cdd6f4;
 }
 
@@ -53,8 +53,8 @@ window#waybar.hidden {
   border-radius: 4px;
   margin: 6px 3px;
   padding: 6px 12px;
-  background-color: #1e1e2e;
-  color: #181825;
+  background-color: #1e1e1e;
+  color: #181818;
 }
 
 #custom-power {
