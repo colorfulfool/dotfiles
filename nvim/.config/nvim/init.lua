@@ -14,6 +14,7 @@ set.signcolumn = "no"
 local builtin = require('telescope.builtin')
 vim.keymap.set('n', '<space><space>', builtin.find_files, {})
 vim.keymap.set('n', '<space>fg', builtin.live_grep, {})
+vim.keymap.set('n', '<space>fs', builtin.grep_string, {})
 vim.keymap.set('n', '<space>fb', builtin.buffers, {})
 vim.keymap.set('n', '<space>fh', builtin.help_tags, {})
 
