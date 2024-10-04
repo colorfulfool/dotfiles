@@ -44,6 +44,7 @@ return packer.startup(function(use)
 
 	use("folke/tokyonight.nvim")
 	use("ellisonleao/gruvbox.nvim")
+  use("AstroNvim/astrotheme")
 
 	use {
 	  'nvim-telescope/telescope.nvim', tag = '0.1.6',

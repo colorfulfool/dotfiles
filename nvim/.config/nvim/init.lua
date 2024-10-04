@@ -1,6 +1,16 @@
 require("plugins")
 
-vim.cmd("colorscheme tokyonight-night")
+require("astrotheme").setup({
+  palette = "astrodark",
+	style = {
+    transparent = false,        
+    simple_syntax_colors = true,
+  },
+
+  termguicolors = true,
+})
+
+vim.cmd("colorscheme astrodark")
 
 local set = vim.opt -- set options
 set.tabstop = 2
