@@ -51,6 +51,8 @@ return packer.startup(function(use)
 	  requires = { {'nvim-lua/plenary.nvim'} }
 	}
 
+	use {"nvim-treesitter/nvim-treesitter", run = ":TSUpdate"}
+
 	use {
 		"pmizio/typescript-tools.nvim",
 		requires = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
@@ -91,6 +93,8 @@ return packer.startup(function(use)
 			}
 		end,
 	}
+
+	use 'm4xshen/autoclose.nvim'
 
 	if PACKER_BOOTSTRAP then
 		require("packer").sync()

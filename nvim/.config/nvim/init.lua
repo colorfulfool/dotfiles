@@ -3,7 +3,7 @@ require("plugins")
 require("astrotheme").setup({
   palette = "astrodark",
 	style = {
-    transparent = false,        
+    transparent = true,        
     simple_syntax_colors = true,
   },
 
@@ -20,6 +20,7 @@ set.number = false
 set.relativenumber = true
 set.scrolloff = 5
 set.signcolumn = "no"
+set.expandtab = true
 
 local builtin = require('telescope.builtin')
 vim.keymap.set('n', '<space><space>', builtin.find_files, {})
@@ -29,6 +30,8 @@ vim.keymap.set('n', '<space>fb', builtin.buffers, {})
 vim.keymap.set('n', '<space>fh', builtin.help_tags, {})
 
 vim.api.nvim_set_keymap('t', '<ESC>', '<C-\\><C-n>', {noremap = true})
+
+vim.api.nvim_set_option("clipboard","unnamed")
 
 local bufopts = { noremap = true, silent = true, buffer = bufnr }
 vim.keymap.set("n", "<space>e", vim.diagnostic.open_float, bufopts)
@@ -45,3 +48,5 @@ require('telescope').setup{
     }
   }
 }
+
+require("autoclose").setup()
