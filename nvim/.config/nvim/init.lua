@@ -22,6 +22,10 @@ set.scrolloff = 5
 set.signcolumn = "no"
 set.expandtab = true
 
+vim.opt.foldmethod = "expr"
+vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+vim.opt.foldlevelstart = 99
+
 local builtin = require('telescope.builtin')
 vim.keymap.set('n', '<space><space>', builtin.find_files, {})
 vim.keymap.set('n', '<space>fg', builtin.live_grep, {})
