@@ -28,6 +28,9 @@ vim.keymap.set('n', '<space>fg', builtin.live_grep, {})
 vim.keymap.set('n', '<space>fs', builtin.grep_string, {})
 vim.keymap.set('n', '<space>fb', builtin.buffers, {})
 vim.keymap.set('n', '<space>fh', builtin.help_tags, {})
+vim.keymap.set('n', '<space>gb', builtin.git_branches, {})
+local telescope = require('telescope')
+vim.keymap.set('n', '<space>gp', telescope.extensions.gh.pull_request, {})
 
 vim.api.nvim_set_keymap('t', '<ESC>', '<C-\\><C-n>', {noremap = true})
 
@@ -39,9 +42,9 @@ vim.keymap.set("n", "<space>e", vim.diagnostic.open_float, bufopts)
 local api = require('typescript-tools.api')
 vim.keymap.set('n', 'gd', api.go_to_source_definition, {})
 
-require('telescope').setup{ 
-  defaults = { 
-    file_ignore_patterns = { 
+require('telescope').setup{
+  defaults = {
+    file_ignore_patterns = {
       "node_modules",
       "build",
       "out"

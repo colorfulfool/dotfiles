@@ -40,7 +40,7 @@ packer.init({
 
 -- Install your plugins here
 return packer.startup(function(use)
-	use ("wbthomason/packer.nvim") -- Have packer manage itself	
+	use ("wbthomason/packer.nvim") -- Have packer manage itself
 
 	use("folke/tokyonight.nvim")
 	use("ellisonleao/gruvbox.nvim")
@@ -48,7 +48,10 @@ return packer.startup(function(use)
 
 	use {
 	  'nvim-telescope/telescope.nvim', tag = '0.1.6',
-	  requires = { {'nvim-lua/plenary.nvim'} }
+	  requires = {
+			{ 'nvim-lua/plenary.nvim' },
+			{ 'nvim-telescope/telescope-github.nvim' }
+		}
 	}
 
 	use {"nvim-treesitter/nvim-treesitter", run = ":TSUpdate"}
@@ -100,4 +103,3 @@ return packer.startup(function(use)
 		require("packer").sync()
 	end
 end)
-
