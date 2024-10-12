@@ -5,6 +5,7 @@ require("astrotheme").setup({
 	style = {
     transparent = true,        
     simple_syntax_colors = true,
+    italic_comments = false
   },
 
   termguicolors = true,
