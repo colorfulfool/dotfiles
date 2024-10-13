@@ -23,6 +23,8 @@ set.scrolloff = 5
 set.signcolumn = "no"
 set.expandtab = true
 
+vim.cmd("set wrap!")
+
 -- vim.opt.foldmethod = "indent"
 vim.opt.foldmethod = "expr"
 vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
