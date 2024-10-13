@@ -4,8 +4,7 @@ require("astrotheme").setup({
   palette = "astrodark",
 	style = {
     transparent = true,        
-    simple_syntax_colors = true,
-    italic_comments = false
+    simple_syntax_colors = true
   },
 
   termguicolors = true,
