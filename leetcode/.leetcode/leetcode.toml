@@ -1,0 +1,26 @@
+[code]
+editor = 'nvim'
+editor_args = []
+# Optional environment variables (ex. [ "XDG_DATA_HOME=...", "XDG_CONFIG_HOME=...", "XDG_STATE_HOME=..." ])
+editor_envs = []
+lang = 'python3'
+edit_code_marker = false
+start_marker = ""
+end_marker = ""
+# if include problem description
+comment_problem_desc = false
+# comment syntax
+comment_leading = ""
+test = true
+
+[cookies]
+csrf = 'YeGt9S2x3OuNR8Cy3gRdTMvKiywzVsMEmaKbOtrWegqFFjAvYZDKDHdabjBRXgE9'
+session = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfYXV0aF91c2VyX2lkIjoiMTM0OTYzNzEiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaGFzaCI6ImZmODI4Mjk4Yjk2NGQwMDE4NWY3MDBhZmU4YjkyNGMwYjg1MjI3ODU3NjA5YTJmMjRhYmU3OWEwZDY5MTk3ZDMiLCJpZCI6MTM0OTYzNzEsImVtYWlsIjoiYmFua3MtbWltZS0wa0BpY2xvdWQuY29tIiwidXNlcm5hbWUiOiJpbnNhbmVkdWRlcHJvZ3JhbW1lciIsInVzZXJfc2x1ZyI6Imluc2FuZWR1ZGVwcm9ncmFtbWVyIiwiYXZhdGFyIjoiaHR0cHM6Ly9hc3NldHMubGVldGNvZGUuY29tL3VzZXJzL2RlZmF1bHRfYXZhdGFyLmpwZyIsInJlZnJlc2hlZF9hdCI6MTcyOTAwNDE3MiwiaXAiOiIzNy45OS4zMy4yNiIsImlkZW50aXR5IjoiY2Q3MGNlZWI0YTE3NjgwMzBiMTg4MmM5MDI0MmE0MjgiLCJkZXZpY2Vfd2l0aF9pcCI6WyI0MDM5MjI4NjE2YmRkOTlhZGJhOTE2MTA2YTBmNWNjMyIsIjM3Ljk5LjMzLjI2Il0sInNlc3Npb25faWQiOjc0NjE1OTMwLCJfc2Vzc2lvbl9leHBpcnkiOjEyMDk2MDB9.kzavod1Fs5i9Z_4IiEzWzfLxNtGL7Txyf5cTg_mdVzU'
+# leetcode.com or leetcode.cn
+site = "leetcode.com"
+
+[storage]
+cache = 'Problems'
+code = 'code'
+root = '~/.leetcode'
+scripts = 'scripts'
