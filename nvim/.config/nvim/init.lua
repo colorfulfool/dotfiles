@@ -23,6 +23,7 @@ set.signcolumn = "no"
 set.expandtab = true
 
 vim.cmd("set wrap!")
+vim.cmd("set cursorline")
 
 -- vim.opt.foldmethod = "indent"
 vim.opt.foldmethod = "expr"
@@ -45,6 +46,11 @@ vim.api.nvim_set_keymap('t', '<ESC>', '<C-\\><C-n>', {noremap = true})
 
 local bufopts = { noremap = true, silent = true, buffer = bufnr }
 vim.keymap.set("n", "<space>e", vim.diagnostic.open_float, bufopts)
+
+local lspconfig = require('lspconfig')
+lspconfig.gleam.setup({})
+-- lspconfig.pyright.setup({})
+lspconfig.rust_analyzer.setup({})
 
 local api = require('typescript-tools.api')
 vim.keymap.set('n', 'gd', api.go_to_source_definition, {})
@@ -79,6 +85,15 @@ require("neo-tree").setup({
       enabled = true
     }
   }
+})
+
+require("ibl").setup({ 
+  indent = {
+    char = "│",
+    tab_char = "│",
+  },
+  scope = { show_start = false, show_end = false },
+  exclude = { filetypes = { 'gleam' } }
 })
 
 require("autoclose").setup()
