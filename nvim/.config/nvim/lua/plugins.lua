@@ -96,7 +96,7 @@ return packer.startup(function(use)
 	use {
 		"aznhe21/actions-preview.nvim",
 		config = function()
-			vim.keymap.set({ "v", "n" }, "gf", require("actions-preview").code_actions)
+			vim.keymap.set({ "v", "n" }, "ca", require("actions-preview").code_actions)
 		end,
 	}
 
