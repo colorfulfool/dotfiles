@@ -40,6 +40,8 @@ vim.keymap.set('n', '<space>gb', builtin.git_branches, {})
 local telescope = require('telescope')
 vim.keymap.set('n', '<space>gp', telescope.extensions.gh.pull_request, {})
 
+vim.keymap.set('n', '<space>ca', require('actions-preview').code_actions)
+
 vim.keymap.set('n', '<space>e', function() vim.cmd('Neotree toggle') end)
 
 vim.api.nvim_set_keymap('t', '<ESC>', '<C-\\><C-n>', {noremap = true})
