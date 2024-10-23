@@ -51,7 +51,7 @@ vim.keymap.set("n", "<space>e", vim.diagnostic.open_float, bufopts)
 
 local lspconfig = require('lspconfig')
 lspconfig.gleam.setup({})
--- lspconfig.pyright.setup({})
+lspconfig.pyright.setup({})
 lspconfig.rust_analyzer.setup({})
 
 local api = require('typescript-tools.api')
