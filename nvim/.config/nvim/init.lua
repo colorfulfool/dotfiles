@@ -30,6 +30,15 @@ vim.opt.foldmethod = "expr"
 vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 vim.opt.foldlevelstart = 99
 
+vim.api.nvim_create_autocmd('TextYankPost', {
+  group = vim.api.nvim_create_augroup('highlight_yank', {}),
+  desc = 'Hightlight selection on yank',
+  pattern = '*',
+  callback = function()
+    vim.highlight.on_yank { higroup = (vim.fn['hlexists']('HighlightedyankRegion') > 0 and 'HighlightedyankRegion' or 'IncSearch'), timeout = 500 }
+  end,
+})
+
 local builtin = require('telescope.builtin')
 vim.keymap.set('n', '<space><space>', builtin.find_files, {})
 vim.keymap.set('n', '<space>fg', builtin.live_grep, {})
