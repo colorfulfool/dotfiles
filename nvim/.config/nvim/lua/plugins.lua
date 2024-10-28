@@ -66,6 +66,8 @@ return packer.startup(function(use)
     }
   }
 
+  use "neovim/nvim-lspconfig" 
+
 	use {
 		"pmizio/typescript-tools.nvim",
 		requires = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
