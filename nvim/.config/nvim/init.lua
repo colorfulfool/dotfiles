@@ -35,7 +35,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Hightlight selection on yank',
   pattern = '*',
   callback = function()
-    vim.highlight.on_yank { higroup = (vim.fn['hlexists']('HighlightedyankRegion') > 0 and 'HighlightedyankRegion' or 'IncSearch'), timeout = 500 }
+    vim.highlight.on_yank { higroup = 'Visual', timeout = 200 }
   end,
 })
 
@@ -62,6 +62,7 @@ local lspconfig = require('lspconfig')
 lspconfig.gleam.setup({})
 lspconfig.pyright.setup({})
 lspconfig.rust_analyzer.setup({})
+lspconfig.tailwindcss.setup({})
 
 local api = require('typescript-tools.api')
 vim.keymap.set('n', 'gd', api.go_to_source_definition, {})
