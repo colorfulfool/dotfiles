@@ -63,6 +63,7 @@ lspconfig.gleam.setup({})
 lspconfig.pyright.setup({})
 lspconfig.rust_analyzer.setup({})
 lspconfig.tailwindcss.setup({})
+lspconfig.gopls.setup({})
 
 local api = require('typescript-tools.api')
 vim.keymap.set('n', 'gd', api.go_to_source_definition, {})
