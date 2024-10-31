@@ -83,6 +83,8 @@ return packer.startup(function(use)
 		end,
 	}
 
+  use "almo7aya/openingh.nvim"
+
   use "lukas-reineke/indent-blankline.nvim"
 
 	use({
