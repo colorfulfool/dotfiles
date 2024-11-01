@@ -51,10 +51,34 @@ return packer.startup(function(use)
 	  requires = {
 			{ 'nvim-lua/plenary.nvim' },
 			{ 'nvim-telescope/telescope-github.nvim' }
-		}
+		},
+    config = function()
+      local builtin = require('telescope.builtin')
+      vim.keymap.set('n', '<space><space>', builtin.find_files, {})
+      vim.keymap.set('n', '<space>fg', builtin.live_grep, {})
+      vim.keymap.set('n', '<space>fs', builtin.grep_string, {})
+      vim.keymap.set('n', '<space>fb', builtin.buffers, {})
+      vim.keymap.set('n', '<space>fh', builtin.help_tags, {})
+      vim.keymap.set('n', '<space>gb', builtin.git_branches, {})
+
+      local telescope = require('telescope')
+      vim.keymap.set('n', '<space>gp', telescope.extensions.gh.pull_request, {})
+    end
 	}
 
-	use {"nvim-treesitter/nvim-treesitter", run = ":TSUpdate"}
+	use { 
+    "nvim-treesitter/nvim-treesitter",
+    run = ":TSUpdate",
+    config = function()
+      vim.keymap.set("n", "<space>ti",
+        function()
+          local result = vim.treesitter.get_captures_at_cursor(0)
+          print(vim.inspect(result))
+        end,
+        { noremap = true, silent = false }
+      )
+    end
+  }
 
   use {
   "nvim-neo-tree/neo-tree.nvim",
@@ -72,14 +96,17 @@ return packer.startup(function(use)
 		"pmizio/typescript-tools.nvim",
 		requires = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
 		config = function()
-			require("typescript-tools").setup {
-				expose_as_code_action = "all",
-				complete_function_calls = true,
-				jsx_close_tag = {
-					enable = true,
-					filetypes = { "javascriptreact", "typescriptreact" },
-				}
-			}
+      require("typescript-tools").setup({
+        expose_as_code_action = "all",
+        complete_function_calls = true,
+        jsx_close_tag = {
+          enable = true,
+          filetypes = { "javascriptreact", "typescriptreact" },
+        }
+      })
+
+      local api = require('typescript-tools.api')
+      vim.keymap.set('n', 'gd', api.go_to_source_definition, {})
 		end,
 	}
 
@@ -91,15 +118,28 @@ return packer.startup(function(use)
     "kylechui/nvim-surround",
     tag = "*", -- Use for stability; omit to use `main` branch for the latest features
     config = function()
-        require("nvim-surround").setup({
-            -- Configuration here, or leave empty to use defaults
-        })
+      require("nvim-surround").setup({})
     end
 	})
 
 	use {
 		"aznhe21/actions-preview.nvim",
+    config = function()
+      vim.keymap.set('n', '<space>ca', require('actions-preview').code_actions)
+    end
 	}
+
+  use {
+    "felipejz/i18n-menu.nvim",
+    requires = {
+      "smjonas/snippet-converter.nvim",
+    },
+    config = function()
+      require("i18n-menu").setup()
+      vim.keymap.set("n", "<leader>ii", ":TranslateMenu<cr>")
+      vim.keymap.set("n", "<leader>id", ":TranslateDefault<cr>")
+    end,
+  }
 
 	use {
 		"ms-jpq/coq_nvim",
