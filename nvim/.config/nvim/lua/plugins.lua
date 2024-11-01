@@ -129,17 +129,17 @@ return packer.startup(function(use)
     end
 	}
 
-  use {
-    "felipejz/i18n-menu.nvim",
-    requires = {
-      "smjonas/snippet-converter.nvim",
-    },
-    config = function()
-      require("i18n-menu").setup()
-      vim.keymap.set("n", "<leader>ii", ":TranslateMenu<cr>")
-      vim.keymap.set("n", "<leader>id", ":TranslateDefault<cr>")
-    end,
-  }
+  -- use {
+  --   "felipejz/i18n-menu.nvim",
+  --   requires = {
+  --     "smjonas/snippet-converter.nvim",
+  --   },
+  --   config = function()
+  --     require("i18n-menu").setup()
+  --     vim.keymap.set("n", "<leader>ii", ":TranslateMenu<cr>")
+  --     vim.keymap.set("n", "<leader>id", ":TranslateDefault<cr>")
+  --   end,
+  -- }
 
 	use {
 		"ms-jpq/coq_nvim",
