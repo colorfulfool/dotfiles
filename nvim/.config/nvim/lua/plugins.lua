@@ -83,11 +83,14 @@ return packer.startup(function(use)
   use {
     "nvim-neo-tree/neo-tree.nvim",
     branch = "v3.x",
-    requires = { 
+    requires = {
       "nvim-lua/plenary.nvim",
       "nvim-tree/nvim-web-devicons",
       "MunifTanjim/nui.nvim",
-    }
+    },
+    config = function()
+      vim.keymap.set('n', '<space>et', ':Neotree toggle<cr>')
+    end
   }
 
   use "neovim/nvim-lspconfig" 
