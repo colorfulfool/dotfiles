@@ -39,8 +39,6 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
-vim.keymap.set('n', '<space>te', ':Neotree toggle<cr>')
-
 vim.api.nvim_set_keymap('t', '<ESC>', '<C-\\><C-n>', {noremap = true})
 
 local bufopts = { noremap = true, silent = true, buffer = buffer }
