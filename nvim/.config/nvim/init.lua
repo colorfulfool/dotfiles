@@ -3,7 +3,7 @@ require("plugins")
 require("astrotheme").setup({
   palette = "astrodark",
 	style = {
-    transparent = true,        
+    transparent = true,
     simple_syntax_colors = true
   },
 
@@ -39,11 +39,11 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
-vim.keymap.set('n', '<space>et', ':Neotree toggle<cr>')
+vim.keymap.set('n', '<space>te', ':Neotree toggle<cr>')
 
 vim.api.nvim_set_keymap('t', '<ESC>', '<C-\\><C-n>', {noremap = true})
 
-local bufopts = { noremap = true, silent = true, buffer = 0 }
+local bufopts = { noremap = true, silent = true, buffer = buffer }
 vim.keymap.set("n", "<space>e", vim.diagnostic.open_float, bufopts)
 vim.keymap.set("n", "<space>h", ":noh<cr>")
 
@@ -61,7 +61,6 @@ lspconfig.lua_ls.setup({
   },
 })
 
-
 vim.api.nvim_set_option("clipboard", "unnamed")
 
 require('telescope').setup{
@@ -74,7 +73,6 @@ require('telescope').setup{
   }
 }
 
-
 require("neo-tree").setup({
   window = {
     width = 30
@@ -86,7 +84,7 @@ require("neo-tree").setup({
   }
 })
 
-require("ibl").setup({ 
+require("ibl").setup({
   indent = {
     char = "│",
     tab_char = "│",
