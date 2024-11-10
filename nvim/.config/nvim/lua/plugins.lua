@@ -89,11 +89,11 @@ return packer.startup(function(use)
       "MunifTanjim/nui.nvim",
     },
     config = function()
-      vim.keymap.set('n', '<space>et', ':Neotree toggle<cr>')
+      vim.keymap.set('n', '<space>te', ':Neotree toggle<cr>')
     end
   }
 
-  use "neovim/nvim-lspconfig" 
+  use "neovim/nvim-lspconfig"
 
 	use {
 		"pmizio/typescript-tools.nvim",
