@@ -39,6 +39,8 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
+vim.api.nvim_set_option("clipboard", "unnamed")
+
 vim.api.nvim_set_keymap('t', '<ESC>', '<C-\\><C-n>', {noremap = true})
 
 local bufopts = { noremap = true, silent = true, buffer = buffer }
@@ -59,7 +61,15 @@ lspconfig.lua_ls.setup({
   },
 })
 
-vim.api.nvim_set_option("clipboard", "unnamed")
+require('nvim-treesitter.configs').setup {
+  ensure_installed = { "lua", "javascript", "typescript", "python", "ruby", "gleam", "bash", "go", "markdown", "css" },
+  sync_install = false,
+  auto_install = true,
+  highlight = {
+    enable = true,
+    additional_vim_regex_highlighting = true,
+  },
+}
 
 require('telescope').setup{
   defaults = {
