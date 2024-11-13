@@ -133,10 +133,9 @@ return packer.startup(function(use)
 	}
 
   use {
-    -- "felipejz/i18n-menu.nvim",
+    "felipejz/i18n-menu.nvim",
     -- "~/Codebases/i18n-menu.nvim",
-    "colorfulfool/i18n-menu.nvim",
-    branch = "feature/nested-support-and-options",
+    -- "colorfulfool/i18n-menu.nvim",
     requires = {
       "smjonas/snippet-converter.nvim",
     },
