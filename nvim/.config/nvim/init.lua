@@ -74,10 +74,6 @@ lspconfig.lua_ls.setup({
 require("typescript-tools").setup({
   expose_as_code_action = "all",
   complete_function_calls = true,
-  jsx_close_tag = {
-    enable = true,
-    filetypes = { "javascriptreact", "typescriptreact" },
-  },
   on_attach = function(client, bufnr)
     lsp_format.on_attach(client, bufnr)
   end
