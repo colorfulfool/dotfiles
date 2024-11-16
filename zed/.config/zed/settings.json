@@ -18,12 +18,7 @@
       "formatter": "language_server"
     },
     "TSX": {
-      "show_inline_completions": false
-    },
-    "HTML": {
-      "prettier": {
-        "allowed": false
-      }
+      "show_inline_completions": false,
     },
     "Markdown": {
       "soft_wrap": "editor_width"
@@ -36,7 +31,7 @@
   "copilot": {
     "disabled_globs": [".env", "*.scss"]
   },
-  "formatter": "prettier",
+  "formatter": "language_server",
   "auto_update": false,
   "vim_mode": true,
   "ui_font_size": 15,
@@ -61,6 +56,10 @@
     "button": false
   },
   "assistant": {
+    "default_model": {
+      "provider": "zed.dev",
+      "model": "claude-3-5-sonnet-latest"
+    },
     "version": "2",
     "button": false,
     "dock": "left"
