@@ -2,7 +2,7 @@ require("plugins")
 
 require("astrotheme").setup({
   palette = "astrodark",
-	style = {
+  style = {
     transparent = true,
     simple_syntax_colors = true
   },
@@ -41,24 +41,46 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 
 vim.api.nvim_set_option("clipboard", "unnamed")
 
-vim.api.nvim_set_keymap('t', '<ESC>', '<C-\\><C-n>', {noremap = true})
+vim.api.nvim_set_keymap('t', '<ESC>', '<C-\\><C-n>', { noremap = true })
 
 local bufopts = { noremap = true, silent = true, buffer = buffer }
 vim.keymap.set("n", "<space>e", vim.diagnostic.open_float, bufopts)
 vim.keymap.set("n", "<space>h", ":noh<cr>")
+
+local lsp_format = require("lsp-format")
+lsp_format.setup({})
 
 local lspconfig = require('lspconfig')
 lspconfig.gleam.setup({})
 lspconfig.pyright.setup({})
 lspconfig.rust_analyzer.setup({})
 lspconfig.tailwindcss.setup({})
-lspconfig.gopls.setup({})
+lspconfig.gopls.setup({
+  on_attach = function(client, bufnr)
+    lsp_format.on_attach(client, bufnr)
+  end
+})
 lspconfig.lua_ls.setup({
   settings = {
     Lua = {
-      diagnostics = { globals = {'vim'} },
+      diagnostics = { globals = { 'vim' } },
     },
   },
+  on_attach = function(client, bufnr)
+    lsp_format.on_attach(client, bufnr)
+  end
+})
+
+require("typescript-tools").setup({
+  expose_as_code_action = "all",
+  complete_function_calls = true,
+  jsx_close_tag = {
+    enable = true,
+    filetypes = { "javascriptreact", "typescriptreact" },
+  },
+  on_attach = function(client, bufnr)
+    lsp_format.on_attach(client, bufnr)
+  end
 })
 
 require('nvim-treesitter.configs').setup {
@@ -71,7 +93,7 @@ require('nvim-treesitter.configs').setup {
   },
 }
 
-require('telescope').setup{
+require('telescope').setup {
   defaults = {
     file_ignore_patterns = {
       "node_modules",

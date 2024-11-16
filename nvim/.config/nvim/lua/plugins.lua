@@ -60,6 +60,7 @@ return packer.startup(function(use)
       vim.keymap.set('n', '<space>fb', builtin.buffers, {})
       vim.keymap.set('n', '<space>fh', builtin.help_tags, {})
       vim.keymap.set('n', '<space>gb', builtin.git_branches, {})
+      vim.keymap.set('n', '<space>fl', builtin.lsp_document_symbols, {})
 
       local telescope = require('telescope')
       vim.keymap.set('n', '<space>gp', telescope.extensions.gh.pull_request, {})
@@ -99,19 +100,12 @@ return packer.startup(function(use)
 		"pmizio/typescript-tools.nvim",
 		requires = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
 		config = function()
-      require("typescript-tools").setup({
-        expose_as_code_action = "all",
-        complete_function_calls = true,
-        jsx_close_tag = {
-          enable = true,
-          filetypes = { "javascriptreact", "typescriptreact" },
-        }
-      })
-
       local api = require('typescript-tools.api')
       vim.keymap.set('n', 'gd', api.go_to_source_definition, {})
 		end,
 	}
+
+  use "lukas-reineke/lsp-format.nvim"
 
   use "almo7aya/openingh.nvim"
 
@@ -133,8 +127,8 @@ return packer.startup(function(use)
 	}
 
   use {
-    "felipejz/i18n-menu.nvim",
-    -- "~/Codebases/i18n-menu.nvim",
+    -- "felipejz/i18n-menu.nvim",
+    "~/Codebases/i18n-menu.nvim",
     -- "colorfulfool/i18n-menu.nvim",
     requires = {
       "smjonas/snippet-converter.nvim",
