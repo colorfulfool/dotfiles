@@ -59,7 +59,9 @@ return packer.startup(function(use)
       vim.keymap.set('n', '<space>fs', builtin.grep_string, {})
       vim.keymap.set('n', '<space>fb', builtin.buffers, {})
       vim.keymap.set('n', '<space>fh', builtin.help_tags, {})
-      vim.keymap.set('n', '<space>gb', builtin.git_branches, {})
+      vim.keymap.set('n', '<space>gb', function()
+        builtin.git_branches({ pattern = "refs/heads" })
+      end, {})
       vim.keymap.set('n', '<space>fl', builtin.lsp_document_symbols, {})
 
       local telescope = require('telescope')
@@ -94,7 +96,53 @@ return packer.startup(function(use)
     end
   }
 
-  use "neovim/nvim-lspconfig"
+  use {
+    "~/Codebases/todo-comments.nvim",
+    requires = { "nvim-lua/plenary.nvim" },
+    config = function()
+      require("todo-comments").setup({
+        search = {
+          pattern = [[\b(TODO|BUG|FIXME):]]
+        }
+      })
+    end,
+  }
+
+  use {
+    "neovim/nvim-lspconfig",
+    config = function()
+      local lspconfig = require('lspconfig')
+
+      lspconfig.gleam.setup({})
+      lspconfig.pyright.setup({})
+      lspconfig.rust_analyzer.setup({})
+      lspconfig.tailwindcss.setup({})
+      lspconfig.gopls.setup({})
+      lspconfig.lua_ls.setup({
+        settings = {
+          Lua = {
+            diagnostics = { globals = { 'vim' } },
+          },
+        },
+      })
+
+      vim.api.nvim_create_autocmd("LspAttach", {
+        callback = function(args)
+          local client = vim.lsp.get_client_by_id(args.data.client_id)
+          if not client then return end
+
+          if client.supports_method("textDocument/formatting") then
+            vim.api.nvim_create_autocmd("BufWritePre", {
+              buffer = args.buf,
+              callback = function()
+                vim.lsp.buf.format({ bufnr = args.buf, id = client.id })
+              end
+            })
+          end
+        end
+      })
+    end
+  }
 
   use {
     "pmizio/typescript-tools.nvim",
@@ -118,17 +166,29 @@ return packer.startup(function(use)
     end
   }
 
-  use "lukas-reineke/lsp-format.nvim"
-
   use "almo7aya/openingh.nvim"
 
   use "lukas-reineke/indent-blankline.nvim"
+
+  use({
+    "kylechui/nvim-surround",
+    tag = "*",
+    config = function()
+      require("nvim-surround").setup({
+        keymaps = {
+          visual = "S",
+          visual_line = "gS",
+        },
+      })
+    end
+  })
 
   use({
     "echasnovski/mini.nvim",
     config = function()
       require("mini.ai").setup({})
       require("mini.surround").setup({})
+      require("mini.operators").setup({})
     end
   })
 
