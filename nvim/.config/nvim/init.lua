@@ -50,9 +50,6 @@ vim.keymap.set("n", "<space>h", ":noh<cr>")
 require("typescript-tools").setup({
   expose_as_code_action = "all",
   complete_function_calls = true,
-  on_attach = function(client, bufnr)
-    lsp_format.on_attach(client, bufnr)
-  end
 })
 
 require('nvim-treesitter.configs').setup {
