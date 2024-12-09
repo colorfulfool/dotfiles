@@ -47,30 +47,6 @@ local bufopts = { noremap = true, silent = true, buffer = buffer }
 vim.keymap.set("n", "<space>e", vim.diagnostic.open_float, bufopts)
 vim.keymap.set("n", "<space>h", ":noh<cr>")
 
-local lsp_format = require("lsp-format")
-lsp_format.setup({})
-
-local lspconfig = require('lspconfig')
-lspconfig.gleam.setup({})
-lspconfig.pyright.setup({})
-lspconfig.rust_analyzer.setup({})
-lspconfig.tailwindcss.setup({})
-lspconfig.gopls.setup({
-  on_attach = function(client, bufnr)
-    lsp_format.on_attach(client, bufnr)
-  end
-})
-lspconfig.lua_ls.setup({
-  settings = {
-    Lua = {
-      diagnostics = { globals = { 'vim' } },
-    },
-  },
-  on_attach = function(client, bufnr)
-    lsp_format.on_attach(client, bufnr)
-  end
-})
-
 require("typescript-tools").setup({
   expose_as_code_action = "all",
   complete_function_calls = true,
