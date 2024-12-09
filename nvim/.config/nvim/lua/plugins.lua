@@ -116,7 +116,6 @@ return packer.startup(function(use)
       lspconfig.gleam.setup({})
       lspconfig.pyright.setup({})
       lspconfig.rust_analyzer.setup({})
-      lspconfig.tailwindcss.setup({})
       lspconfig.gopls.setup({})
       lspconfig.lua_ls.setup({
         settings = {
@@ -151,6 +150,23 @@ return packer.startup(function(use)
       local api = require('typescript-tools.api')
       vim.keymap.set('n', 'gd', api.go_to_source_definition, {})
     end,
+  }
+
+  use {
+    "luckasRanarison/tailwind-tools.nvim",
+    build = ":UpdateRemotePlugins",
+    requires = {
+      "nvim-treesitter/nvim-treesitter",
+      "nvim-telescope/telescope.nvim",
+      "neovim/nvim-lspconfig",
+    },
+    config = function()
+      require("tailwind-tools").setup({
+        document_color = {
+          enabled = false
+        }
+      })
+    end
   }
 
   use {
