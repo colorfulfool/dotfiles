@@ -42,8 +42,6 @@ packer.init({
 return packer.startup(function(use)
   use("wbthomason/packer.nvim") -- Have packer manage itself
 
-  use("folke/tokyonight.nvim")
-  use("ellisonleao/gruvbox.nvim")
   use("AstroNvim/astrotheme")
 
   use {
@@ -204,7 +202,7 @@ return packer.startup(function(use)
     config = function()
       require("mini.ai").setup({})
       require("mini.surround").setup({})
-      require("mini.operators").setup({})
+      -- require("mini.operators").setup({})
     end
   })
 
@@ -217,8 +215,9 @@ return packer.startup(function(use)
 
   use {
     -- "felipejz/i18n-menu.nvim",
-    "~/Codebases/i18n-menu.nvim",
-    -- "colorfulfool/i18n-menu.nvim",
+    -- "~/Codebases/i18n-menu.nvim",
+    "colorfulfool/i18n-menu.nvim",
+    branch = "feature/smart-default-value",
     requires = {
       "smjonas/snippet-converter.nvim",
     },
