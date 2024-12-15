@@ -48,9 +48,22 @@ return packer.startup(function(use)
     'nvim-telescope/telescope.nvim', tag = '0.1.6',
     requires = {
       { 'nvim-lua/plenary.nvim' },
-      { 'nvim-telescope/telescope-github.nvim' }
+      { 'nvim-telescope/telescope-github.nvim' },
+      { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
     },
     config = function()
+      require('telescope').setup {
+        defaults = {
+          file_ignore_patterns = {
+            "node_modules",
+            "build",
+            "out"
+          }
+        }
+      }
+
+      require('telescope').load_extension('fzf')
+
       local builtin = require('telescope.builtin')
       vim.keymap.set('n', '<space><space>', builtin.find_files, {})
       vim.keymap.set('n', '<space>fg', builtin.live_grep, {})
@@ -202,7 +215,7 @@ return packer.startup(function(use)
     config = function()
       require("mini.ai").setup({})
       require("mini.surround").setup({})
-      -- require("mini.operators").setup({})
+      require("mini.operators").setup({})
     end
   })
 
