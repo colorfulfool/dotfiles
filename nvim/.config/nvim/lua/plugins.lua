@@ -165,7 +165,7 @@ return packer.startup(function(use)
 
   use {
     "luckasRanarison/tailwind-tools.nvim",
-    build = ":UpdateRemotePlugins",
+    run = ":UpdateRemotePlugins",
     requires = {
       "nvim-treesitter/nvim-treesitter",
       "nvim-telescope/telescope.nvim",
