@@ -29,7 +29,6 @@ if not status_ok then
   return
 end
 
--- Have packer use a popup window
 packer.init({
   display = {
     open_fn = function()
@@ -38,7 +37,6 @@ packer.init({
   },
 })
 
--- Install your plugins here
 return packer.startup(function(use)
   use("wbthomason/packer.nvim") -- Have packer manage itself
 
@@ -57,7 +55,13 @@ return packer.startup(function(use)
           file_ignore_patterns = {
             "node_modules",
             "build",
-            "out"
+            "out",
+            ".git"
+          }
+        },
+        pickers = {
+          find_files = {
+            hidden = true
           }
         }
       }
@@ -228,15 +232,14 @@ return packer.startup(function(use)
 
   use {
     -- "felipejz/i18n-menu.nvim",
-    -- "~/Codebases/i18n-menu.nvim",
-    "colorfulfool/i18n-menu.nvim",
-    branch = "feature/smart-default-value",
+    "~/Codebases/i18n-menu.nvim",
+    -- "colorfulfool/i18n-menu.nvim",
     requires = {
       "smjonas/snippet-converter.nvim",
     },
     config = function()
       require("i18n-menu").setup()
-      vim.keymap.set("n", "<leader>ii", ":TranslateMenu<cr>")
+      vim.keymap.set("n", "<leader>ii", ":TranslateMenucr")
     end,
   }
 

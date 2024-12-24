@@ -79,7 +79,7 @@ require("ibl").setup({
     tab_char = "│",
   },
   scope = { show_start = false, show_end = false },
-  exclude = { filetypes = { 'gleam' } }
+  exclude = {}
 })
 
 require("autoclose").setup()
