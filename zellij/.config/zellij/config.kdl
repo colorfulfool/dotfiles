@@ -4,6 +4,8 @@ on_force_close "quit"
 copy_command "pbcopy"
 
 keybinds {
+  unbind "Ctrl q"
+
 	shared_except "session" "locked" {
 		unbind "Ctrl o" // free up for nvim's "go back"
 	}
@@ -11,8 +13,8 @@ keybinds {
 	tmux {
     bind "w" {
       LaunchOrFocusPlugin "session-manager" {
-          floating true
-          move_to_focused_tab true
+        floating true
+        move_to_focused_tab true
       };
       SwitchToMode "Normal"
     }
