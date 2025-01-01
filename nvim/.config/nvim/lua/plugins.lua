@@ -54,8 +54,8 @@ return packer.startup(function(use)
         defaults = {
           file_ignore_patterns = {
             "node_modules",
-            "build",
-            "out",
+            "/build",
+            "/out",
             ".git"
           }
         },
