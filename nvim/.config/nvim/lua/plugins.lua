@@ -139,6 +139,9 @@ return packer.startup(function(use)
           },
         },
       })
+      lspconfig.elixirls.setup({
+        cmd = { "/Users/antonkhamets/.local/elixir-ls/language_server.sh" }
+      })
 
       vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(args)
