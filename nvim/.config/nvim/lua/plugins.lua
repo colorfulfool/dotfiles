@@ -60,9 +60,9 @@ return packer.startup(function(use)
           }
         },
         pickers = {
-          find_files = {
-            hidden = true
-          }
+          buffers = { sort_mru = true },
+          find_files = { hidden = true },
+          git_branches = { pattern = "refs/heads" }
         }
       }
 
@@ -72,13 +72,9 @@ return packer.startup(function(use)
       vim.keymap.set('n', '<space><space>', builtin.find_files, {})
       vim.keymap.set('n', '<space>fg', builtin.live_grep, {})
       vim.keymap.set('n', '<space>fs', builtin.grep_string, {})
-      vim.keymap.set('n', '<space>fb', function()
-        builtin.buffers({ sort_mru = true })
-      end, {})
+      vim.keymap.set('n', '<space>fb', builtin.buffers, {})
       vim.keymap.set('n', '<space>fh', builtin.help_tags, {})
-      vim.keymap.set('n', '<space>gb', function()
-        builtin.git_branches({ pattern = "refs/heads" })
-      end, {})
+      vim.keymap.set('n', '<space>gb', builtin.git_branches, {})
       vim.keymap.set('n', '<space>fl', builtin.lsp_document_symbols, {})
 
       local telescope = require('telescope')
