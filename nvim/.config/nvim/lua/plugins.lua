@@ -56,6 +56,7 @@ return packer.startup(function(use)
             "node_modules",
             "/build",
             "/out",
+            "/performance",
             ".git"
           }
         },
@@ -123,14 +124,17 @@ return packer.startup(function(use)
 
   use {
     "neovim/nvim-lspconfig",
+    requires = { "saghen/blink.cmp" },
     config = function()
       local lspconfig = require('lspconfig')
+      local capabilities = require('blink.cmp').get_lsp_capabilities()
 
-      lspconfig.gleam.setup({})
-      lspconfig.pyright.setup({})
-      lspconfig.rust_analyzer.setup({})
-      lspconfig.gopls.setup({})
+      lspconfig.gleam.setup({ capabilities = capabilities })
+      lspconfig.pyright.setup({ capabilities = capabilities })
+      lspconfig.rust_analyzer.setup({ capabilities = capabilities })
+      lspconfig.gopls.setup({ capabilities = capabilities })
       lspconfig.lua_ls.setup({
+        capabilities = capabilities,
         settings = {
           Lua = {
             diagnostics = { globals = { 'vim' } },
@@ -138,6 +142,7 @@ return packer.startup(function(use)
         },
       })
       lspconfig.elixirls.setup({
+        capabilities = capabilities,
         cmd = { "/Users/antonkhamets/.local/elixir-ls/language_server.sh" }
       })
 
@@ -245,11 +250,33 @@ return packer.startup(function(use)
   }
 
   use {
-    "ms-jpq/coq_nvim",
+    "saghen/blink.cmp",
+    tag = "*",
     config = function()
-      vim.g.coq_settings = {
-        auto_start = true, -- if you want to start COQ at startup
-      }
+      require("blink.cmp").setup({
+        keymap = {
+          preset = 'default',
+          ['<CR>'] = { 'accept', 'fallback' },
+          ['<Up>'] = { 'select_prev', 'fallback' },
+          ['<Down>'] = { 'select_next', 'fallback' },
+          cmdline = {
+            preset = 'enter',
+            ['<Tab>'] = { 'show', 'snippet_forward', 'fallback' },
+          }
+        },
+        completion = {
+          menu = { auto_show = function(ctx) return ctx.mode ~= 'cmdline' end }
+        },
+        appearance = {
+          use_nvim_cmp_as_default = true,
+          nerd_font_variant = 'mono'
+        },
+        sources = {
+          default = { 'lsp', 'path', 'snippets', 'buffer' },
+          cmdline = {},
+        },
+        signature = { enabled = false }
+      })
     end,
   }
 
