@@ -255,7 +255,7 @@ return packer.startup(function(use)
 
   use {
     "saghen/blink.cmp",
-    tag = "*",
+    tag = "v0.11.0",
     config = function()
       require("blink.cmp").setup({
         keymap = {
