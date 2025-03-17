@@ -255,7 +255,7 @@ return packer.startup(function(use)
 
   use {
     "saghen/blink.cmp",
-    tag = "v0.13.1",
+    tag = "v0.11.0",
     config = function()
       require("blink.cmp").setup({
         keymap = {
@@ -263,6 +263,10 @@ return packer.startup(function(use)
           ['<CR>'] = { 'accept', 'fallback' },
           ['<Up>'] = { 'select_prev', 'fallback' },
           ['<Down>'] = { 'select_next', 'fallback' },
+          cmdline = {
+            preset = 'enter',
+            ['<Tab>'] = { 'show', 'snippet_forward', 'fallback' },
+          }
         },
         completion = {
           menu = { auto_show = function(ctx) return ctx.mode ~= 'cmdline' end }
@@ -273,6 +277,7 @@ return packer.startup(function(use)
         },
         sources = {
           default = { 'lsp', 'path', 'snippets', 'buffer' },
+          cmdline = {},
         },
         signature = { enabled = false }
       })
