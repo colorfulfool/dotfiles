@@ -47,6 +47,9 @@ local bufopts = { noremap = true, silent = true, buffer = buffer }
 vim.keymap.set("n", "<space>e", vim.diagnostic.open_float, bufopts)
 vim.keymap.set("n", "<space>h", ":noh<cr>")
 
+vim.api.nvim_create_user_command("BlankSlate", "%bd|!git switch main", {})
+vim.api.nvim_create_user_command("CleanSlate", "%bd|!git switch main", {})
+
 require("typescript-tools").setup({
   expose_as_code_action = "all",
   complete_function_calls = true,
