@@ -9,11 +9,12 @@
     ],
     "modules-right": [
         "tray",
+        "cpu",
         "memory",
         "network",
         "pulseaudio",
         "battery",
-	"clock"
+        "clock"
     ],
     "wlr/taskbar": {
         "format": "{icon}",
@@ -50,8 +51,14 @@
     },
     "memory": {
         "interval": 5,
-        "format": "󰍛 {}%",
-        "max-length": 10
+        "format": "  {used}GB",
+        "expand": true,
+        "max-length": 9
+    },
+    "cpu": {
+        "interval": 5,
+        "format": "󰍛 {max_frequency}GHz",
+        "justify": "left",
     },
     "tray": {
         "spacing": 10
@@ -59,21 +66,21 @@
     "clock": {
         "tooltip-format": "<tt>{calendar}</tt>",
         "format-alt": "  {:%a, %d %b %Y}",
-        "format": "  {:%I:%M %p}"
+        "format": "  {:%H:%M}"
     },
     "network": {
-        "format-wifi" : "{icon}",
+        "format-wifi" : "{icon} ",
         "format-icons": ["󰤯","󰤟","󰤢","󰤥","󰤨"],
         "format-ethernet": "󰀂",
-	"format-alt" : "󱛇",
+        "format-alt" : "󱛇",
         "format-disconnected" : "󰖪",
-	"tooltip-format-wifi": "{icon} {essid}\n⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}",
+        "tooltip-format-wifi": "{icon} {essid}\n⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}",
         "tooltip-format-ethernet": "󰀂  {ifname}\n⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}",
-	"tooltip-format-disconnected": "Disconnected",
-	"on-click": "~/.config/rofi/wifi/wifi.sh &",
+        "tooltip-format-disconnected": "Disconnected",
+        "on-click": "~/.config/rofi/wifi/wifi.sh &",
         "on-click-right": "~/.config/rofi/wifi/wifinew.sh &",
-	"interval": 5,
-	"nospacing": 1,
+        "interval": 5,
+        "nospacing": 1,
     },
     "pulseaudio": {
         "format": "{icon}",
