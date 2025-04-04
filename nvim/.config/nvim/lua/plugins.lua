@@ -242,8 +242,8 @@ return packer.startup(function(use)
 
   use {
     -- "felipejz/i18n-menu.nvim",
-    "~/Codebases/i18n-menu.nvim",
-    -- "colorfulfool/i18n-menu.nvim",
+    "colorfulfool/i18n-menu.nvim",
+    branch = "feature/function-patterns-config",
     requires = {
       "smjonas/snippet-converter.nvim",
     },
