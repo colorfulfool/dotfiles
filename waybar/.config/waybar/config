@@ -14,7 +14,7 @@
         "network",
         "pulseaudio",
         "battery",
-        "clock"
+        "clock",
     ],
     "wlr/taskbar": {
         "format": "{icon}",
