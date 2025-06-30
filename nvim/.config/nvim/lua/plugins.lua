@@ -228,8 +228,12 @@ return packer.startup(function(use)
     "echasnovski/mini.nvim",
     config = function()
       require("mini.ai").setup({})
-      require("mini.surround").setup({})
-      require("mini.operators").setup({})
+      require("mini.surround").setup({
+        n_lines = 50
+      })
+      require("mini.operators").setup({
+        replace = { prefix = "fuck" }
+      })
     end
   })
 
