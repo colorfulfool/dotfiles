@@ -6,6 +6,10 @@ copy_command "pbcopy"
 keybinds {
   unbind "Ctrl q"
 
+  shared_except "locked" {
+    unbind "Alt f" // free up for Bash "forward by one word"
+  }
+
 	shared_except "session" "locked" {
 		unbind "Ctrl o" // free up for nvim's "go back"
 	}
