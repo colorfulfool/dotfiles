@@ -290,6 +290,13 @@ return packer.startup(function(use)
     end,
   }
 
+  use {
+    "folke/ts-comments.nvim",
+    config = function()
+      require("ts-comments").setup()
+    end
+  }
+
   use 'm4xshen/autoclose.nvim'
 
   if PACKER_BOOTSTRAP then
