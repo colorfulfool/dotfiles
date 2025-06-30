@@ -51,11 +51,6 @@ vim.keymap.set("n", "<space>h", ":noh<cr>")
 vim.api.nvim_create_user_command("BlankSlate", "%bd|!git switch main", {})
 vim.api.nvim_create_user_command("CleanSlate", "%bd|!git switch main", {})
 
-require("typescript-tools").setup({
-  expose_as_code_action = "all",
-  complete_function_calls = true,
-})
-
 require('nvim-treesitter.configs').setup {
   ensure_installed = { "lua", "javascript", "typescript", "python", "ruby", "gleam", "bash", "go", "markdown", "css" },
   sync_install = false,
