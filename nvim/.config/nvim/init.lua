@@ -1,4 +1,5 @@
 require("plugins")
+require("commands")
 
 require("astrotheme").setup({
   palette = "astrodark",
