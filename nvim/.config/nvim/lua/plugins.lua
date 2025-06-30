@@ -172,8 +172,10 @@ return packer.startup(function(use)
     "pmizio/typescript-tools.nvim",
     requires = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
     config = function()
-      local api = require('typescript-tools.api')
-      vim.keymap.set('n', 'gd', api.go_to_source_definition, {})
+      require("typescript-tools").setup({
+        expose_as_code_action = "all",
+        complete_function_calls = true,
+      })
     end,
   }
 
