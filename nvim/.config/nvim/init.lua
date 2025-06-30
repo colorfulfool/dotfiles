@@ -82,3 +82,40 @@ require("ibl").setup({
 })
 
 require("autoclose").setup()
+
+local function remove_qf_item(mode)
+  local qf_list = vim.fn.getqflist()
+  local del_qf_idx, del_ct
+
+  if mode == 'v' then
+    local start_lnum = vim.fn.getpos("'<")[2]
+    local end_lnum = vim.fn.getpos("'>")[2]
+    del_qf_idx = start_lnum - 1
+    del_ct = end_lnum - del_qf_idx
+  else
+    del_qf_idx = vim.fn.line('.') - 1
+    del_ct = vim.v.count > 1 and vim.v.count or 1
+  end
+
+  -- Delete items (Lua tables are 1-indexed)
+  for _ = 1, del_ct do
+    table.remove(qf_list, del_qf_idx + 1)
+  end
+
+  vim.fn.setqflist(qf_list, 'r')
+
+  if #qf_list > 0 then
+    vim.cmd(string.format('%dcfirst', del_qf_idx + 1))
+    vim.cmd.copen()
+  else
+    vim.cmd.cclose()
+  end
+end
+
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'qf',
+  callback = function()
+    vim.keymap.set('n', 'dd', function() remove_qf_item('n') end, { buffer = true })
+    vim.keymap.set('v', 'x', function() remove_qf_item('v') end, { buffer = true })
+  end
+})
