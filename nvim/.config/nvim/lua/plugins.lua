@@ -234,7 +234,7 @@ return packer.startup(function(use)
     config = function()
       require("mini.ai").setup({})
       require("mini.surround").setup({
-        n_lines = 50
+        n_lines = 100
       })
       require("mini.operators").setup({
         replace = { prefix = "fuck" }
