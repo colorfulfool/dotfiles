@@ -43,7 +43,8 @@ return packer.startup(function(use)
   use("AstroNvim/astrotheme")
 
   use {
-    'nvim-telescope/telescope.nvim', tag = '0.1.6',
+    'nvim-telescope/telescope.nvim',
+    commit = '814f102',
     requires = {
       { 'nvim-lua/plenary.nvim' },
       { 'nvim-telescope/telescope-github.nvim' },
