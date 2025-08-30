@@ -58,6 +58,8 @@ return packer.startup(function(use)
             "^build/",
             "^out/",
             "^performance/",
+            "^venv/",
+            "^__pycache__/",
             "^.git/",
             ".png$",
             ".avif$",
