@@ -46,6 +46,8 @@ vim.api.nvim_set_keymap('t', '<ESC>', '<C-\\><C-n>', { noremap = true })
 
 local bufopts = { noremap = true, silent = true, buffer = buffer }
 vim.keymap.set("n", "<space>e", vim.diagnostic.open_float, bufopts)
+vim.keymap.set("n", "<space>gn", vim.diagnostic.goto_next, bufopts)
+vim.keymap.set("n", "<space>gp", vim.diagnostic.goto_prev, bufopts)
 vim.keymap.set("n", "<space>h", ":noh<cr>")
 
 vim.keymap.set('n', 'gd', vim.lsp.buf.definition, {})
