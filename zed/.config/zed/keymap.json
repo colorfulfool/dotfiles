@@ -29,8 +29,14 @@
     "bindings": {
       "cmd-shift-r": "project_symbols::Toggle",
       "cmd-shift-t": "task::Spawn",
-      "alt-h": ["workspace::ActivatePaneInDirection", "Left"],
-      "alt-l": ["workspace::ActivatePaneInDirection", "Right"],
+      "alt-h": [
+        "workspace::ActivatePaneInDirection",
+        "Left"
+      ],
+      "alt-l": [
+        "workspace::ActivatePaneInDirection",
+        "Right"
+      ],
       "alt-t": "task::Spawn"
     }
   },
@@ -38,6 +44,12 @@
     "context": "Editor && mode == full",
     "bindings": {
       "cmd-t": "outline::Toggle"
+    }
+  },
+  {
+    "context": "Terminal",
+    "bindings": {
+      "ctrl-w k": "terminal_panel::ToggleFocus"
     }
   }
 ]
