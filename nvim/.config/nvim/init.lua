@@ -53,16 +53,6 @@ vim.keymap.set('n', 'gd', vim.lsp.buf.definition, {})
 vim.api.nvim_create_user_command("BlankSlate", "%bd|!git switch main", {})
 vim.api.nvim_create_user_command("CleanSlate", "%bd|!git switch main", {})
 
-require('nvim-treesitter.configs').setup {
-  ensure_installed = { "lua", "javascript", "typescript", "python", "ruby", "gleam", "bash", "go", "markdown", "css" },
-  sync_install = false,
-  auto_install = true,
-  highlight = {
-    enable = true,
-    additional_vim_regex_highlighting = true,
-  },
-}
-
 require("neo-tree").setup({
   window = {
     width = 30
