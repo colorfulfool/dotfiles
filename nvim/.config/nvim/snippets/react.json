@@ -1,0 +1,10 @@
+{
+  "useTranslation": {
+    "prefix": "contra",
+    "body": ["const [translate] = useTranslation()"]
+  },
+  "useRouter": {
+    "prefix": "conrou",
+    "body": ["const router = useRouter()"]
+  }
+}
