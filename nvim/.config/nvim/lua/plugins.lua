@@ -101,6 +101,16 @@ return packer.startup(function(use)
         end,
         { noremap = true, silent = false }
       )
+
+      require('nvim-treesitter.configs').setup {
+        ensure_installed = { "lua", "javascript", "typescript", "python", "ruby", "gleam", "bash", "go", "markdown", "css" },
+        sync_install = false,
+        auto_install = true,
+        highlight = {
+          enable = true,
+          additional_vim_regex_highlighting = true,
+        },
+      }
     end
   }
 
