@@ -145,6 +145,7 @@ return packer.startup(function(use)
   use {
     "neovim/nvim-lspconfig",
     requires = { "saghen/blink.cmp" },
+    tag = "v2.5.0",
     config = function()
       local lspconfig = require('lspconfig')
       local capabilities = require('blink.cmp').get_lsp_capabilities()
@@ -187,6 +188,7 @@ return packer.startup(function(use)
   use {
     "pmizio/typescript-tools.nvim",
     requires = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+    commit = "3c501d7",
     config = function()
       require("typescript-tools").setup({
         expose_as_code_action = "all",
