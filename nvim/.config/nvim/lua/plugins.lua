@@ -169,14 +169,19 @@ return packer.startup(function(use)
 
       vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(args)
-          local client = vim.lsp.get_client_by_id(args.data.client_id)
+          local client_id = args.data.client_id
+
+          local client = vim.lsp.get_client_by_id(client_id)
           if not client then return end
 
           if client.supports_method("textDocument/formatting") then
             vim.api.nvim_create_autocmd("BufWritePre", {
               buffer = args.buf,
               callback = function()
-                vim.lsp.buf.format({ bufnr = args.buf, id = client.id })
+                local now_client = vim.lsp.get_client_by_id(client_id)
+                if not now_client then return end
+
+                vim.lsp.buf.format({ bufnr = args.buf, id = client_id })
               end
             })
           end
