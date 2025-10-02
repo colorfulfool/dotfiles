@@ -199,6 +199,15 @@ return packer.startup(function(use)
         expose_as_code_action = "all",
         complete_function_calls = true,
       })
+
+      vim.api.nvim_create_autocmd("BufAdd", {
+        pattern = "*.ts,*.tsx",
+        callback = function(args)
+          vim.keymap.set("n", "gd", ":TSToolsGoToSourceDefinition<cr>", {
+            buffer = args.buf
+          })
+        end
+      })
     end,
   }
 
