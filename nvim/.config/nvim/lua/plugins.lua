@@ -126,18 +126,29 @@ return packer.startup(function(use)
       "MunifTanjim/nui.nvim",
     },
     config = function()
+      require("neo-tree").setup({
+        window = {
+          width = 30
+        },
+        filesystem = {
+          follow_current_file = {
+            enabled = true
+          }
+        }
+      })
+
       vim.keymap.set('n', '<space>te', ':Neotree toggle<cr>')
     end
   }
 
-  use({
+  use {
     "stevearc/oil.nvim",
     config = function()
       require("oil").setup({
         columns = {}
       })
     end,
-  })
+  }
 
   use {
     "colorfulfool/todo-comments.nvim",
@@ -252,9 +263,21 @@ return packer.startup(function(use)
 
   use "almo7aya/openingh.nvim"
 
-  use "lukas-reineke/indent-blankline.nvim"
+  use {
+    "lukas-reineke/indent-blankline.nvim",
+    config = function()
+      require("ibl").setup({
+        indent = {
+          char = "│",
+          tab_char = "│",
+        },
+        scope = { show_start = false, show_end = false },
+        exclude = {}
+      })
+    end
+  }
 
-  use({
+  use {
     "kylechui/nvim-surround",
     tag = "*",
     config = function()
@@ -265,9 +288,9 @@ return packer.startup(function(use)
         },
       })
     end
-  })
+  }
 
-  use({
+  use {
     "echasnovski/mini.nvim",
     config = function()
       require("mini.ai").setup({ n_lines = 100 })
@@ -276,7 +299,7 @@ return packer.startup(function(use)
         replace = { prefix = "fuck" }
       })
     end
-  })
+  }
 
   use {
     "aznhe21/actions-preview.nvim",
@@ -336,7 +359,12 @@ return packer.startup(function(use)
     end
   }
 
-  use 'm4xshen/autoclose.nvim'
+  use {
+    "m4xshen/autoclose.nvim",
+    config = function()
+      require("autoclose").setup()
+    end
+  }
 
   if PACKER_BOOTSTRAP then
     require("packer").sync()

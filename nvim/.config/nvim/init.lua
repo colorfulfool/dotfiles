@@ -73,28 +73,6 @@ end, { noremap = true, silent = true })
 vim.api.nvim_create_user_command("BlankSlate", "%bd|!git switch main", {})
 vim.api.nvim_create_user_command("CleanSlate", "%bd|!git switch main", {})
 
-require("neo-tree").setup({
-  window = {
-    width = 30
-  },
-  filesystem = {
-    follow_current_file = {
-      enabled = true
-    }
-  }
-})
-
-require("ibl").setup({
-  indent = {
-    char = "│",
-    tab_char = "│",
-  },
-  scope = { show_start = false, show_end = false },
-  exclude = {}
-})
-
-require("autoclose").setup()
-
 local function remove_qf_item(mode)
   local qf_list = vim.fn.getqflist()
   local del_qf_idx, del_ct
