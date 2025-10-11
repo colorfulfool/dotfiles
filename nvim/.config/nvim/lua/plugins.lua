@@ -270,10 +270,7 @@ return packer.startup(function(use)
   })
 
   use {
-    -- "aznhe21/actions-preview.nvim",
-    "colorfulfool/actions-preview.nvim",
-    -- "~/Codebases/actions-preview.nvim",
-    branch = "fix/action-is-nil",
+    "aznhe21/actions-preview.nvim",
     config = function()
       vim.keymap.set('n', '<space>ca', require('actions-preview').code_actions)
     end
