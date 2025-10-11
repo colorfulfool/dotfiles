@@ -130,6 +130,15 @@ return packer.startup(function(use)
     end
   }
 
+  use({
+    "stevearc/oil.nvim",
+    config = function()
+      require("oil").setup({
+        columns = {}
+      })
+    end,
+  })
+
   use {
     "colorfulfool/todo-comments.nvim",
     requires = { "nvim-lua/plenary.nvim" },
