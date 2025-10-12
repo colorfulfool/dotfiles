@@ -147,6 +147,8 @@ return packer.startup(function(use)
       require("oil").setup({
         columns = {}
       })
+
+      vim.keymap.set('n', '<space>o', ':Oil<cr>')
     end,
   }
 
