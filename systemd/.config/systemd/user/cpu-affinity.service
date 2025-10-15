@@ -1,0 +1,13 @@
+[Unit]
+Description=Set CPU affinity according to adjust-affinity.sh
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/bin/bash -c 'while true; do ~/.config/systemd/user/adjust-affinity.sh; sleep 5; done'
+Restart=always
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=default.target
