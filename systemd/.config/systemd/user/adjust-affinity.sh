@@ -14,6 +14,7 @@ pin $first_core zellij
 
 pin $second_core next-server
 pin $second_core "next dev"
+pin $second_core "next build"
 pin $second_core "node-modules/next"
 pin $second_core tailwindcss
 pin $second_core storybook
