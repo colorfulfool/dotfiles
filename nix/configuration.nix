@@ -47,6 +47,8 @@ in
   programs.zsh.autosuggestions.enable = true;
   programs.zsh.syntaxHighlighting.enable = true;
   programs.zsh.interactiveShellInit = ''
+    PS1="%c %{$fg_bold[black]%}$%{$reset_color$} "
+
     # Add custom completions directory
     fpath=(~/.zsh/completions $fpath)
     autoload -U compinit && compinit
@@ -68,6 +70,7 @@ in
     nerd-fonts.jetbrains-mono
     swaybg  # For setting wallpaper
     stow
+    mise
     git
     gh      # GitHub CLI
     ruby
