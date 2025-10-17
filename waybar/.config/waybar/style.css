@@ -1,6 +1,5 @@
 * {
   border: none;
-  border-radius: 0;
   min-height: 0;
   font-family: JetBrainsMono Nerd Font;
   font-size: 13px;
@@ -43,6 +42,10 @@ window#waybar.hidden {
   background-color: #f38ba8;
 }
 
+.modules-right {
+  margin-right: 3px;
+}
+
 #memory, #cpu, #custom-power, #battery, #backlight, #pulseaudio, #network, #bluetooth, #clock, #tray {
   border-radius: 4px;
   margin: 6px 3px;
@@ -53,7 +56,11 @@ window#waybar.hidden {
 }
 
 #network, #pulseaudio, #bluetooth {
-  min-width: 12px;
+  min-width: 14px;
+}
+
+#network, #pulseaudio {
+  padding-left: 6px;
 }
 
 #cpu, #memory {
@@ -65,9 +72,8 @@ window#waybar.hidden {
 }
 
 #custom-logo {
-  padding-right: 7px;
-  padding-left: 7px;
-  margin-left: 5px;
+  padding: 0px 6px;
+  margin: 0px 3px;
   font-size: 15px;
   border-radius: 8px 0px 0px 8px;
   color: #1793d1;
