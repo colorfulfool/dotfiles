@@ -3,7 +3,8 @@
 let
   dotfiles = pkgs.fetchgit {
     url = "https://github.com/colorfulfool/dotfiles.git";
-    hash = "sha256-URWCi3SNgWZavzN6K1WcXhedlPZkHmfhv7BnXwDEJF8=";
+    rev = "aeac06b";
+    hash = "sha256-J06xdlgHO24WiWFmHHZZHKVctV82371YBCF2FKQqPC4=";
     leaveDotGit = true;
   };
   cursor-theme = pkgs.fetchgit {
@@ -122,7 +123,6 @@ in
   users.users.nixos = {
     isNormalUser = true;
     extraGroups = [ "wheel" "video" "audio" ];
-    password = "";  # Empty password for live session
   };
   security.sudo.wheelNeedsPassword = false;
 
