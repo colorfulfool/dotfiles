@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 let
   dotfiles = pkgs.fetchgit {
@@ -8,7 +8,7 @@ let
   };
   cursor-theme = pkgs.fetchgit {
     url = "https://github.com/ful1e5/BreezeX_Cursor.git";
-    hash = "sha256-URWCi3SNgWZavzN6K1WcXhedlPZkHmfhv7BnXwDEJF8=";
+    hash = "sha256-2eACaOo6kWHZrMQ1QTIRrWKOTfJqaCm6tsWRy0AjRb8=";
   };
   wallpaper = "/home/nixos/wallpapers/city.jpg";  # Path in live environment
 in
@@ -34,6 +34,11 @@ in
     defaultEditor = true;
   };
 
+  programs.steam = {
+    enable = true;
+    localNetworkGameTransfers.openFirewall = true;
+  };
+
   # Enable zsh shell with completions
   programs.zsh.enable = true;
   programs.zsh.enableCompletion = true;
@@ -44,6 +49,13 @@ in
     fpath=(~/.zsh/completions $fpath)
     autoload -U compinit && compinit
   '';
+
+  nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
+    "steam"
+    "steam-original"
+    "steam-unwrapped"
+    "steam-run"
+  ];
 
   # Install requested packages
   environment.systemPackages = with pkgs; [
