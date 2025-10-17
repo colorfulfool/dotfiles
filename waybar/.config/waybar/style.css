@@ -43,7 +43,7 @@ window#waybar.hidden {
   background-color: #f38ba8;
 }
 
-#memory, #cpu, #custom-power, #battery, #backlight, #pulseaudio, #network, #clock, #tray {
+#memory, #cpu, #custom-power, #battery, #backlight, #pulseaudio, #network, #bluetooth, #clock, #tray {
   border-radius: 4px;
   margin: 6px 3px;
   padding: 6px 12px;
@@ -52,7 +52,7 @@ window#waybar.hidden {
   color: #aaaaaa;
 }
 
-#network, #pulseaudio {
+#network, #pulseaudio, #bluetooth {
   min-width: 12px;
 }
 

@@ -167,6 +167,14 @@
         "format-linked": "{ifname} (No IP) ",
         "format-disconnected": "Disconnected ⚠",
         "format-alt": "{ifname}: {ipaddr}/{cidr}"
+        "on-click": "uwsm app -- \"$TERMINAL\" --class=Impala -e impala"
+    },
+    "bluetooth": {
+      "format": "",
+      "format-disabled": "󰂲",
+      "format-connected": "",
+      "tooltip-format": "Devices connected: {num_connections}",
+      "on-click": "blueberry"
     },
     "pulseaudio": {
         // "scroll-step": 1, // %, can be a float
