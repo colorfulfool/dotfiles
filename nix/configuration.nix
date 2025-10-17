@@ -8,6 +8,7 @@ let
   };
   cursor-theme = pkgs.fetchgit {
     url = "https://github.com/ful1e5/BreezeX_Cursor.git";
+    rev = "5db7bc6";
     hash = "sha256-2eACaOo6kWHZrMQ1QTIRrWKOTfJqaCm6tsWRy0AjRb8=";
   };
   wallpaper = "/home/nixos/wallpapers/city.jpg";  # Path in live environment
