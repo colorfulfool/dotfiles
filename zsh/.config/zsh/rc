@@ -1,5 +1,6 @@
 source ~/.config/zsh/init
 source ~/.config/zsh/aliases
+source ~/.config/zsh/functions
 
 # Editor used by CLI
 export SUDO_EDITOR="$EDITOR"
