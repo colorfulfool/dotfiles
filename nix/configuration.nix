@@ -47,7 +47,7 @@ in
   programs.zsh.autosuggestions.enable = true;
   programs.zsh.syntaxHighlighting.enable = true;
   programs.zsh.interactiveShellInit = ''
-    PS1="%c %{$fg_bold[black]%}$%{$reset_color$} "
+    PROMPT='%C %B$%b '
 
     # Add custom completions directory
     fpath=(~/.zsh/completions $fpath)
@@ -82,10 +82,10 @@ in
     ani-cli
     chromium
     lua-language-server
+    tailwindcss-language-server
+    typescript-language-server # for typescript-tools in neovim
     btop
     uwsm
-    blueberry
-    impala
   ];
 
   # Activation script to handle dotfiles and wallpaper
