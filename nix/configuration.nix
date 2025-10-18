@@ -45,18 +45,8 @@ in
     localNetworkGameTransfers.openFirewall = true;
   };
 
-  # Enable zsh shell with completions
+  # Enable zsh shell
   programs.zsh.enable = true;
-  programs.zsh.enableCompletion = true;
-  programs.zsh.autosuggestions.enable = true;
-  programs.zsh.syntaxHighlighting.enable = true;
-  programs.zsh.interactiveShellInit = ''
-    PROMPT='%C %B$%b '
-
-    # Add custom completions directory
-    fpath=(~/.zsh/completions $fpath)
-    autoload -U compinit && compinit
-  '';
 
   nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
     "steam"
@@ -98,7 +88,10 @@ in
   system.activationScripts.dotfiles = pkgs.lib.stringAfter [ "users" ] ''
     # Copy dotfiles to home directory
     mkdir -p /home/nixos
-    cp -r ${dotfiles} /home/nixos/dotfiles
+    cp -r ${dotfiles} /home/nixos/.dotfiles
+
+    # Initialize zsh config from dotfiles
+    cp /home/nixos/.dotfiles/zsh/.zshrc.template /home/nixos/.zshrc
 
     # Stow dotfiles
     cd /home/nixos/dotfiles
