@@ -7,9 +7,13 @@ let
     hash = "sha256-J06xdlgHO24WiWFmHHZZHKVctV82371YBCF2FKQqPC4=";
     leaveDotGit = true;
   };
-  cursor-theme = pkgs.fetchgit {
-    url = "https://github.com/ful1e5/BreezeX_Cursor.git";
-    rev = "5db7bc6";
+  scripts = pkgs.fetchgit {
+    url = "https://github.com/colorfulfool/scripts.git";
+    rev = "9b17269";
+    hash = "sha256-J06xdlgHO24WiWFmHHZZHKVctV82371YBCF2FKQqPC4=";
+  };
+  cursors = pkgs.fetchurl {
+    url = "https://github.com/ful1e5/BreezeX_Cursor/releases/download/v2.0.1/BreezeX-Black.tar.xz";
     hash = "sha256-2eACaOo6kWHZrMQ1QTIRrWKOTfJqaCm6tsWRy0AjRb8=";
   };
   wallpaper = "/home/nixos/wallpapers/city.jpg";  # Path in live environment
@@ -114,7 +118,7 @@ in
 
     # Copy curser theme to home directory
     mkdir -p /home/nixos/.icons
-    cp ${cursor-theme} /home/nixos/.icons/
+    cp ${cursors} /home/nixos/.icons/
 
     # Set wallpaper
     ${pkgs.swaybg}/bin/swaybg -i ${wallpaper} -m fill &
