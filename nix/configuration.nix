@@ -3,8 +3,8 @@
 let
   dotfiles = pkgs.fetchgit {
     url = "https://github.com/colorfulfool/dotfiles.git";
-    rev = "aeac06b";
-    hash = "sha256-J06xdlgHO24WiWFmHHZZHKVctV82371YBCF2FKQqPC4=";
+    rev = "f841657";
+    hash = "sha256-pvxS7S1XRO5rjViZ2anpV5tHtJPYp+iPz2jVd2uYH78=";
     leaveDotGit = true;
   };
   scripts = pkgs.fetchgit {
