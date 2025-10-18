@@ -2,23 +2,30 @@ add_newline = false
 command_timeout = 200
 format = "[$directory$git_branch$git_status]($style)$character"
 
+palette = "custom"
+
+# The palette definition
+[palettes.custom]
+light_blue = "#70d9fc"
+
 [character]
-success_symbol = "[❯](bold #70d9fc)"
+error_symbol = "[\\$](bold light_blue)"
+success_symbol = "[\\$](bold light_blue)"
 vicmd_symbol = "[V](bold yellow)"
 
 [directory]
 truncation_length = 2
 truncation_symbol = "…/"
-repo_root_style = "bold #70d9fc"
+repo_root_style = "bold light_blue"
 repo_root_format = "[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) "
 
 [git_branch]
 format = "[$branch]($style) "
-style = "#70d9fc"
+style = "light_blue"
 
 [git_status]
 format     = '[$all_status]($style)'
-style      = "#70d9fc"
+style      = "light_blue"
 ahead      = "⇡${count} "
 diverged   = "⇕⇡${ahead_count}⇣${behind_count} "
 behind     = "⇣${count} "
