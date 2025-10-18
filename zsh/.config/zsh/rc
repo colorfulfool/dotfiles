@@ -1,4 +1,4 @@
-source ~/.config/bash/init
+source ~/.config/zsh/init
 
 # File system
 alias lsa='ls -a'
@@ -20,13 +20,9 @@ compinit
 
 # Set complete path
 export PATH="$HOME/.local/bin:$PATH"
-set +h
 
 # My Scripts
 export PATH="$HOME/.scripts:$PATH"
-
-# Prompt
-PS1="\W \[\033[1m\]\$\[\033[0m\] "
 
 # Enable vi mode
 bindkey -v
