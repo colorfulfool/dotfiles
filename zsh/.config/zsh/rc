@@ -1,0 +1,32 @@
+source ~/.config/bash/init
+
+# File system
+alias lsa='ls -a'
+alias ff="fzf --preview 'bat --style=numbers --color=always {}'"
+
+# Git
+alias g='git'
+alias gcm='git commit -m'
+alias gcam='git commit -a -m'
+alias gcad='git commit -a --amend'
+
+# Editor used by CLI
+export SUDO_EDITOR="$EDITOR"
+
+# Autocompletion
+zstyle :compinstall filename '$HOME/.zshrc'
+autoload -Uz compinit
+compinit
+
+# Set complete path
+export PATH="$HOME/.local/bin:$PATH"
+set +h
+
+# My Scripts
+export PATH="$HOME/.scripts:$PATH"
+
+# Prompt
+PS1="\W \[\033[1m\]\$\[\033[0m\] "
+
+# Enable vi mode
+bindkey -v
