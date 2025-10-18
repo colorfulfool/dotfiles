@@ -14,7 +14,7 @@ let
   };
   cursors = pkgs.fetchurl {
     url = "https://github.com/ful1e5/BreezeX_Cursor/releases/download/v2.0.1/BreezeX-Black.tar.xz";
-    hash = "sha256-2eACaOo6kWHZrMQ1QTIRrWKOTfJqaCm6tsWRy0AjRb8=";
+    hash = "sha256-dzt1UjdIFzQJ7mIoQbD3Sx6AYXpcWz3LtTp6w9BswjM=";
   };
   wallpaper = "/home/nixos/wallpapers/city.jpg";  # Path in live environment
 in
@@ -135,17 +135,15 @@ in
   image.fileName = "nixos-hyprland.iso";
   users.users.nixos = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "video" "audio" ];
+    extraGroups = [ "wheel" "video" "audio" "networkmanager" ];
   };
   security.sudo.wheelNeedsPassword = false;
 
   # Enable Wi-Fi
   networking.wireless.enable = false;
   networking.networkmanager.enable = true; # proivder nmcli, nmtui
-  users.users.nixos.extraGroups = ["networkmanager"];
 
   # Enable Bluetooth
-  hardware.pulseaudio.enable = true;
   hardware.bluetooth.enable = true;
   services.blueman.enable = true; # provides bluetoothctl
 }
