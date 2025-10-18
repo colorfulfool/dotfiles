@@ -90,13 +90,13 @@ in
     mkdir -p /home/nixos
     cp -r ${dotfiles} /home/nixos/.dotfiles
 
-    # Initialize zsh config from dotfiles
-    cp /home/nixos/.dotfiles/zsh/.zshrc.template /home/nixos/.zshrc
-
     # Stow dotfiles
-    cd /home/nixos/dotfiles
-    ${pkgs.stow}/bin/stow -Sv hypr waybar nvim kitty zellij systemd zed
+    cd /home/nixos/.dotfiles
+    ${pkgs.stow}/bin/stow -Sv hypr waybar nvim kitty zellij systemd zsh
     git reset --hard
+
+    # Initialize zsh config from dotfiles
+    cp /home/nixos/.config/zsh/.zshrc.template /home/nixos/.zshrc
 
     # Create directories
     cd /home/nixos
@@ -107,14 +107,11 @@ in
 
     # Copy wallpaper to home directory
     mkdir -p /home/nixos/wallpapers
-    cp ${./city.jpg} /home/nixos/wallpapers/city.jpg
+    cp ${wallpaper} /home/nixos/wallpapers/city.jpg
 
     # Copy curser theme to home directory
     mkdir -p /home/nixos/.icons
     cp ${cursors} /home/nixos/.icons/
-
-    # Set wallpaper
-    ${pkgs.swaybg}/bin/swaybg -i ${wallpaper} -m fill &
 
     # Set up zsh completions for GitHub CLI
     mkdir -p /home/nixos/.zsh/completions
