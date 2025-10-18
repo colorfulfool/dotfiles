@@ -68,16 +68,16 @@ in
     kitty
     zellij
     nerd-fonts.jetbrains-mono
-    swaybg  # For setting wallpaper
+    swaybg # for wallpaper
     stow
     mise
     git
-    gh      # GitHub CLI
+    gh # GitHub CLI
     ruby
-    kdePackages.dolphin     # File manager
-    hyprshot    # Screenshot tool
-    pamixer     # Audio control
-    playerctl   # Media control
+    kdePackages.dolphin # File manager
+    hyprshot  # Screenshot tool
+    pamixer  # Audio control
+    playerctl # Media control
     brightnessctl # Brightness control
     ani-cli
     chromium
@@ -86,6 +86,8 @@ in
     typescript-language-server # for typescript-tools in neovim
     btop
     uwsm
+    overskride # Bluetooth GUI
+    networkmanagerapplet # WiFi GUI
   ];
 
   # Activation script to handle dotfiles and wallpaper
@@ -98,6 +100,10 @@ in
     cd /home/nixos/dotfiles
     ${pkgs.stow}/bin/stow -Sv hypr waybar nvim kitty zellij systemd zed
     git reset --hard
+
+    # Create directories
+    cd /home/nixos
+    mkdir -p Projects Codebases Personal Tools
 
     # Install neovim plugins
     nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
@@ -129,7 +135,13 @@ in
   };
   security.sudo.wheelNeedsPassword = false;
 
-  # Ensure networking for live environment
+  # Enable Wi-Fi
   networking.wireless.enable = false;
-  networking.networkmanager.enable = true;
+  networking.networkmanager.enable = true; # proivder nmcli, nmtui
+  users.users.nixos.extraGroups = ["networkmanager"];
+
+  # Enable Bluetooth
+  hardware.pulseaudio.enable = true;
+  hardware.bluetooth.enable = true;
+  services.blueman.enable = true; # provides bluetoothctl
 }
