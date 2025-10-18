@@ -1,14 +1,5 @@
 source ~/.config/zsh/init
-
-# File system
-alias lsa='ls -a'
-alias ff="fzf --preview 'bat --style=numbers --color=always {}'"
-
-# Git
-alias g='git'
-alias gcm='git commit -m'
-alias gcam='git commit -a -m'
-alias gcad='git commit -a --amend'
+source ~/.config/zsh/aliases
 
 # Editor used by CLI
 export SUDO_EDITOR="$EDITOR"

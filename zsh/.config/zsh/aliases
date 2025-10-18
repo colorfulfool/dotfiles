@@ -1,0 +1,12 @@
+# File system
+alias lsa='ls -a'
+alias ff="fzf --preview 'bat --style=numbers --color=always {}'"
+
+# Git
+alias g='git'
+alias gcm='git commit -m'
+alias gcam='git commit -a -m'
+alias gcad='git commit -a --amend'
+
+# Clipboard
+alias pbcopy='wl-copy'
