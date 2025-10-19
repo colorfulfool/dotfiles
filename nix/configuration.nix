@@ -107,7 +107,7 @@ in
 
     # Copy wallpaper to home directory
     mkdir -p /home/nixos/wallpapers
-    cp ${wallpaper} /home/nixos/wallpapers/city.jpg
+    cp ${./city.jpg} /home/nixos/wallpapers/city.jpg
 
     # Copy curser theme to home directory
     mkdir -p /home/nixos/.icons
