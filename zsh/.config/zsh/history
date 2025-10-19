@@ -1,0 +1,3 @@
+HISTFILE=~/.zsh_history
+HISTSIZE=100000  # Maximum lines kept in memory
+SAVEHIST=100000  # Maximum lines saved to $HISTFILE
