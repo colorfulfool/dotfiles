@@ -1,3 +1,9 @@
-HISTFILE=~/.zsh_history
-HISTSIZE=100000  # Maximum lines kept in memory
-SAVEHIST=100000  # Maximum lines saved to $HISTFILE
+HISTFILE=~/.histfile
+HISTSIZE=1000
+SAVEHIST=1000
+setopt appendhistory
+
+# Fix to ctrl+r in tmux
+bindkey '^R' history-incremental-search-backward
+# Added ctrl+p for good measure, since that was also broken
+bindkey '^P' up-history

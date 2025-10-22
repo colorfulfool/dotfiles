@@ -8,5 +8,6 @@ alias gcm='git commit -m'
 alias gcam='git commit -a -m'
 alias gcad='git commit -a --amend'
 
-# Clipboard
+# MacOS-like OS interaction commands
 alias pbcopy='wl-copy'
+alias open='xdg-open'
