@@ -13,6 +13,8 @@ require("astrotheme").setup({
 
 vim.cmd("colorscheme astrodark")
 
+vim.env.PATH = vim.env.HOME .. "/.local/share/mise/shims:" .. vim.env.PATH
+
 local set = vim.opt -- set options
 set.tabstop = 2
 set.softtabstop = 2
