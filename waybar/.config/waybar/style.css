@@ -59,6 +59,11 @@ window#waybar.hidden {
   min-width: 14px;
 }
 
+#bluetooth {
+  padding-left: 9px;
+  padding-right: 9px;
+}
+
 #network, #pulseaudio {
   padding-left: 6px;
 }
