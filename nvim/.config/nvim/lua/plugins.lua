@@ -319,7 +319,7 @@ return packer.startup(function(use)
     },
     config = function()
       require("i18n-menu").setup()
-      vim.keymap.set("n", "<leader>ii", ":TranslateMenucr")
+      vim.keymap.set("n", "<leader>ii", ":TranslateMenu<CR>")
     end,
   }
 
