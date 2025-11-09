@@ -1,1 +1,2 @@
 source ~/.config/zsh/rc
+source ~/.config/zsh/aliases/linux # or aliases/macos

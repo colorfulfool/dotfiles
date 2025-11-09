@@ -8,6 +8,6 @@ alias gcm='git commit -m'
 alias gcam='git commit -a -m'
 alias gcad='git commit -a --amend'
 
-# MacOS-like OS interaction commands
-alias pbcopy='wl-copy'
-alias open='xdg-open'
+# Useful commands for dev
+alias codemodjs="codemod --extensions ts,tsx,js,jsx -d src"
+alias push-and-wait="git push && sleep 10 && gh pr checks --watch"
