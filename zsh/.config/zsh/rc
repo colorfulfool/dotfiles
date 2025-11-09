@@ -1,9 +1,9 @@
 source ~/.config/zsh/init
-source ~/.config/zsh/aliases
 source ~/.config/zsh/functions
 source ~/.config/zsh/history
 
 # Editor used by CLI
+export EDITOR="nvim"
 export SUDO_EDITOR="$EDITOR"
 
 # Autocompletion
@@ -19,3 +19,6 @@ export PATH="$HOME/.scripts:$PATH"
 
 # Enable vi mode
 bindkey -v
+
+# Shell prompt
+PS1="%c %{$fg_bold[black]%}$%{$reset_color%} "

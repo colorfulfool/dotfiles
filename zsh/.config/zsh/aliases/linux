@@ -1,0 +1,5 @@
+source ./common
+
+# MacOS-like OS interaction commands
+alias pbcopy='wl-copy'
+alias open='xdg-open'
