@@ -15,9 +15,11 @@
     "memory",
     "network",
     "pulseaudio",
+    "bluetooth",
     "battery",
     "clock"
   ],
+  "reload_style_on_change": true,
   "wlr/taskbar": {
     "format": "{icon}",
     "on-click": "activate",
@@ -53,13 +55,13 @@
   },
   "memory": {
     "interval": 5,
-    "format": "  {used}GB",
+    "format": "  {used:0.1f}GB",
     "expand": true,
     "max-length": 9
   },
   "cpu": {
     "interval": 5,
-    "format": "󰍛 {max_frequency}GHz",
+    "format": "󰍛 {max_frequency:0.1f}GHz",
     "justify": "left",
   },
   "tray": {
