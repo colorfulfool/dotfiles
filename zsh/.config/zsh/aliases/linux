@@ -1,4 +1,4 @@
-source ./common
+source ~/.config/zsh/aliases/common
 
 # MacOS-like OS interaction commands
 alias pbcopy='wl-copy'
