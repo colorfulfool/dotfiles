@@ -21,4 +21,6 @@ export PATH="$HOME/.scripts:$PATH"
 bindkey -v
 
 # Shell prompt
-PS1="%c %{$fg_bold[black]%}$%{$reset_color%} "
+if ! command -v starship &> /dev/null; then
+  PS1="%c %{$fg_bold[black]%}$%{$reset_color%} "
+fi
