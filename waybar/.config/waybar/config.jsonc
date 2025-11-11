@@ -78,7 +78,7 @@
     "tooltip-format": "{ifname} via {gwaddr} ",
     "format-linked": "",
     "format-disconnected": "⚠",
-    "format-alt": "{ifname}: {ipaddr}/{cidr}",
+    "format-disabled": " •‿•",
     "on-click": "uwsm app -- \"$TERMINAL\" --class=Impala -e impala"
   },
   "bluetooth": {
@@ -104,7 +104,7 @@
   "custom/logo": {
     "format": "  ",
     "tooltip": false,
-    "on-click": "wofi --show drun"
+    "on-click": "omarchy-menu"
   },
   "battery": {
     "format": "{capacity}% {icon}",
