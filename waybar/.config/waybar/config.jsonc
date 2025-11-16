@@ -15,7 +15,6 @@
     "memory",
     "network",
     "pulseaudio",
-    "bluetooth",
     "battery",
     "clock"
   ],
@@ -79,14 +78,14 @@
     "format-linked": "",
     "format-disconnected": "⚠",
     "format-disabled": " •‿•",
-    "on-click": "better-control -w"
+    "on-click": "toggle-better-control -w"
   },
   "bluetooth": {
     "format": "",
     "format-disabled": "󰂲",
     "format-connected": "",
     "tooltip-format": "Devices connected: {num_connections}",
-    "on-click": "better-control -b"
+    "on-click": "toggle-better-control -b"
   },
   "pulseaudio": {
     "format": "{icon}",
@@ -98,7 +97,7 @@
       "headphone": "",
       "default": ["󰖀","󰕾",""]
     },
-    "on-click": "better-control -v",
+    "on-click": "toggle-better-control -v",
     "scroll-step": 1
   },
   "custom/logo": {
@@ -119,7 +118,7 @@
     "tooltip-format-discharging": "{power:>1.0f}W↓ {capacity}%",
     "tooltip-format-charging": "{power:>1.0f}W↑ {capacity}%",
     "interval": 5,
-    "on-click": "better-control -B",
+    "on-click": "toggle-better-control -B",
     "states": {
       "warning": 20,
       "critical": 10
