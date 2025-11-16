@@ -19,3 +19,4 @@ pin $second_core "node-modules/next"
 pin $second_core tailwindcss
 pin $second_core storybook
 pin $second_core cc1
+pin $second_core ollama
