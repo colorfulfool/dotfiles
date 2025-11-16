@@ -243,8 +243,8 @@ return packer.startup(function(use)
       "neovim/nvim-lspconfig",
     },
     config = function()
-      local project_dir = vim.fn.fnamemodify(vim.fn.getcwd(), ':t')
       local rootFontSize = 16 -- Default size
+      local project_dir = vim.fn.fnamemodify(vim.fn.getcwd(), ':t')
 
       if project_dir == 'asvla-site-frontend' then
         rootFontSize = 20
