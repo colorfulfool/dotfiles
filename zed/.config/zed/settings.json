@@ -32,7 +32,10 @@
     "inline_completion_provider": "none"
   },
   "copilot": {
-    "disabled_globs": [".env", "*.scss"]
+    "disabled_globs": [
+      ".env",
+      "*.scss"
+    ]
   },
   "formatter": "language_server",
   "auto_update": false,
