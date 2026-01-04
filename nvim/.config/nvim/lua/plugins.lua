@@ -84,6 +84,7 @@ return packer.startup(function(use)
       end, {})
       vim.keymap.set('n', '<space>fb', builtin.buffers, {})
       vim.keymap.set('n', '<space>fh', builtin.help_tags, {})
+      vim.keymap.set('n', '<space>fr', builtin.resume, {})
       vim.keymap.set('n', '<space>gb', builtin.git_branches, {})
       vim.keymap.set('n', '<space>fl', builtin.lsp_document_symbols, {})
       vim.keymap.set('n', 'gr', builtin.lsp_references, {})
@@ -242,9 +243,21 @@ return packer.startup(function(use)
       "neovim/nvim-lspconfig",
     },
     config = function()
+      local rootFontSize = 16 -- Default size
+      local project_dir = vim.fn.fnamemodify(vim.fn.getcwd(), ':t')
+
+      if project_dir == 'asvla-site-frontend' then
+        rootFontSize = 20
+      end
+
       require("tailwind-tools").setup({
         document_color = {
           enabled = false
+        },
+        server = {
+          settings = { -- shortcut for `settings.tailwindCSS`
+            rootFontSize = rootFontSize
+          }
         }
       })
     end
