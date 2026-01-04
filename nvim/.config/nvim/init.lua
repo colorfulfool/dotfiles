@@ -59,15 +59,15 @@ vim.keymap.set('n', 'gd', vim.lsp.buf.definition, {})
 -- Line swapping functionality
 vim.keymap.set('n', '<C-S-j>', function()
   local current_line = vim.fn.line('.')
-  if current_line > 1 then
+  local total_lines = vim.fn.line('$')
+  if current_line < total_lines then
     vim.cmd('move .+1')
   end
 end, { noremap = true, silent = true })
 
 vim.keymap.set('n', '<C-S-k>', function()
   local current_line = vim.fn.line('.')
-  local total_lines = vim.fn.line('$')
-  if current_line < total_lines then
+  if current_line > 1 then
     vim.cmd('move .-2')
   end
 end, { noremap = true, silent = true })
