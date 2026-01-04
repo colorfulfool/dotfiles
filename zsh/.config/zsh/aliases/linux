@@ -2,4 +2,5 @@ source ~/.config/zsh/aliases/common
 
 # MacOS-like OS interaction commands
 alias pbcopy='wl-copy'
+alias pbpaste='wl-paste'
 alias open='xdg-open'
