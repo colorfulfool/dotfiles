@@ -226,9 +226,8 @@ return packer.startup(function(use)
       vim.api.nvim_create_autocmd("BufAdd", {
         pattern = "*.ts,*.tsx",
         callback = function(args)
-          vim.keymap.set("n", "gd", ":TSToolsGoToSourceDefinition<cr>", {
-            buffer = args.buf
-          })
+          vim.keymap.set("n", "gd", ":TSToolsGoToSourceDefinition<CR>", { buffer = args.buf, silent = true })
+          vim.keymap.set("n", "gD", ":lua vim.lsp.buf.definition()<CR>", { buffer = args.buf, silent = true })
         end
       })
     end,
