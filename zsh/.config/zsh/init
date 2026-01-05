@@ -18,3 +18,9 @@ fi
 if [ -s "$HOME/.bun/_bun" ]; then
   source "$HOME/.bun/_bun"
 fi
+
+# bun binaries
+if [ -s "$HOME/.cache/.bun/bin" ]; then
+  export PATH="$HOME/.cache/.bun/bin:$PATH"
+fi
+
