@@ -65,7 +65,17 @@ return packer.startup(function(use)
             ".avif$",
             ".webp$",
             ".mp3$",
-          }
+          },
+          vimgrep_arguments = {
+            'rg',
+            '--color=never',
+            '--no-heading',
+            '--with-filename',
+            '--line-number',
+            '--column',
+            '--smart-case',
+            '--hidden' -- search in .github and such
+          },
         },
         pickers = {
           buffers = { sort_mru = true },
