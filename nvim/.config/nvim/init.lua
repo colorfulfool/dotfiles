@@ -72,6 +72,9 @@ vim.keymap.set('n', '<C-S-k>', function()
   end
 end, { noremap = true, silent = true })
 
+vim.keymap.set('v', '<C-S-j>', ":move '>+1<CR>gv=gv", { noremap = true, silent = true })
+vim.keymap.set('v', '<C-S-k>', ":move '<-2<CR>gv=gv", { noremap = true, silent = true })
+
 vim.api.nvim_create_user_command("BlankSlate", "%bd|!git switch main", {})
 vim.api.nvim_create_user_command("CleanSlate", "%bd|!git switch main", {})
 
