@@ -14,7 +14,7 @@ success_symbol = "[\\$](bold light_blue)"
 vicmd_symbol = "[V](bold yellow)"
 
 [directory]
-truncation_length = 2
+truncation_length = 1
 truncation_symbol = "…/"
 repo_root_style = "bold light_blue"
 repo_root_format = "[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) "
