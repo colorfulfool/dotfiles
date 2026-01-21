@@ -377,6 +377,28 @@ return packer.startup(function(use)
   }
 
   use {
+    "brenton-leighton/multiple-cursors.nvim",
+    config = function()
+      require("multiple-cursors").setup()
+
+      vim.keymap.set({ "n", "x" }, "<space>a", "<Cmd>MultipleCursorsAddJumpNextMatch<CR>")
+      vim.keymap.set({ "n", "x" }, "<space>A", "<Cmd>MultipleCursorsJumpNextMatch<CR>")
+    end
+  }
+
+  use {
+    "napmn/react-extract.nvim",
+    config = function()
+      require("react-extract").setup()
+
+      -- vim.api.nvim_create_user_command("ReactExtract", require("react-extract").extract_to_new_file)
+      -- vim.api.nvim_create_user_command("ReactExtractCurrentFile", require("react-extract").extract_to_current_file)
+      vim.keymap.set({ "v" }, "<space>re", require("react-extract").extract_to_new_file)
+      vim.keymap.set({ "v" }, "<space>rc", require("react-extract").extract_to_current_file)
+    end
+  }
+
+  use {
     "folke/ts-comments.nvim",
     config = function()
       require("ts-comments").setup()
