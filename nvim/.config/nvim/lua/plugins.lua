@@ -413,10 +413,13 @@ return packer.startup(function(use)
         },
       })
 
+      vim.api.nvim_create_user_command("PrimeVisual", function() _99.visual_prompt() end, { range = true })
+      vim.api.nvim_create_user_command("PrimeFill", function() _99.fill_in_function() end, {})
       vim.api.nvim_create_user_command("PrimeStop", function() _99.stop_all_requests() end, {})
 
       vim.keymap.set("v", "<space>pv", function() _99.visual_prompt() end)
       vim.keymap.set("n", "<space>pf", function() _99.fill_in_function() end)
+      vim.keymap.set("n", "<space>ps", function() _99.stop_all_requests() end)
     end,
   }
 
