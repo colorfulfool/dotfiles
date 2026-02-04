@@ -75,6 +75,10 @@ end, { noremap = true, silent = true })
 vim.keymap.set('v', '<C-S-j>', ":move '>+1<CR>gv=gv", { noremap = true, silent = true })
 vim.keymap.set('v', '<C-S-k>', ":move '<-2<CR>gv=gv", { noremap = true, silent = true })
 
+vim.api.nvim_create_user_command("GitBlame", function(data)
+  vim.cmd(string.format("!git blame '%s' -L%d,%d", vim.fn.expand("%"), data.line1, data.line2))
+end, { range = true })
+
 vim.api.nvim_create_user_command("BlankSlate", "%bd|!git switch main", {})
 vim.api.nvim_create_user_command("CleanSlate", "%bd|!git switch main", {})
 
