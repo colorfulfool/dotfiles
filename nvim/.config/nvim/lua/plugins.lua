@@ -391,8 +391,8 @@ return packer.startup(function(use)
     config = function()
       require("react-extract").setup()
 
-      -- vim.api.nvim_create_user_command("ReactExtract", require("react-extract").extract_to_new_file)
-      -- vim.api.nvim_create_user_command("ReactExtractCurrentFile", require("react-extract").extract_to_current_file)
+      vim.api.nvim_create_user_command("ReactExtract", require("react-extract").extract_to_new_file, {})
+      vim.api.nvim_create_user_command("ReactExtractCurrentFile", require("react-extract").extract_to_current_file, {})
       vim.keymap.set({ "v" }, "<space>re", require("react-extract").extract_to_new_file)
       vim.keymap.set({ "v" }, "<space>rc", require("react-extract").extract_to_current_file)
     end
