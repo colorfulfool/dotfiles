@@ -399,6 +399,28 @@ return packer.startup(function(use)
   }
 
   use {
+    "ThePrimeagen/99",
+    config = function()
+      local _99 = require("99")
+      local cwd = vim.uv.cwd()
+      local basename = vim.fs.basename(cwd)
+      _99.setup({
+        model = "opencode/kimi-k2.5-free",
+        logger = {
+          level = _99.DEBUG,
+          path = "/tmp/" .. basename .. ".99.debug",
+          print_on_error = true,
+        },
+      })
+
+      vim.api.nvim_create_user_command("PrimeStop", function() _99.stop_all_requests() end, {})
+
+      vim.keymap.set("v", "<space>pv", function() _99.visual_prompt() end)
+      vim.keymap.set("n", "<space>pf", function() _99.fill_in_function() end)
+    end,
+  }
+
+  use {
     "folke/ts-comments.nvim",
     config = function()
       require("ts-comments").setup()
