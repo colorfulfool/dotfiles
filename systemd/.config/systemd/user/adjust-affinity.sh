@@ -20,3 +20,4 @@ pin $second_core tailwindcss
 pin $second_core storybook
 pin $second_core cc1
 pin $second_core ollama
+pin $second_core tsserver
