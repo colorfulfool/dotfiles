@@ -382,6 +382,7 @@ return packer.startup(function(use)
       require("multiple-cursors").setup()
 
       vim.keymap.set({ "n", "x" }, "<space>a", "<Cmd>MultipleCursorsAddJumpNextMatch<CR>")
+      vim.keymap.set({ "v" }, "<space>a", "<Cmd>MultipleCursorsAddVisualArea<CR>")
       vim.keymap.set({ "n", "x" }, "<space>A", "<Cmd>MultipleCursorsJumpNextMatch<CR>")
     end
   }
