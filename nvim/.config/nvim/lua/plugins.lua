@@ -438,6 +438,13 @@ return packer.startup(function(use)
     end
   }
 
+  use {
+    'dmmulroy/tsc.nvim',
+    config = function()
+      require('tsc').setup()
+    end,
+  }
+
   if PACKER_BOOTSTRAP then
     require("packer").sync()
   end
