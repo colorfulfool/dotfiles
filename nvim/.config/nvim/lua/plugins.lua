@@ -195,10 +195,10 @@ return packer.startup(function(use)
           },
         },
       })
-      lspconfig.elixirls.setup({
-        capabilities = capabilities,
-        cmd = { "/Users/antonkhamets/.local/elixir-ls/language_server.sh" }
-      })
+      -- lspconfig.elixirls.setup({
+      --   capabilities = capabilities,
+      --   cmd = { "/Users/antonkhamets/.local/elixir-ls/language_server.sh" }
+      -- })
 
       vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(args)
@@ -305,12 +305,7 @@ return packer.startup(function(use)
     "kylechui/nvim-surround",
     tag = "*",
     config = function()
-      require("nvim-surround").setup({
-        keymaps = {
-          visual = "S",
-          visual_line = "gS",
-        },
-      })
+      require("nvim-surround").setup()
     end
   }
 
@@ -414,11 +409,11 @@ return packer.startup(function(use)
         },
       })
 
-      vim.api.nvim_create_user_command("PrimeVisual", function() _99.visual_prompt() end, { range = true })
+      vim.api.nvim_create_user_command("PrimeVisual", function() _99.visual() end, { range = true })
       vim.api.nvim_create_user_command("PrimeFill", function() _99.fill_in_function() end, {})
       vim.api.nvim_create_user_command("PrimeStop", function() _99.stop_all_requests() end, {})
 
-      vim.keymap.set("v", "<space>pv", function() _99.visual_prompt() end)
+      vim.keymap.set("v", "<space>pv", function() _99.visual() end)
       vim.keymap.set("n", "<space>pf", function() _99.fill_in_function() end)
       vim.keymap.set("n", "<space>ps", function() _99.stop_all_requests() end)
     end,
