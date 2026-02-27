@@ -401,7 +401,7 @@ return packer.startup(function(use)
       local cwd = vim.uv.cwd()
       local basename = vim.fs.basename(cwd)
       _99.setup({
-        model = "opencode/kimi-k2.5-free",
+        model = "opencode/minimax-m2.5-free",
         logger = {
           level = _99.DEBUG,
           path = "/tmp/" .. basename .. ".99.debug",
