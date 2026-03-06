@@ -90,7 +90,12 @@ return packer.startup(function(use)
       vim.keymap.set('n', '<space><space>', builtin.find_files, {})
       vim.keymap.set('n', '<space>fg', builtin.live_grep, {})
       vim.keymap.set('n', '<space>fs', function()
-        builtin.grep_string({ word_match = "-w" })
+        local col = vim.fn.col('.')
+        local line = vim.fn.getline('.')
+        local s, e = col, col
+        while s > 1 and line:sub(s - 1, s - 1):match('[%w_%-]') do s = s - 1 end
+        while e < #line and line:sub(e + 1, e + 1):match('[%w_%-]') do e = e + 1 end
+        builtin.grep_string({ search = line:sub(s, e) })
       end, {})
       vim.keymap.set('n', '<space>fb', builtin.buffers, {})
       vim.keymap.set('n', '<space>fh', builtin.help_tags, {})
