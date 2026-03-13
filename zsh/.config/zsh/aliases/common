@@ -6,6 +6,7 @@ alias ff="fzf --preview 'bat --style=numbers --color=always {}'"
 alias g='git'
 alias gcm='git commit -m'
 alias gcam='git commit -a -m'
+alias gcd='git commit --amend'
 alias gcad='git commit -a --amend'
 
 alias ga='git worktree add' 
