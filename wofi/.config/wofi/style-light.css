@@ -12,6 +12,8 @@
   border-radius: 8px 8px 0 0;
   background-color: rgba(235, 235, 235, 0.9);
   color: #222;
+  outline: none;
+  box-shadow: none;
 }
 
 #inner-box {
