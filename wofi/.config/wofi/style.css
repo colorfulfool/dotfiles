@@ -1,3 +1,22 @@
 #window {
-  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+#input {
+  padding: 12px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  font-size: 18px;
+  border-radius: 8px 8px 0 0;
+}
+
+#inner-box {
+  padding: 8px;
+}
+
+#entry {
+  padding: 8px 8px;
+  border-radius: 4px;
+  font-size: 15px;
 }
