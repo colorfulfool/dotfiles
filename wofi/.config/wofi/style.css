@@ -1,1 +1,35 @@
-/home/colorfulfool/.config/wofi/style-dark.css
+#window {
+  border-radius: 8px;
+  border: 2px solid @theme_bg_color;
+  background-color: alpha(@borders, 0.85);
+}
+
+#input {
+  padding: 12px 12px;
+  border: 2px solid @theme_bg_color;
+  border-bottom: 1px solid @theme_bg_color;
+  font-size: 18px;
+  border-radius: 8px 8px 0 0;
+  background-color: alpha(@borders, 0.9);
+  outline: none;
+  box-shadow: none;
+}
+
+#inner-box {
+  padding: 8px;
+}
+
+#entry {
+  padding: 8px 8px;
+  border-radius: 4px;
+  font-size: 15px;
+}
+
+#entry:selected {
+  outline: none;
+  box-shadow: none;
+}
+
+#img {
+  margin-right: 8px;
+}
