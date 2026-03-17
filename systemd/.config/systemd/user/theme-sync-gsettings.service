@@ -1,0 +1,10 @@
+[Unit]
+Description=Sync KDE color scheme to gsettings and GTK theme
+
+[Service]
+Type=simple
+ExecStart=%h/.dotfiles/systemd/.config/systemd/user/theme-sync-gsettings.sh
+Restart=on-failure
+
+[Install]
+WantedBy=default.target
