@@ -375,6 +375,9 @@ return packer.startup(function(use)
         sources = {
           default = { 'lsp', 'path', 'snippets', 'buffer' },
           cmdline = {},
+          providers = {
+            buffer = { fallbacks = {} },
+          },
         },
         signature = { enabled = false }
       })
