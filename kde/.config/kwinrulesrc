@@ -1,0 +1,16 @@
+[1]
+Description=Hide Portal screenshot window
+launchfeedback=1
+launchfeedbackrule=3
+skippager=true
+skippagerrule=3
+skipswitcher=true
+skipswitcherrule=3
+skiptaskbar=true
+skiptaskbarrule=3
+wmclass=xdg-desktop-portal-kde
+wmclassmatch=1
+
+[General]
+count=1
+rules=1
