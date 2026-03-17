@@ -323,7 +323,14 @@ return packer.startup(function(use)
     "echasnovski/mini.nvim",
     config = function()
       require("mini.ai").setup({ n_lines = 100 })
-      require("mini.surround").setup({ n_lines = 100 })
+      require("mini.surround").setup({
+        n_lines = 100,
+        custom_surroundings = {
+          T = {
+            output = { left = '{twMerge(', right = ')}' },
+          },
+        },
+      })
       require("mini.operators").setup({
         replace = { prefix = "fuck" }
       })
@@ -376,7 +383,9 @@ return packer.startup(function(use)
           default = { 'lsp', 'path', 'snippets', 'buffer' },
           cmdline = {},
           providers = {
-            buffer = { fallbacks = {} },
+            lsp = { fallbacks = {} },
+            path = { fallbacks = {} },
+            buffer = { score_offset = -3 },
           },
         },
         signature = { enabled = false }
