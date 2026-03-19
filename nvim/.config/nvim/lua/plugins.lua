@@ -273,6 +273,9 @@ return packer.startup(function(use)
         document_color = {
           enabled = false
         },
+        conceal = {
+          enabled = false
+        },
         server = {
           settings = { -- shortcut for `settings.tailwindCSS`
             rootFontSize = rootFontSize
