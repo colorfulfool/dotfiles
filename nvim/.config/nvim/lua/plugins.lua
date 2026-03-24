@@ -315,14 +315,6 @@ return packer.startup(function(use)
   }
 
   use {
-    "kylechui/nvim-surround",
-    tag = "*",
-    config = function()
-      require("nvim-surround").setup()
-    end
-  }
-
-  use {
     "echasnovski/mini.nvim",
     config = function()
       require("mini.ai").setup({ n_lines = 100 })
@@ -330,13 +322,14 @@ return packer.startup(function(use)
         n_lines = 100,
         custom_surroundings = {
           T = {
-            output = { left = '{twMerge(', right = ')}' },
+            output = { left = '{twMerge("', right = '")}' },
           },
         },
       })
       require("mini.operators").setup({
         replace = { prefix = "fuck" }
       })
+      vim.keymap.set("x", "S", "sa", { remap = true })
     end
   }
 
