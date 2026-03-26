@@ -322,7 +322,7 @@ return packer.startup(function(use)
         n_lines = 100,
         custom_surroundings = {
           T = {
-            output = { left = '{twMerge("', right = '")}' },
+            output = { left = '{twMerge(', right = ')}' },
           },
         },
       })
