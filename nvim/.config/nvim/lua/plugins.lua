@@ -201,7 +201,12 @@ return packer.startup(function(use)
         capabilities = capabilities,
         settings = {
           Lua = {
+            runtime = { version = 'LuaJIT' },
             diagnostics = { globals = { 'vim' } },
+            workspace = {
+              library = vim.api.nvim_get_runtime_file("", true),
+              checkThirdParty = false,
+            },
           },
         },
       })
@@ -324,6 +329,15 @@ return packer.startup(function(use)
           T = {
             output = { left = '{twMerge(', right = ')}' },
           },
+          t = {
+            output = function()
+              local tag = MiniSurround.user_input("Tag")
+              if not tag then return nil end
+              local name = tag:match("^%S*")
+              local pad = string.rep(" ", vim.fn.indent(vim.fn.line(".")))
+              return { left = "<" .. tag .. ">\n" .. pad, right = "\n" .. pad .. "</" .. name .. ">" }
+            end,
+          },
         },
       })
       require("mini.operators").setup({
@@ -379,7 +393,19 @@ return packer.startup(function(use)
           default = { 'lsp', 'path', 'snippets', 'buffer' },
           cmdline = {},
           providers = {
-            lsp = { fallbacks = {} },
+            lsp = {
+              fallbacks = {},
+              enabled = function()
+                local node = vim.treesitter.get_node()
+                while node do
+                  if node:type() == 'string' or node:type() == 'string_content' or node:type() == 'string_fragment' or node:type() == 'template_string' then
+                    return false
+                  end
+                  node = node:parent()
+                end
+                return true
+              end,
+            },
             path = { fallbacks = {} },
             buffer = { score_offset = -3 },
           },
