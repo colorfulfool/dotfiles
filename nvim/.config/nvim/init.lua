@@ -1,4 +1,5 @@
 require("plugins")
+require("lsp-commands")
 require("commands")
 
 require("astrotheme").setup({
@@ -79,7 +80,6 @@ vim.api.nvim_create_user_command("GitBlame", function(data)
 end, { range = true })
 
 vim.api.nvim_create_user_command("BlankSlate", "%bd|!git switch main", {})
-vim.api.nvim_create_user_command("CleanSlate", "%bd|!git switch main", {})
 
 local function remove_qf_item(mode)
   local qf_list = vim.fn.getqflist()
