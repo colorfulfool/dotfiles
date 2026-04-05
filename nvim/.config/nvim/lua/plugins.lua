@@ -335,6 +335,11 @@ return packer.startup(function(use)
               if not tag then return nil end
               local name = tag:match("^%S*")
               local pad = string.rep(" ", vim.fn.indent(vim.fn.line(".")))
+              local sel_start = vim.fn.line("'<")
+              local sel_end = vim.fn.line("'>")
+              vim.schedule(function()
+                vim.cmd((sel_start + 1) .. "," .. (sel_end + 1) .. ">")
+              end)
               return { left = "<" .. tag .. ">\n" .. pad, right = "\n" .. pad .. "</" .. name .. ">" }
             end,
           },
