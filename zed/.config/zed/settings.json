@@ -7,18 +7,22 @@
 // custom settings, run the `open default settings` command
 // from the command palette or from `Zed` application menu.
 {
+  "inline_code_actions": false,
+  "edit_predictions": {
+    "provider": "none"
+  },
   "theme": {
-    "mode": "dark",
+    "mode": "system",
     "light": "macOS Classic Light",
     "dark": "One Dark"
   },
   "languages": {
     "Gleam": {
-      "show_inline_completions": false,
+      "show_edit_predictions": false,
       "formatter": "language_server"
     },
     "TSX": {
-      "show_inline_completions": false,
+      "show_edit_predictions": false,
     },
     "Markdown": {
       "soft_wrap": "editor_width"
@@ -28,8 +32,7 @@
     }
   },
   "features": {
-    "copilot": false,
-    "inline_completion_provider": "none"
+    "copilot": false
   },
   "copilot": {
     "disabled_globs": [
@@ -41,8 +44,8 @@
   "auto_update": false,
   "vim_mode": true,
   "ui_font_size": 15,
-  "buffer_font_family": "JetBrains Mono",
-  "ui_font_family": "JetBrains Mono",
+  "buffer_font_family": "JetBrainsMono Nerd Font Mono",
+  "ui_font_family": "JetBrainsMono Nerd Font Mono",
   "buffer_font_size": 13,
   "project_panel": {
     "dock": "right",
@@ -59,14 +62,13 @@
     "dock": "right"
   },
   "chat_panel": {
-    "button": false
+    "button": "never"
   },
-  "assistant": {
+  "agent": {
     "default_model": {
       "provider": "zed.dev",
       "model": "claude-3-5-sonnet-latest"
     },
-    "version": "2",
     "button": false,
     "dock": "left"
   },
@@ -83,7 +85,7 @@
   },
   "preview_tabs": {
     "enabled": false,
-    "enable_preview_from_code_navigation": true
+    "enable_keep_preview_on_code_navigation": true
   },
   "vim": {
     "use_system_clipboard": "on_yank"
@@ -94,5 +96,5 @@
   "preferred_line_length": 80,
   "tab_size": 2,
   "vertical_scroll_margin": 6,
-  "relative_line_numbers": true
+  "relative_line_numbers": "enabled"
 }
