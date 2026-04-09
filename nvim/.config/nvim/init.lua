@@ -59,25 +59,6 @@ vim.keymap.set("n", "<space>h", ":noh<cr>")
 
 vim.keymap.set('n', 'gd', vim.lsp.buf.definition, {})
 
--- Line swapping functionality
-vim.keymap.set('n', '<C-S-j>', function()
-  local current_line = vim.fn.line('.')
-  local total_lines = vim.fn.line('$')
-  if current_line < total_lines then
-    vim.cmd('move .+1')
-  end
-end, { noremap = true, silent = true })
-
-vim.keymap.set('n', '<C-S-k>', function()
-  local current_line = vim.fn.line('.')
-  if current_line > 1 then
-    vim.cmd('move .-2')
-  end
-end, { noremap = true, silent = true })
-
-vim.keymap.set('v', '<C-S-j>', ":move '>+1<CR>gv=gv", { noremap = true, silent = true })
-vim.keymap.set('v', '<C-S-k>', ":move '<-2<CR>gv=gv", { noremap = true, silent = true })
-
 vim.api.nvim_create_user_command("GitBlame", function(data)
   vim.cmd(string.format("!git blame '%s' -L%d,%d", vim.fn.expand("%"), data.line1, data.line2))
 end, { range = true })
