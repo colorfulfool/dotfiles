@@ -49,6 +49,8 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 
 vim.api.nvim_set_keymap('t', '<ESC>', '<C-\\><C-n>', { noremap = true })
 
+vim.diagnostic.config({ virtual_text = true })
+
 local bufopts = { noremap = true, silent = true, buffer = buffer }
 vim.keymap.set("n", "<space>e", vim.diagnostic.open_float, bufopts)
 vim.keymap.set("n", "]e", vim.diagnostic.goto_next, bufopts)
