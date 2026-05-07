@@ -401,6 +401,11 @@ return packer.startup(function(use)
             lsp = {
               fallbacks = {},
               enabled = function()
+                for _, client in ipairs(vim.lsp.get_clients({ bufnr = 0 })) do
+                  if client.name == 'tailwindcss' then
+                    return true
+                  end
+                end
                 local node = vim.treesitter.get_node()
                 while node do
                   if node:type() == 'string' or node:type() == 'string_content' or node:type() == 'string_fragment' or node:type() == 'template_string' then
