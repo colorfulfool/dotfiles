@@ -7,6 +7,8 @@
 // custom settings, run the `open default settings` command
 // from the command palette or from `Zed` application menu.
 {
+  "colorize_brackets": false,
+  "lsp_document_colors": "none",
   "inline_code_actions": false,
   "edit_predictions": {
     "provider": "none"
@@ -91,6 +93,7 @@
     "use_system_clipboard": "on_yank"
   },
   "indent_guides": {
+    "background_coloring": "disabled",
     "enabled": false
   },
   "preferred_line_length": 80,
