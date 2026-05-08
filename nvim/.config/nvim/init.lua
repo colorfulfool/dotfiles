@@ -51,6 +51,10 @@ vim.api.nvim_set_keymap('t', '<ESC>', '<C-\\><C-n>', { noremap = true })
 
 vim.diagnostic.config({ virtual_text = true })
 
+if vim.lsp.document_color then
+  vim.lsp.document_color.enable(false)
+end
+
 local bufopts = { noremap = true, silent = true, buffer = buffer }
 vim.keymap.set("n", "<space>e", vim.diagnostic.open_float, bufopts)
 vim.keymap.set("n", "]e", vim.diagnostic.goto_next, bufopts)
