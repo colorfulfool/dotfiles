@@ -222,7 +222,7 @@ return packer.startup(function(use)
           local client = vim.lsp.get_client_by_id(client_id)
           if not client then return end
 
-          if client.supports_method("textDocument/formatting") then
+          if client:supports_method("textDocument/formatting") then
             vim.api.nvim_create_autocmd("BufWritePre", {
               buffer = args.buf,
               callback = function()
