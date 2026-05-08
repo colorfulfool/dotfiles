@@ -29,13 +29,40 @@ set.expandtab = true
 vim.cmd("set wrap!")
 vim.cmd("set cursorline")
 
--- vim.opt.foldmethod = "indent"
-vim.opt.foldmethod = "expr"
-vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+vim.opt.foldmethod = "manual"
 vim.opt.foldlevelstart = 99
+
+for _, key in ipairs({ "zc", "zC", "zo", "zO", "za", "zA", "zM", "zR", "zm", "zr", "zv", "zx" }) do
+  vim.keymap.set("n", key, function()
+    if not vim.b.ts_folds_enabled then
+      vim.b.ts_folds_enabled = true
+      vim.opt_local.foldmethod = "expr"
+      vim.opt_local.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+    end
+    vim.api.nvim_feedkeys(key, "n", false)
+  end)
+end
 
 vim.opt.splitright = true
 vim.opt.splitbelow = true
+
+local saved_views = {}
+vim.api.nvim_create_autocmd({ "BufLeave", "BufWinLeave", "WinLeave" }, {
+  callback = function(args)
+    saved_views[args.buf] = vim.fn.winsaveview()
+  end,
+})
+vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
+  callback = function(args)
+    local view = saved_views[args.buf]
+    if view then vim.fn.winrestview(view) end
+  end,
+})
+vim.api.nvim_create_autocmd("BufWipeout", {
+  callback = function(args) saved_views[args.buf] = nil end,
+})
+
+vim.opt.lazyredraw = true
 
 vim.api.nvim_create_autocmd('TextYankPost', {
   group = vim.api.nvim_create_augroup('highlight_yank', {}),
