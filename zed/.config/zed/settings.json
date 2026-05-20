@@ -7,6 +7,9 @@
 // custom settings, run the `open default settings` command
 // from the command palette or from `Zed` application menu.
 {
+  "git_panel": {
+    "dock": "left"
+  },
   "colorize_brackets": false,
   "lsp_document_colors": "none",
   "inline_code_actions": false,
@@ -57,6 +60,7 @@
     "button": false
   },
   "outline_panel": {
+    "dock": "left",
     "button": false
   },
   "collaboration_panel": {
