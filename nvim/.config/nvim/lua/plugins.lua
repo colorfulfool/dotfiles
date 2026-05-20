@@ -241,7 +241,7 @@ return packer.startup(function(use)
   use {
     "pmizio/typescript-tools.nvim",
     requires = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
-    commit = "3c501d7",
+    commit = "c2f5910",
     config = function()
       require("typescript-tools").setup({
         expose_as_code_action = "all",
