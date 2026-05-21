@@ -107,6 +107,8 @@ return packer.startup(function(use)
       vim.keymap.set('n', '<space>fr', builtin.resume, {})
       vim.keymap.set('n', '<space>gb', builtin.git_branches, {})
       vim.keymap.set('n', '<space>fl', builtin.lsp_document_symbols, {})
+      vim.keymap.set('n', '<space>fL', builtin.lsp_dynamic_workspace_symbols, {})
+      vim.keymap.set('n', '<space>ga', builtin.lsp_dynamic_workspace_symbols, {})
       vim.keymap.set('n', 'gr', builtin.lsp_references, {})
 
       local telescope = require('telescope')
