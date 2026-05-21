@@ -199,6 +199,15 @@ return packer.startup(function(use)
       lspconfig.pyright.setup({ capabilities = capabilities })
       lspconfig.rust_analyzer.setup({ capabilities = capabilities })
       lspconfig.gopls.setup({ capabilities = capabilities })
+      lspconfig.tailwindcss.setup({
+        capabilities = capabilities,
+        cmd_env = { NODE_OPTIONS = "--max-old-space-size=8192" },
+        settings = {
+          tailwindCSS = {
+            rootFontSize = vim.fn.fnamemodify(vim.fn.getcwd(), ':t') == 'asvla-site-frontend' and 20 or 16,
+          },
+        },
+      })
       lspconfig.lua_ls.setup({
         capabilities = capabilities,
         settings = {
@@ -269,13 +278,6 @@ return packer.startup(function(use)
       "neovim/nvim-lspconfig",
     },
     config = function()
-      local rootFontSize = 16 -- Default size
-      local project_dir = vim.fn.fnamemodify(vim.fn.getcwd(), ':t')
-
-      if project_dir == 'asvla-site-frontend' then
-        rootFontSize = 20
-      end
-
       require("tailwind-tools").setup({
         document_color = {
           enabled = false
@@ -284,9 +286,7 @@ return packer.startup(function(use)
           enabled = false
         },
         server = {
-          settings = { -- shortcut for `settings.tailwindCSS`
-            rootFontSize = rootFontSize
-          }
+          override = false, -- LSP configured directly via lspconfig.tailwindcss.setup
         }
       })
     end
