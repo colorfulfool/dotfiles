@@ -374,6 +374,8 @@ return packer.startup(function(use)
     end,
   }
 
+  use "rafamadriz/friendly-snippets"
+
   use {
     "saghen/blink.cmp",
     tag = "v0.11.0",
