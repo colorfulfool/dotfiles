@@ -55,6 +55,7 @@ return packer.startup(function(use)
         defaults = {
           file_ignore_patterns = {
             "^node_modules/",
+            "%.next/",
             "^build/",
             "^out/",
             "^performance/",
@@ -108,8 +109,20 @@ return packer.startup(function(use)
       vim.keymap.set('n', '<space>gb', builtin.git_branches, {})
       vim.keymap.set('n', '<space>fl', builtin.lsp_document_symbols, {})
       vim.keymap.set('n', '<space>fL', builtin.lsp_dynamic_workspace_symbols, {})
+      -- dynamic_workspace_symbols ignores file_ignore_patterns, so drop
+      -- generated files (e.g. Next.js .next/types) via a custom entry_maker.
+      local make_entry = require('telescope.make_entry')
       vim.keymap.set('n', '<space>fa', function()
-        builtin.lsp_dynamic_workspace_symbols({ symbols = { 'function', 'method', 'class' } })
+        local default_maker = make_entry.gen_from_lsp_symbols({})
+        builtin.lsp_dynamic_workspace_symbols({
+          symbols = { 'function', 'method', 'class' },
+          entry_maker = function(item)
+            if item.filename and item.filename:match('%.next/') then
+              return nil
+            end
+            return default_maker(item)
+          end,
+        })
       end, {})
       vim.keymap.set('n', 'gr', builtin.lsp_references, {})
 
@@ -228,6 +241,39 @@ return packer.startup(function(use)
       --   cmd = { "/Users/antonkhamets/.local/elixir-ls/language_server.sh" }
       -- })
 
+      -- tsgo: the Go TypeScript LSP (@typescript/native-preview), standard LSP
+      vim.lsp.config('tsgo', {
+        cmd = { 'tsgo', '--lsp', '--stdio' },
+        filetypes = { 'typescript', 'typescriptreact', 'javascript', 'javascriptreact' },
+        root_markers = { { 'tsconfig.json', 'jsconfig.json' }, 'package.json', '.git' },
+        capabilities = capabilities,
+      })
+      vim.lsp.enable('tsgo')
+
+      -- Replicate typescript-tools commands via standard LSP code actions.
+      -- tsgo advertises these as `source.*` kinds; any it doesn't support no-ops.
+      local function ts_source_action(kind)
+        return function()
+          vim.lsp.buf.code_action({
+            context = { only = { kind }, diagnostics = {} },
+            apply = true,
+          })
+        end
+      end
+      vim.api.nvim_create_user_command('TSToolsAddMissingImports', ts_source_action('source.addMissingImports.ts'), {})
+      vim.api.nvim_create_user_command('TSToolsOrganizeImports', ts_source_action('source.organizeImports.ts'), {})
+      vim.api.nvim_create_user_command('TSToolsRemoveUnused', ts_source_action('source.removeUnused.ts'), {})
+      vim.api.nvim_create_user_command('TSToolsRemoveUnusedImports', ts_source_action('source.removeUnusedImports.ts'), {})
+      vim.api.nvim_create_user_command('TSToolsSortImports', ts_source_action('source.sortImports.ts'), {})
+      vim.api.nvim_create_user_command('TSToolsFixAll', ts_source_action('source.fixAll.ts'), {})
+
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
+        callback = function(args)
+          vim.keymap.set("n", "gd", vim.lsp.buf.definition, { buffer = args.buf, silent = true })
+        end
+      })
+
       vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(args)
           local client_id = args.data.client_id
@@ -249,26 +295,6 @@ return packer.startup(function(use)
         end
       })
     end
-  }
-
-  use {
-    "pmizio/typescript-tools.nvim",
-    requires = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
-    commit = "c2f5910",
-    config = function()
-      require("typescript-tools").setup({
-        expose_as_code_action = "all",
-        complete_function_calls = true,
-      })
-
-      vim.api.nvim_create_autocmd("BufAdd", {
-        pattern = "*.ts,*.tsx",
-        callback = function(args)
-          vim.keymap.set("n", "gd", ":TSToolsGoToSourceDefinition<CR>", { buffer = args.buf, silent = true })
-          vim.keymap.set("n", "gD", ":lua vim.lsp.buf.definition()<CR>", { buffer = args.buf, silent = true })
-        end
-      })
-    end,
   }
 
   use {
