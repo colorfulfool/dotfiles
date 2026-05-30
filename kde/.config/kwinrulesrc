@@ -11,6 +11,13 @@ skiptaskbarrule=3
 wmclass=xdg-desktop-portal-kde
 wmclassmatch=1
 
+[2]
+Description=mpv keep fullscreen
+fullscreen=true
+fullscreenrule=4
+wmclass=mpv
+wmclassmatch=1
+
 [General]
-count=1
-rules=1
+count=2
+rules=1,2
