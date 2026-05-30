@@ -109,15 +109,28 @@ return packer.startup(function(use)
       vim.keymap.set('n', '<space>gb', builtin.git_branches, {})
       vim.keymap.set('n', '<space>fl', builtin.lsp_document_symbols, {})
       vim.keymap.set('n', '<space>fL', builtin.lsp_dynamic_workspace_symbols, {})
-      -- dynamic_workspace_symbols ignores file_ignore_patterns, so drop
-      -- generated files (e.g. Next.js .next/types) via a custom entry_maker.
+      -- Filter workspace symbols in a custom entry_maker (dynamic_workspace_symbols
+      -- ignores both file_ignore_patterns and the `symbols` kind option reliably):
+      --   * drop generated files (e.g. Next.js .next/types)
+      --   * keep functions / methods / classes
+      --   * keep PascalCase variables/constants too, since arrow-function
+      --     components (const Foo = () => ...) report as Variable, not Function.
+      --     The PascalCase test (initial upper + a lowercase) keeps components
+      --     like PrimaryButton while dropping consts like defaultCountry/API_URL.
       local make_entry = require('telescope.make_entry')
       vim.keymap.set('n', '<space>fa', function()
         local default_maker = make_entry.gen_from_lsp_symbols({})
         builtin.lsp_dynamic_workspace_symbols({
-          symbols = { 'function', 'method', 'class' },
           entry_maker = function(item)
             if item.filename and item.filename:match('%.next/') then
+              return nil
+            end
+            local kind = (item.kind or ''):lower()
+            local name = (item.text or ''):match('%]%s+(.*)')
+            local callable = kind == 'function' or kind == 'method' or kind == 'class'
+            local component = (kind == 'variable' or kind == 'constant')
+              and name and name:match('^%u') and name:match('%l')
+            if not (callable or component) then
               return nil
             end
             return default_maker(item)
