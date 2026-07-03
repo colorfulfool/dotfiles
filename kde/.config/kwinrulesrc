@@ -18,6 +18,15 @@ fullscreenrule=4
 wmclass=mpv
 wmclassmatch=1
 
+[3]
+Description=Playwright MiniBrowser no focus steal
+acceptfocus=false
+acceptfocusrule=2
+fsplevel=4
+fsplevelrule=2
+wmclass=MiniBrowser
+wmclassmatch=1
+
 [General]
-count=2
-rules=1,2
+count=3
+rules=1,2,3
