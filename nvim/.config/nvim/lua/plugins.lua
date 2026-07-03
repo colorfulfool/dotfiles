@@ -107,35 +107,114 @@ return packer.startup(function(use)
       vim.keymap.set('n', '<space>fh', builtin.help_tags, {})
       vim.keymap.set('n', '<space>fr', builtin.resume, {})
       vim.keymap.set('n', '<space>gb', builtin.git_branches, {})
-      vim.keymap.set('n', '<space>fl', builtin.lsp_document_symbols, {})
       vim.keymap.set('n', '<space>fL', builtin.lsp_dynamic_workspace_symbols, {})
-      -- Filter workspace symbols in a custom entry_maker (dynamic_workspace_symbols
-      -- ignores both file_ignore_patterns and the `symbols` kind option reliably):
+      local make_entry = require('telescope.make_entry')
+      local pickers = require('telescope.pickers')
+      local finders = require('telescope.finders')
+      local conf = require('telescope.config').values
+
+      -- <space>fa (workspace symbols): dynamic_workspace_symbols returns a flat
+      -- SymbolInformation list and ignores both file_ignore_patterns and the
+      -- `symbols` kind option, so filter in a custom entry_maker:
       --   * drop generated files (e.g. Next.js .next/types)
       --   * keep functions / methods / classes
       --   * keep PascalCase variables/constants too, since arrow-function
       --     components (const Foo = () => ...) report as Variable, not Function.
       --     The PascalCase test (initial upper + a lowercase) keeps components
       --     like PrimaryButton while dropping consts like defaultCountry/API_URL.
-      local make_entry = require('telescope.make_entry')
-      vim.keymap.set('n', '<space>fa', function()
+      local function filtered_symbol_maker()
         local default_maker = make_entry.gen_from_lsp_symbols({})
-        builtin.lsp_dynamic_workspace_symbols({
-          entry_maker = function(item)
-            if item.filename and item.filename:match('%.next/') then
-              return nil
+        return function(item)
+          if item.filename and item.filename:match('%.next/') then
+            return nil
+          end
+          local kind = (item.kind or ''):lower()
+          local name = (item.text or ''):match('%]%s+(.*)')
+          local callable = kind == 'function' or kind == 'method' or kind == 'class'
+          local component = (kind == 'variable' or kind == 'constant')
+            and name and name:match('^%u') and name:match('%l')
+          if not (callable or component) then
+            return nil
+          end
+          return default_maker(item)
+        end
+      end
+      vim.keymap.set('n', '<space>fa', function()
+        builtin.lsp_dynamic_workspace_symbols({ entry_maker = filtered_symbol_maker() })
+      end, {})
+
+      local SK = vim.lsp.protocol.SymbolKind
+      local KEEP = { Function = true, Method = true, Constructor = true,
+        Class = true, Interface = true, Enum = true, Namespace = true,
+        Module = true, Variable = true, Constant = true }
+      local RECURSE = { Class = true, Interface = true, Enum = true,
+        Namespace = true, Module = true, Struct = true }
+
+      local function import_line_set(bufnr)
+        local set = {}
+        local in_import = false
+        for i, raw in ipairs(vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)) do
+          local l = raw:gsub('^%s+', '')
+          if in_import then
+            set[i - 1] = true -- LSP lines are 0-indexed
+            if l:match("from%s+['\"]") or l:match("['\"]%s*;?%s*$") then
+              in_import = false
             end
-            local kind = (item.kind or ''):lower()
-            local name = (item.text or ''):match('%]%s+(.*)')
-            local callable = kind == 'function' or kind == 'method' or kind == 'class'
-            local component = (kind == 'variable' or kind == 'constant')
-              and name and name:match('^%u') and name:match('%l')
-            if not (callable or component) then
-              return nil
+          elseif l:match('^import[%s{*\'"]') or l == 'import' then
+            set[i - 1] = true
+            if not (l:match("from%s+['\"]") or l:match("^import%s+['\"]")) then
+              in_import = true -- multi-line import, keep consuming until `from '...'`
             end
-            return default_maker(item)
-          end,
-        })
+          end
+        end
+        return set
+      end
+
+      local function collect_defs(symbols, bufnr, imports, out)
+        for _, s in ipairs(symbols or {}) do
+          local kind = SK[s.kind]
+          local sel = s.selectionRange or s.range or (s.location and s.location.range)
+          local is_import = (kind == 'Variable' or kind == 'Constant')
+            and sel and imports[sel.start.line]
+          if sel and KEEP[kind] and not is_import then
+            table.insert(out, {
+              filename = vim.api.nvim_buf_get_name(bufnr),
+              lnum = sel.start.line + 1,
+              col = sel.start.character + 1,
+              kind = kind,
+              text = string.format('[%s] %s', kind, s.name),
+            })
+          end
+          if s.children and RECURSE[kind] then
+            collect_defs(s.children, bufnr, imports, out)
+          end
+        end
+      end
+
+      vim.keymap.set('n', '<space>fl', function()
+        local bufnr = vim.api.nvim_get_current_buf()
+        local params = { textDocument = vim.lsp.util.make_text_document_params(bufnr) }
+        vim.lsp.buf_request_all(bufnr, 'textDocument/documentSymbol', params, function(results)
+          local symbols
+          for _, r in pairs(results or {}) do
+            if r.result and #r.result > 0 then symbols = r.result break end
+          end
+          if not symbols then
+            vim.notify('No document symbols', vim.log.levels.INFO)
+            return
+          end
+          local items = {}
+          collect_defs(symbols, bufnr, import_line_set(bufnr), items)
+          pickers.new({}, {
+            prompt_title = 'Document Definitions',
+            finder = finders.new_table({
+              results = items,
+              entry_maker = make_entry.gen_from_lsp_symbols({ bufnr = bufnr }),
+            }),
+            sorter = conf.generic_sorter({}),
+            previewer = conf.qflist_previewer({}),
+          }):find()
+        end)
       end, {})
       vim.keymap.set('n', 'gr', builtin.lsp_references, {})
 
@@ -227,6 +306,7 @@ return packer.startup(function(use)
       lspconfig.pyright.setup({ capabilities = capabilities })
       lspconfig.rust_analyzer.setup({ capabilities = capabilities })
       lspconfig.gopls.setup({ capabilities = capabilities })
+      lspconfig.svelte.setup({ capabilities = capabilities })
       lspconfig.tailwindcss.setup({
         capabilities = capabilities,
         cmd_env = { NODE_OPTIONS = "--max-old-space-size=8192" },
@@ -264,7 +344,8 @@ return packer.startup(function(use)
       vim.lsp.enable('tsgo')
 
       -- Replicate typescript-tools commands via standard LSP code actions.
-      -- tsgo advertises these as `source.*` kinds; any it doesn't support no-ops.
+      -- tsgo advertises these WITHOUT the `.ts` suffix that tsserver/typescript-tools used:
+      --   quickfix, source.organizeImports, source.removeUnusedImports, source.sortImports, source.fixAll
       local function ts_source_action(kind)
         return function()
           vim.lsp.buf.code_action({
@@ -273,12 +354,73 @@ return packer.startup(function(use)
           })
         end
       end
-      vim.api.nvim_create_user_command('TSToolsAddMissingImports', ts_source_action('source.addMissingImports.ts'), {})
-      vim.api.nvim_create_user_command('TSToolsOrganizeImports', ts_source_action('source.organizeImports.ts'), {})
-      vim.api.nvim_create_user_command('TSToolsRemoveUnused', ts_source_action('source.removeUnused.ts'), {})
-      vim.api.nvim_create_user_command('TSToolsRemoveUnusedImports', ts_source_action('source.removeUnusedImports.ts'), {})
-      vim.api.nvim_create_user_command('TSToolsSortImports', ts_source_action('source.sortImports.ts'), {})
-      vim.api.nvim_create_user_command('TSToolsFixAll', ts_source_action('source.fixAll.ts'), {})
+
+      -- tsgo does NOT advertise `source.addMissingImports`; it only offers the
+      -- import as a `quickfix` action attached to each "Cannot find name"
+      -- diagnostic (and an aggregate "Add all missing imports" when several are
+      -- missing). So we request quickfix actions for all buffer diagnostics and
+      -- apply the aggregate, falling back to the lone "Add import" action.
+      local function ts_add_missing_imports()
+        local bufnr = vim.api.nvim_get_current_buf()
+        local client = vim.lsp.get_clients({ bufnr = bufnr, name = 'tsgo' })[1]
+        if not client then return end
+        local lsp_diags = {}
+        for _, d in ipairs(vim.diagnostic.get(bufnr)) do
+          if d.user_data and d.user_data.lsp then
+            table.insert(lsp_diags, d.user_data.lsp)
+          end
+        end
+        if #lsp_diags == 0 then return end
+        local params = {
+          textDocument = vim.lsp.util.make_text_document_params(bufnr),
+          range = {
+            start = { line = 0, character = 0 },
+            ['end'] = { line = vim.api.nvim_buf_line_count(bufnr), character = 0 },
+          },
+          context = { only = { 'quickfix' }, diagnostics = lsp_diags },
+        }
+        client:request('textDocument/codeAction', params, function(err, result)
+          if err or not result then return end
+          local chosen
+          for _, a in ipairs(result) do
+            if type(a) == 'table' and a.title == 'Add all missing imports' then
+              chosen = a
+              break
+            end
+          end
+          if not chosen then
+            for _, a in ipairs(result) do
+              if type(a) == 'table' and a.title and a.title:match('^Add import') then
+                chosen = a
+                break
+              end
+            end
+          end
+          if not chosen then return end
+          local function apply(a)
+            if a.edit then
+              vim.lsp.util.apply_workspace_edit(a.edit, client.offset_encoding)
+            end
+            if a.command then
+              client:request('workspace/executeCommand', a.command, nil, bufnr)
+            end
+          end
+          if chosen.edit or chosen.command then
+            apply(chosen)
+          else
+            client:request('codeAction/resolve', chosen, function(_, resolved)
+              apply(resolved or chosen)
+            end, bufnr)
+          end
+        end, bufnr)
+      end
+
+      vim.api.nvim_create_user_command('TSToolsAddMissingImports', ts_add_missing_imports, {})
+      vim.api.nvim_create_user_command('TSToolsOrganizeImports', ts_source_action('source.organizeImports'), {})
+      vim.api.nvim_create_user_command('TSToolsRemoveUnused', ts_source_action('source.removeUnused'), {})
+      vim.api.nvim_create_user_command('TSToolsRemoveUnusedImports', ts_source_action('source.removeUnusedImports'), {})
+      vim.api.nvim_create_user_command('TSToolsSortImports', ts_source_action('source.sortImports'), {})
+      vim.api.nvim_create_user_command('TSToolsFixAll', ts_source_action('source.fixAll'), {})
 
       vim.api.nvim_create_autocmd("FileType", {
         pattern = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
@@ -500,7 +642,7 @@ return packer.startup(function(use)
       local cwd = vim.uv.cwd()
       local basename = vim.fs.basename(cwd)
       _99.setup({
-        model = "ollama/qwen2.5-coder:3b",
+        model = "ollama/gemma4:e2b-it-qat",
         logger = {
           level = _99.DEBUG,
           path = "/tmp/" .. basename .. ".99.debug",
