@@ -47,6 +47,10 @@ transcode-video-4K() {
   ffmpeg -i $1 -c:v libx265 -preset slow -crf 24 -c:a aac -b:a 192k ${1%.*}-optimized.mp4
 }
 
+youtube() {
+  mpv --ytdl-format="bestvideo[height<=?1080][vcodec!=?av01]+bestaudio/best" "$1"
+}
+
 # Transcode any image to JPG image that's great for shrinking wallpapers
 img2jpg() {
   magick $1 -quality 95 -strip ${1%.*}.jpg
@@ -65,3 +69,17 @@ img2png() {
     -define png:exclude-chunk=all \
     "${1%.*}.png"
 }
+lowcpu() {
+  systemd-run --user --scope --quiet -p CPUWeight=20 -- "$@"
+}
+
+cd_to_dir() {
+    local selected_dir
+    selected_dir=$(fd -t d . "${1:-.}" | fzf +m --height 50% --preview 'tree -C {}')
+    if [[ -n "$selected_dir" ]]; then
+        # Change to the selected directory
+        cd "$selected_dir" || return 1
+    fi
+}
+
+alias cds='cd_to_dir'
