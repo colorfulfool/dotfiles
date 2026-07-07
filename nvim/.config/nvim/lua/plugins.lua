@@ -642,7 +642,7 @@ return packer.startup(function(use)
       local cwd = vim.uv.cwd()
       local basename = vim.fs.basename(cwd)
       _99.setup({
-        model = "ollama/gemma4:e2b-it-qat",
+        model = "opencode/mimo-v2.5-free",
         logger = {
           level = _99.DEBUG,
           path = "/tmp/" .. basename .. ".99.debug",
