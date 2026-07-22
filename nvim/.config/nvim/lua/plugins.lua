@@ -316,6 +316,46 @@ return packer.startup(function(use)
           },
         },
       })
+
+      -- Resolve Tailwind v4 var(--*) refs in tailwindcss LSP hover to literal
+      -- values (v4 generates `font-size: var(--text-lg)` and the language
+      -- server shows the var ref instead of the resolved px).
+      local theme_vars = nil
+      local function load_theme_vars()
+        if theme_vars then return theme_vars end
+        theme_vars = {}
+        local files = vim.fn.systemlist("rg -l --glob '*.css' -- '--[a-z]' 2>/dev/null")
+        for _, f in ipairs(files) do
+          for _, line in ipairs(vim.fn.readfile(f)) do
+            local name, val = line:match("^%s*(%-%-[%w-]+):%s*([^;]+);")
+            if name and val then theme_vars[name] = vim.trim(val) end
+          end
+        end
+        return theme_vars
+      end
+      vim.api.nvim_create_user_command("TailwindReloadThemeVars", function()
+        theme_vars = nil
+      end, {})
+
+      local orig_hover = vim.lsp.handlers["textDocument/hover"]
+      vim.lsp.handlers["textDocument/hover"] = function(err, result, ctx, config)
+        local client = vim.lsp.get_client_by_id(ctx.client_id)
+        if client and client.name == "tailwindcss" and result and result.contents then
+          local vars = load_theme_vars()
+          local function fix(s)
+            return (s:gsub("var%((%-%-[%w-]+)%)", function(n)
+              return vars[n] and (vars[n] .. " /* " .. n .. " */") or ("var(" .. n .. ")")
+            end))
+          end
+          local c = result.contents
+          if type(c) == "string" then
+            result.contents = fix(c)
+          elseif c.value then
+            c.value = fix(c.value)
+          end
+        end
+        return orig_hover(err, result, ctx, config)
+      end
       lspconfig.lua_ls.setup({
         capabilities = capabilities,
         settings = {
