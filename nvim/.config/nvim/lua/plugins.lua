@@ -118,10 +118,13 @@ return packer.startup(function(use)
       -- `symbols` kind option, so filter in a custom entry_maker:
       --   * drop generated files (e.g. Next.js .next/types)
       --   * keep functions / methods / classes
-      --   * keep PascalCase variables/constants too, since arrow-function
-      --     components (const Foo = () => ...) report as Variable, not Function.
-      --     The PascalCase test (initial upper + a lowercase) keeps components
-      --     like PrimaryButton while dropping consts like defaultCountry/API_URL.
+      --   * keep variables/constants that look like identifiers, since
+      --     arrow-function definitions (const foo = () => ...) report as
+      --     Variable, not Function -- this covers both PascalCase components
+      --     (PrimaryButton) and camelCase functions (fetchLobby). LSP flat
+      --     symbols carry no value info, so a Variable can't be proven
+      --     callable; we approximate by dropping only SCREAMING_SNAKE_CASE
+      --     data consts (API_URL, GAME_LIMIT) and keeping everything else.
       local function filtered_symbol_maker()
         local default_maker = make_entry.gen_from_lsp_symbols({})
         return function(item)
@@ -131,9 +134,11 @@ return packer.startup(function(use)
           local kind = (item.kind or ''):lower()
           local name = (item.text or ''):match('%]%s+(.*)')
           local callable = kind == 'function' or kind == 'method' or kind == 'class'
-          local component = (kind == 'variable' or kind == 'constant')
-            and name and name:match('^%u') and name:match('%l')
-          if not (callable or component) then
+          -- keep any variable/constant whose name has a lowercase letter
+          -- (drops SCREAMING_SNAKE_CASE consts, keeps camelCase + PascalCase)
+          local defined = (kind == 'variable' or kind == 'constant')
+            and name and name:match('%l')
+          if not (callable or defined) then
             return nil
           end
           return default_maker(item)
