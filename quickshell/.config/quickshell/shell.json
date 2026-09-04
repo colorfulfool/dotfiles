@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "idle": {
+    "screensaver": 150,
+    "lock": 300
+  },
+  "bar": {
+    "id": "omarchy.bar",
+    "position": "top",
+    "transparent": false,
+    "centerAnchor": "omarchy.clock",
+    "layout": {
+      "left": [
+        { "id": "omarchy.menu" },
+        { "id": "omarchy.workspaces" }
+      ],
+      "center": [],
+      "right": [
+        { "id": "omarchy.tray" },
+        {
+          "id": "cpu",
+          "type": "command",
+          "exec": "~/.config/omarchy/bar/scripts/cpu.sh",
+          "interval": 5,
+          "tooltip": "CPU"
+        },
+        {
+          "id": "memory",
+          "type": "command",
+          "exec": "~/.config/omarchy/bar/scripts/memory.sh",
+          "interval": 5,
+          "tooltip": "Memory"
+        },
+        { "id": "omarchy.network" },
+        { "id": "omarchy.bluetooth" },
+        { "id": "omarchy.audio" },
+        { "id": "omarchy.power" },
+        { "id": "omarchy.clock", "format": "HH:mm" }
+      ]
+    }
+  },
+  "plugins": []
+}
