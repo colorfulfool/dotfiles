@@ -1,0 +1,33 @@
+# waybar-dark — Omarchy theme recreating the Waybar look
+# Palette mapped from waybar/.config/waybar/style.css
+mode = "dark"
+
+accent = "#1793d1"            # #custom-logo arch blue
+selection = "#3d3d3d"          # text-selection background
+muted = "#6e6e6e"              # de-emphasized text
+
+background = "#181818"         # window#waybar rgba(24,24,24,0.6) base
+dark_background = "#131313"
+darker_background = "#0d0d0d"  # tooltip #131822 family
+lighter_background = "#242424" # module pills rgba(0,0,0,0.16) over bar
+
+foreground = "#aaaaaa"         # module + workspace button text
+dark_foreground = "#5c5c5c"
+light_foreground = "#c9c9c9"
+bright_foreground = "#ededed"  # active/hover text
+
+red = "#ff0048"                # battery warning/critical/urgent
+yellow = "#d7ba7d"
+orange = "#d19a66"
+green = "#a6e3a1"              # battery charging
+cyan = "#7db8c4"
+blue = "#1793d1"
+magenta = "#b48ead"
+brown = "#8a6d4b"
+
+bright_red = "#ff0000"         # workspace urgent rgba(255,0,0,1.0)
+bright_yellow = "#e5c07b"
+bright_green = "#b5e8b5"
+bright_cyan = "#8fc7d4"
+bright_blue = "#4aa3df"
+bright_magenta = "#c98ac9"
