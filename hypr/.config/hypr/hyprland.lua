@@ -11,7 +11,8 @@ cursorSize = "32"
 
 -- Execute your favorite apps at launch
 hl.on("hyprland.start", function ()
-  hl.exec_cmd("uwsm app -- waybar")
+  -- hl.exec_cmd("uwsm app -- waybar")
+  hl.exec_cmd("omarchy-launch-shell")
   hl.exec_cmd("uwsm app -- hypridle")
   hl.exec_cmd("uwsm app -- swaybg -i ~/.dotfiles/nix/city.jpg -m fill")
   hl.exec_cmd("uwsm app -- hyprctl setcursor " .. cursorTheme .. " " .. cursorSize)
