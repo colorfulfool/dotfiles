@@ -1,13 +1,13 @@
 hl.monitor({ mode = "preferred", position = "auto", scale = 1 })
 
 -- Set programs that you use
-terminal = "kitty"
-fileManager = "nautilus"
-browser = "chromium"
-menu = "wofi -iIa --show drun --style ~/.config/wofi/style.css -W 800"
+local terminal = "kitty"
+local fileManager = "nautilus"
+local browser = "chromium"
+local menu = "wofi -iIa --show drun --style ~/.config/wofi/style.css -W 800"
 
-cursorTheme = "BreezeX-Black"
-cursorSize = "32"
+local cursorTheme = "BreezeX-Black"
+local cursorSize = "32"
 
 -- Execute your favorite apps at launch
 hl.on("hyprland.start", function ()
