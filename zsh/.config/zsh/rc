@@ -24,3 +24,7 @@ bindkey -v
 if ! command -v starship &> /dev/null; then
   PS1="%c %{$fg_bold[black]%}$%{$reset_color%} "
 fi
+
+# Blank line between a command's output and the next prompt.
+# Self-redefining so there's no stray blank line before the first prompt.
+precmd() { precmd() { echo } }
