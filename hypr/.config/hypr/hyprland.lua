@@ -13,8 +13,8 @@ local launch = function(cmd) return "uwsm-app -- " .. cmd end
 
 -- Execute your favorite apps at launch
 hl.on("hyprland.start", function()
-  -- hl.exec_cmd(launch("waybar"))
-  hl.exec_cmd("omarchy-launch-shell")
+  hl.exec_cmd(launch("waybar"))
+  -- hl.exec_cmd("omarchy-launch-shell")
   hl.exec_cmd(launch("hypridle"))
   hl.exec_cmd(launch("swaybg -i ~/.dotfiles/nix/city.jpg -m fill"))
   hl.exec_cmd("hyprctl setcursor " .. cursorTheme .. " " .. cursorSize)
@@ -27,76 +27,76 @@ hl.env("QT_QPA_PLATFORMTHEME", "qt6ct")
 hl.env("TERMINAL", terminal)
 
 hl.config({
-    input = {
-        kb_layout = "us",
-        follow_mouse = 1,
-        touchpad = {
-            natural_scroll = true
-        },
-        natural_scroll = true,
-        sensitivity = 0,
-        repeat_delay = 200,
-        repeat_rate = 30
+  input = {
+    kb_layout = "us",
+    follow_mouse = 1,
+    touchpad = {
+      natural_scroll = true
     },
-    cursor = {
-        hide_on_key_press = true
+    natural_scroll = true,
+    sensitivity = 0,
+    repeat_delay = 200,
+    repeat_rate = 30
+  },
+  cursor = {
+    hide_on_key_press = true
+  },
+  general = {
+    gaps_in = 0,
+    gaps_out = 0,
+    border_size = 2,
+    col = {
+      active_border = { colors = { "rgba(33ccffee)", "rgba(00ff99ee)" }, angle = 45 },
+      inactive_border = "rgba(595959aa)"
     },
-    general = {
-        gaps_in = 0,
-        gaps_out = 0,
-        border_size = 2,
-        col = {
-            active_border = { colors = {"rgba(33ccffee)", "rgba(00ff99ee)"}, angle = 45 },
-            inactive_border = "rgba(595959aa)"
-        },
-        snap = {
-            border_overlap = true
-        },
-        layout = "dwindle",
-        allow_tearing = false
+    snap = {
+      border_overlap = true
     },
-    decoration = {
-        rounding = 0,
-        shadow = {
-            enabled = true,
-            range = 4,
-            render_power = 3,
-            color = "rgba(1a1a1aee)"
-        },
-        blur = {
-            enabled = true,
-            size = 3,
-            passes = 1,
-            vibrancy = 0.1696
-        }
+    layout = "dwindle",
+    allow_tearing = false
+  },
+  decoration = {
+    rounding = 0,
+    shadow = {
+      enabled = true,
+      range = 4,
+      render_power = 3,
+      color = "rgba(1a1a1aee)"
     },
-    group = {
-        col = {
-            border_active = { colors = {"rgba(33ccffee)", "rgba(00ff99ee)"}, angle = 45 },
-            border_inactive = "rgba(595959aa)"
-        },
-        groupbar = {
-            font_family = "JetBrainsMono Nerd Font",
-            gradients = true,
-            col = {
-                active = "rgba(24242499)",
-                inactive = "rgba(00000099)"
-            },
-            gaps_in = 0,
-            gaps_out = 0
-        }
-    },
-    animations = {
-        enabled = true
-    },
-    dwindle = {
-        pseudotile = true,
-        preserve_split = true
-    },
-    misc = {
-        disable_hyprland_logo = true,
-        disable_splash_rendering = true
+    blur = {
+      enabled = true,
+      size = 3,
+      passes = 1,
+      vibrancy = 0.1696
     }
+  },
+  group = {
+    col = {
+      border_active = { colors = { "rgba(33ccffee)", "rgba(00ff99ee)" }, angle = 45 },
+      border_inactive = "rgba(595959aa)"
+    },
+    groupbar = {
+      font_family = "JetBrainsMono Nerd Font",
+      gradients = true,
+      col = {
+        active = "rgba(24242499)",
+        inactive = "rgba(00000099)"
+      },
+      gaps_in = 0,
+      gaps_out = 0
+    }
+  },
+  animations = {
+    enabled = true
+  },
+  dwindle = {
+    pseudotile = true,
+    preserve_split = true
+  },
+  misc = {
+    disable_hyprland_logo = true,
+    disable_splash_rendering = true
+  }
 })
 
 hl.animation({ leaf = "windows", enabled = true, speed = 7, bezier = "default" })
@@ -112,13 +112,16 @@ hl.animation({ leaf = "workspaces", enabled = true, speed = 6, bezier = "default
 -- source = ~/.local/share/omarchy/default/hypr/bindings/utilities.conf
 
 hl.window_rule({ match = { tag = "floating-window" }, float = true, center = true, size = "800 600" })
-hl.window_rule({ match = { class = "blueberry.py|Impala|Wiremix|org.gnome.NautilusPreviewer|com.gabm.satty|Omarchy|About|TUI.float|Netsoft-com.netsoft.hubstaff|localsend" }, tag = "floating-window" })
-hl.window_rule({ match = { class = "xdg-desktop-portal-gtk|DesktopEditors|org.gnome.Nautilus", title = "^(Open.*Files?|Open [F|f]older.*|Save.*Files?|Save.*As|Save|All Files)" }, tag = "floating-window" })
+hl.window_rule({ match = { class = "blueberry.py|Impala|Wiremix|org.gnome.NautilusPreviewer|com.gabm.satty|Omarchy|About|TUI.float|Netsoft-com.netsoft.hubstaff|localsend" }, tag =
+"floating-window" })
+hl.window_rule({ match = { class = "xdg-desktop-portal-gtk|DesktopEditors|org.gnome.Nautilus", title = "^(Open.*Files?|Open [F|f]older.*|Save.*Files?|Save.*As|Save|All Files)" }, tag =
+"floating-window" })
 hl.window_rule({ match = { class = "Slack|sublime_merge" }, float = true, size = "995 800" })
 hl.window_rule({ match = { title = "Picture in picture" }, border_size = 0, rounding = 15 })
 hl.window_rule({ match = { class = "^Godot$", title = "^Godot$" }, tile = true })
 hl.window_rule({ match = { class = "^blender$", title = "^Blender$" }, size = "900 600", center = true })
-hl.window_rule({ match = { class = "better_control.py" }, float = true, border_size = 0, animation = "slide top", move = "(monitor_w-810) (52)", size = "800 550", rounding = 10, opacity = "0.95" })
+hl.window_rule({ match = { class = "better_control.py" }, float = true, border_size = 0, animation = "slide top", move =
+"(monitor_w-810) (52)", size = "800 550", rounding = 10, opacity = "0.95" })
 hl.window_rule({ match = { class = ".*" }, suppress_event = "maximize" })
 
 hl.layer_rule({ match = { namespace = "wofi" }, animation = "fade" })
@@ -189,9 +192,9 @@ hl.bind("SUPER + ALT + code:37", hl.dsp.window.resize({ x = 0, y = -100 }))
 hl.bind("SUPER + ALT + code:36", hl.dsp.window.resize({ x = 0, y = 100 }))
 
 for i = 1, 10 do
-    local key = i % 10
-    hl.bind("SUPER + " .. key, hl.dsp.focus({ workspace = i }))
-    hl.bind("SUPER + SHIFT + " .. key, hl.dsp.window.move({ workspace = i }))
+  local key = i % 10
+  hl.bind("SUPER + " .. key, hl.dsp.focus({ workspace = i }))
+  hl.bind("SUPER + SHIFT + " .. key, hl.dsp.window.move({ workspace = i }))
 end
 
 hl.bind("SUPER + S", hl.dsp.workspace.toggle_special("magic"))
