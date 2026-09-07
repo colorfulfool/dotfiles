@@ -26,11 +26,13 @@ switch_tab = "prefix+1..9"
 switch_workspace = "prefix+shift+1..9"
 focus_agent = "prefix+alt+1..9"
 
-previous_agent = ["prefix+alt+up", "alt+up"]
-next_agent = ["prefix+alt+down", "alt+down"]
-# Alt+left/right switches tabs (keeps prefix+p/n defaults)
-previous_tab = ["prefix+p", "prefix+alt+left", "alt+left"]
-next_tab = ["prefix+n", "prefix+alt+right", "alt+right"]
+previous_agent = "alt+shift+up"
+next_agent = "alt+shift+down"
+
+previous_workspace = "alt+up"
+next_workspace = "alt+down"
+previous_tab = ["prefix+p", "alt+left"]
+next_tab = ["prefix+n", "alt+right"]
 
 [ui]
 accent = "blue"
