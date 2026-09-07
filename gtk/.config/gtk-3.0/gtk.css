@@ -1,5 +1,1 @@
 @import 'colors.css';
-
-menubar {
-  background-color: @theme_header_background_breeze;
-}
