@@ -1,4 +1,4 @@
-hl.monitor({ mode = "preferred", position = "auto", scale = 1 })
+hl.monitor({ output = "", mode = "preferred", position = "auto", scale = 1 })
 
 -- Set programs that you use
 local terminal = "kitty"
@@ -42,9 +42,9 @@ hl.config({
     hide_on_key_press = true
   },
   general = {
-    gaps_in = 0,
-    gaps_out = 0,
-    border_size = 2,
+    gaps_in = 4,
+    gaps_out = 8,
+    border_size = 0,
     col = {
       active_border = { colors = { "rgba(33ccffee)", "rgba(00ff99ee)" }, angle = 45 },
       inactive_border = "rgba(595959aa)"
@@ -56,7 +56,7 @@ hl.config({
     allow_tearing = false
   },
   decoration = {
-    rounding = 0,
+    rounding = 8,
     shadow = {
       enabled = true,
       range = 4,
@@ -90,7 +90,6 @@ hl.config({
     enabled = true
   },
   dwindle = {
-    pseudotile = true,
     preserve_split = true
   },
   misc = {
@@ -112,16 +111,31 @@ hl.animation({ leaf = "workspaces", enabled = true, speed = 6, bezier = "default
 -- source = ~/.local/share/omarchy/default/hypr/bindings/utilities.conf
 
 hl.window_rule({ match = { tag = "floating-window" }, float = true, center = true, size = "800 600" })
-hl.window_rule({ match = { class = "blueberry.py|Impala|Wiremix|org.gnome.NautilusPreviewer|com.gabm.satty|Omarchy|About|TUI.float|Netsoft-com.netsoft.hubstaff|localsend" }, tag =
-"floating-window" })
-hl.window_rule({ match = { class = "xdg-desktop-portal-gtk|DesktopEditors|org.gnome.Nautilus", title = "^(Open.*Files?|Open [F|f]older.*|Save.*Files?|Save.*As|Save|All Files)" }, tag =
-"floating-window" })
+hl.window_rule({
+  match = { class = "blueberry.py|Impala|Wiremix|org.gnome.NautilusPreviewer|com.gabm.satty|Omarchy|About|TUI.float|Netsoft-com.netsoft.hubstaff|localsend" },
+  tag =
+  "floating-window"
+})
+hl.window_rule({
+  match = { class = "xdg-desktop-portal-gtk|DesktopEditors|org.gnome.Nautilus", title = "^(Open.*Files?|Open [F|f]older.*|Save.*Files?|Save.*As|Save|All Files)" },
+  tag =
+  "floating-window"
+})
 hl.window_rule({ match = { class = "Slack|sublime_merge" }, float = true, size = "995 800" })
 hl.window_rule({ match = { title = "Picture in picture" }, border_size = 0, rounding = 15 })
 hl.window_rule({ match = { class = "^Godot$", title = "^Godot$" }, tile = true })
 hl.window_rule({ match = { class = "^blender$", title = "^Blender$" }, size = "900 600", center = true })
-hl.window_rule({ match = { class = "better_control.py" }, float = true, border_size = 0, animation = "slide top", move =
-"(monitor_w-810) (52)", size = "800 550", rounding = 10, opacity = "0.95" })
+hl.window_rule({
+  match = { class = "better_control.py" },
+  float = true,
+  border_size = 0,
+  animation = "slide top",
+  move =
+  "(monitor_w-810) (52)",
+  size = "800 550",
+  rounding = 10,
+  opacity = "0.95"
+})
 hl.window_rule({ match = { class = ".*" }, suppress_event = "maximize" })
 
 hl.layer_rule({ match = { namespace = "wofi" }, animation = "fade" })
@@ -134,7 +148,7 @@ hl.bind("SUPER + P", hl.dsp.window.pseudo())
 hl.bind("SUPER + F", hl.dsp.window.fullscreen())
 hl.bind("SUPER + SHIFT + G", hl.dsp.group.toggle())
 hl.bind("SUPER + G", hl.dsp.layout("togglesplit"))
-hl.bind("SUPER + ALT + G", hl.dsp.group.active({ index = "f" }))
+hl.bind("SUPER + ALT + G", hl.dsp.group.next())
 
 hl.bind("SUPER + W", hl.dsp.exec_cmd(launch(terminal)))
 hl.bind("SUPER + R", hl.dsp.exec_cmd(menu))
