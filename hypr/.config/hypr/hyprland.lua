@@ -16,14 +16,16 @@ hl.on("hyprland.start", function()
   hl.exec_cmd(launch("waybar"))
   -- hl.exec_cmd("omarchy-launch-shell")
   hl.exec_cmd(launch("hypridle"))
-  hl.exec_cmd(launch("swaybg -i ~/.dotfiles/nix/city.jpg -m fill"))
+  hl.exec_cmd("pkill -x swaybg || true")
+  hl.exec_cmd(launch("hyprpaper"))
+  hl.exec_cmd("~/.config/hypr/scripts/wallpaper.sh restore")
   hl.exec_cmd("hyprctl setcursor " .. cursorTheme .. " " .. cursorSize)
   hl.exec_cmd(launch("yin_yang --minimized"))
 end)
 
 hl.env("XCURSOR_THEME", cursorTheme)
 hl.env("XCURSOR_SIZE", cursorSize)
-hl.env("QT_QPA_PLATFORMTHEME", "qt6ct")
+hl.env("QT_QPA_PLATFORMTHEME", "kde")
 hl.env("TERMINAL", terminal)
 
 hl.config({
@@ -42,26 +44,27 @@ hl.config({
     hide_on_key_press = true
   },
   general = {
-    gaps_in = 4,
-    gaps_out = 8,
-    border_size = 0,
+    gaps_in = 5,
+    gaps_out = { top = 6, right = 12, bottom = 12, left = 12 },
+    border_size = 2,
     col = {
       active_border = { colors = { "rgba(33ccffee)", "rgba(00ff99ee)" }, angle = 45 },
-      inactive_border = "rgba(595959aa)"
+      inactive_border = "rgba(ffffff00)"
     },
     snap = {
       border_overlap = true
     },
-    layout = "dwindle",
+    layout = "scrolling",
     allow_tearing = false
   },
   decoration = {
     rounding = 8,
     shadow = {
       enabled = true,
-      range = 4,
-      render_power = 3,
-      color = "rgba(1a1a1aee)"
+      range = 12,
+      render_power = 2,
+      color = "rgba(00000044)",
+      color_inactive = "rgba(00000028)"
     },
     blur = {
       enabled = true,
@@ -73,7 +76,7 @@ hl.config({
   group = {
     col = {
       border_active = { colors = { "rgba(33ccffee)", "rgba(00ff99ee)" }, angle = 45 },
-      border_inactive = "rgba(595959aa)"
+      border_inactive = "rgba(ffffff00)"
     },
     groupbar = {
       font_family = "JetBrainsMono Nerd Font",
@@ -92,6 +95,9 @@ hl.config({
   dwindle = {
     preserve_split = true
   },
+  scrolling = {
+    fullscreen_on_one_column = false
+  },
   misc = {
     disable_hyprland_logo = true,
     disable_splash_rendering = true
@@ -105,23 +111,20 @@ hl.animation({ leaf = "borderangle", enabled = true, speed = 8, bezier = "defaul
 hl.animation({ leaf = "fade", enabled = true, speed = 7, bezier = "default" })
 hl.animation({ leaf = "fadeLayers", enabled = true, speed = 3, bezier = "default" })
 hl.animation({ leaf = "fadeLayersOut", enabled = true, speed = 1, bezier = "default" })
-hl.animation({ leaf = "workspaces", enabled = true, speed = 6, bezier = "default" })
+hl.animation({ leaf = "workspaces", enabled = true, speed = 6, bezier = "default", style = "slidevert" })
 
 -- Source omarchy bindings
 -- source = ~/.local/share/omarchy/default/hypr/bindings/utilities.conf
 
 hl.window_rule({ match = { tag = "floating-window" }, float = true, center = true, size = "800 600" })
 hl.window_rule({
-  match = { class = "blueberry.py|Impala|Wiremix|org.gnome.NautilusPreviewer|com.gabm.satty|Omarchy|About|TUI.float|Netsoft-com.netsoft.hubstaff|localsend" },
-  tag =
-  "floating-window"
+  match = { class = "blueberry.py|Impala|Wiremix|org.gnome.NautilusPreviewer|com.gabm.satty|Omarchy|About|TUI.float|Netsoft-com.netsoft.hubstaff" },
+  tag = "floating-window"
 })
 hl.window_rule({
   match = { class = "xdg-desktop-portal-gtk|DesktopEditors|org.gnome.Nautilus", title = "^(Open.*Files?|Open [F|f]older.*|Save.*Files?|Save.*As|Save|All Files)" },
-  tag =
-  "floating-window"
+  tag = "floating-window"
 })
-hl.window_rule({ match = { class = "Slack|sublime_merge" }, float = true, size = "995 800" })
 hl.window_rule({ match = { title = "Picture in picture" }, border_size = 0, rounding = 15 })
 hl.window_rule({ match = { class = "^Godot$", title = "^Godot$" }, tile = true })
 hl.window_rule({ match = { class = "^blender$", title = "^Blender$" }, size = "900 600", center = true })
@@ -130,8 +133,7 @@ hl.window_rule({
   float = true,
   border_size = 0,
   animation = "slide top",
-  move =
-  "(monitor_w-810) (52)",
+  move = "(monitor_w/2-400) (60)",
   size = "800 550",
   rounding = 10,
   opacity = "0.95"
@@ -143,6 +145,7 @@ hl.layer_rule({ match = { namespace = "wofi" }, blur = true })
 
 hl.bind("SUPER + X", hl.dsp.window.kill())
 hl.bind("SUPER + C", hl.dsp.window.kill())
+hl.bind("SUPER + W", hl.dsp.window.kill())
 hl.bind("SUPER + V", hl.dsp.window.float({ action = "toggle" }))
 hl.bind("SUPER + P", hl.dsp.window.pseudo())
 hl.bind("SUPER + F", hl.dsp.window.fullscreen())
@@ -150,7 +153,7 @@ hl.bind("SUPER + SHIFT + G", hl.dsp.group.toggle())
 hl.bind("SUPER + G", hl.dsp.layout("togglesplit"))
 hl.bind("SUPER + ALT + G", hl.dsp.group.next())
 
-hl.bind("SUPER + W", hl.dsp.exec_cmd(launch(terminal)))
+hl.bind("SUPER + Return", hl.dsp.exec_cmd(launch(terminal)))
 hl.bind("SUPER + R", hl.dsp.exec_cmd(menu))
 hl.bind("SUPER + E", hl.dsp.exec_cmd(launch(fileManager)))
 hl.bind("SUPER + B", hl.dsp.exec_cmd(launch(browser)), { description = "Browser" })
@@ -160,6 +163,8 @@ hl.bind("SUPER + CTRL + L", hl.dsp.exec_cmd("pidof hyprlock || hyprlock"), { des
 hl.bind("SUPER + M", hl.dsp.exec_cmd("omarchy-launch-or-focus lollypop"), { description = "Music" })
 hl.bind("SUPER + A", hl.dsp.exec_cmd('omarchy-launch-webapp "https://gemini.google.com"'), { description = "Grok" })
 hl.bind("SUPER + T", hl.dsp.exec_cmd(launch(terminal .. " -e btop")), { description = "Top" })
+hl.bind("SUPER + ALT + W", hl.dsp.exec_cmd("~/.config/hypr/scripts/wallpaper.sh next"),
+  { description = "Random wallpaper" })
 
 hl.bind("ALT + SHIFT + 3", hl.dsp.exec_cmd("hyprshot -m output"))
 hl.bind("ALT + SHIFT + 4", hl.dsp.exec_cmd("hyprshot -m region"))
@@ -205,7 +210,7 @@ hl.bind("SUPER + ALT + code:38", hl.dsp.window.resize({ x = -100, y = 0 }))
 hl.bind("SUPER + ALT + code:37", hl.dsp.window.resize({ x = 0, y = -100 }))
 hl.bind("SUPER + ALT + code:36", hl.dsp.window.resize({ x = 0, y = 100 }))
 
-for i = 1, 10 do
+for i = 1, 4 do
   local key = i % 10
   hl.bind("SUPER + " .. key, hl.dsp.focus({ workspace = i }))
   hl.bind("SUPER + SHIFT + " .. key, hl.dsp.window.move({ workspace = i }))
@@ -219,3 +224,12 @@ hl.bind("SUPER + mouse_up", hl.dsp.focus({ workspace = "e-1" }))
 
 hl.bind("SUPER + mouse:272", hl.dsp.window.drag(), { mouse = true })
 hl.bind("SUPER + mouse:273", hl.dsp.window.resize(), { mouse = true })
+
+hl.bind("SUPER + period", hl.dsp.layout("move +col"))
+hl.bind("SUPER + comma", hl.dsp.layout("move -col"))
+
+hl.bind("SUPER + SHIFT + comma", hl.dsp.layout("swapcol l"))
+hl.bind("SUPER + SHIFT + period", hl.dsp.layout("swapcol r"))
+
+hl.bind("SUPER + equal", hl.dsp.layout("colresize +conf"))
+hl.bind("SUPER + minus", hl.dsp.layout("colresize -conf"))
