@@ -8,7 +8,7 @@ packages=(
   hyprland
   waybar
   wofi
-  swaybg
+  hyprpaper
   hypridle
   hyprlock
   hyprshot
@@ -58,6 +58,8 @@ packages=(
   # Image/video tools
   imagemagick
   ffmpeg
+  curl
+  libnotify
 
   # Fonts
   ttf-jetbrains-mono-nerd
