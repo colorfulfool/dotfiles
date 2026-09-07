@@ -190,10 +190,10 @@ hl.bind("SUPER + SHIFT + right", hl.dsp.window.move({ direction = "right" }))
 hl.bind("SUPER + SHIFT + up", hl.dsp.window.move({ direction = "up" }))
 hl.bind("SUPER + SHIFT + down", hl.dsp.window.move({ direction = "down" }))
 
-hl.bind("SUPER + ALT + right", hl.dsp.window.resize({ x = 100, y = 0 }))
-hl.bind("SUPER + ALT + left", hl.dsp.window.resize({ x = -100, y = 0 }))
-hl.bind("SUPER + ALT + up", hl.dsp.window.resize({ x = 0, y = -100 }))
-hl.bind("SUPER + ALT + down", hl.dsp.window.resize({ x = 0, y = 100 }))
+hl.bind("SUPER + ALT + right", hl.dsp.window.resize({ x = 100, y = 0, relative = true }))
+hl.bind("SUPER + ALT + left", hl.dsp.window.resize({ x = -100, y = 0, relative = true }))
+hl.bind("SUPER + ALT + up", hl.dsp.window.resize({ x = 0, y = -100, relative = true }))
+hl.bind("SUPER + ALT + down", hl.dsp.window.resize({ x = 0, y = 100, relative = true }))
 
 hl.bind("SUPER + code:35", hl.dsp.focus({ direction = "left" }))
 hl.bind("SUPER + code:38", hl.dsp.focus({ direction = "right" }))
@@ -205,10 +205,10 @@ hl.bind("SUPER + SHIFT + code:38", hl.dsp.window.move({ direction = "right" }))
 hl.bind("SUPER + SHIFT + code:37", hl.dsp.window.move({ direction = "up" }))
 hl.bind("SUPER + SHIFT + code:36", hl.dsp.window.move({ direction = "down" }))
 
-hl.bind("SUPER + ALT + code:35", hl.dsp.window.resize({ x = 100, y = 0 }))
-hl.bind("SUPER + ALT + code:38", hl.dsp.window.resize({ x = -100, y = 0 }))
-hl.bind("SUPER + ALT + code:37", hl.dsp.window.resize({ x = 0, y = -100 }))
-hl.bind("SUPER + ALT + code:36", hl.dsp.window.resize({ x = 0, y = 100 }))
+hl.bind("SUPER + ALT + code:35", hl.dsp.window.resize({ x = 100, y = 0, relative = true }))
+hl.bind("SUPER + ALT + code:38", hl.dsp.window.resize({ x = -100, y = 0, relative = true }))
+hl.bind("SUPER + ALT + code:37", hl.dsp.window.resize({ x = 0, y = -100, relative = true }))
+hl.bind("SUPER + ALT + code:36", hl.dsp.window.resize({ x = 0, y = 100, relative = true }))
 
 for i = 1, 4 do
   local key = i % 10
