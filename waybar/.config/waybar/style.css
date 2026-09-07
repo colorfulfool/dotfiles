@@ -6,36 +6,34 @@
 }
 
 window#waybar {
-  background-color: rgba(24,24,24,0.6);
+  background-color: transparent;
+}
+
+.modules-center {
+  background-color: rgba(24,24,24,0.7);
   transition-property: background-color;
   transition-duration: 0.5s;
+  border-radius: 16px;
+  padding: 0px 12px 0px 16px;
 }
 
 window#waybar.hidden {
   opacity: 0.5;
 }
 
-#workspaces {
-  background-color: transparent;
-}
-
 #workspaces button {
   all: initial; /* Remove GTK theme values (waybar #1351) */
   min-width: 0; /* Fix weird spacing in materia (waybar #450) */
-  box-shadow: inset 0 -3px transparent; /* Use box-shadow instead of border so the text isn't offset */
-  padding: 6px 18px;
+  padding: 6px 6px;
   margin: 6px 3px;
   border-radius: 4px;
-  background-color: rgba(0,0,0,0.16);
-  box-shadow: inset 0px 0px 4px rgba(0,0,0,0.1);
-  color: #aaaaaa;
+  opacity: 0.6;
 }
 
 #workspaces button:hover {
  box-shadow: inherit;
  text-shadow: inherit;
- color: #1e1e1e;
- background-color: #aaaaaa;
+ color: #fff;
 }
 
 #workspaces button.urgent {
@@ -53,9 +51,12 @@ window#waybar.hidden {
   border-radius: 4px;
   margin: 6px 3px;
   padding: 6px 12px;
-  background-color: rgba(0,0,0,0.16);
-  box-shadow: inset 0px 0px 4px rgba(0,0,0,0.1);
-  color: #aaaaaa;
+  color: #fff;
+  opacity: 0.6;
+}
+
+#tray {
+  opacity: 0.7;
 }
 
 #network, #pulseaudio, #bluetooth {
@@ -72,7 +73,7 @@ window#waybar.hidden {
 }
 
 #cpu, #memory {
-  min-width: 72px;
+  min-width: 50px;
 }
 
 #custom-power {
