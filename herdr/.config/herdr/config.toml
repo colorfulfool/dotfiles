@@ -20,8 +20,6 @@ selection_bg = "#585b70"
 new_cwd = "follow"
 
 [keys]
-prefix = "ctrl+space"
-
 switch_tab = "prefix+1..9"
 switch_workspace = "prefix+shift+1..9"
 focus_agent = "prefix+alt+1..9"
@@ -52,9 +50,6 @@ prompt_new_tab_name = false
 
 # set -g mouse on
 mouse_capture = true
-
-# status-right had the zoom flag followed by #h
-tab_bar_right = [{ type = "zoom" }, { type = "hostname" }]
 
 # set -g set-titles on / set -g set-titles-string '#h:#W', where tmux's #W was
 # the basename of the pane cwd. This is what Hyprland shows in the group bar,
