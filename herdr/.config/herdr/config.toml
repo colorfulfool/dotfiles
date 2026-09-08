@@ -1,35 +1,20 @@
 onboarding = false
-# Mirrors the Omarchy tmux config in config/tmux/tmux.conf
-# tmux session -> herdr workspace, tmux window -> herdr tab, tmux pane -> herdr pane
 
 [theme]
-# tmux ran on the terminal's own palette (bg=default, fg=default, ANSI blue accents)
-name = "terminal"
+# name = "terminal"
 auto_switch = true
 
 [theme.custom.dark]
-# The active tab is drawn as panel_bg text on an accent background, so panel_bg
-# has to be dark for it to read - same colors as status-left's "#[fg=black,bg=blue]"
-# (ANSI blue is light #3daee9 on the dark kitty palette).
-panel_bg = "black"
-# Darker selected workspace / focused agent row on dark theme
-active_row_bg = "#313244"
-# Navigate-mode cursor row (prefix+w picker) - must be brighter than
-# active_row_bg to stay visible on dark background (#191919)
-selection_bg = "#585b70"
+panel_bg = "#000000"
+active_row_bg = "#313244" # Darker selected workspace / focused agent row on dark theme
+selection_bg = "#585b70" # Must be brighter than active_row_bg
 
 [theme.custom.light]
-# True white hex (NOT the ANSI "white" name, which follows the terminal palette
-# and turned the tab bar gray). Tab bar blends with the terminal background,
-# and the active tab name renders white on the blue accent.
-panel_bg = "#ffffff"
-# Light grey row highlights visible on white background (#ffffff)
-active_row_bg = "#d4d4d4"
-# Must be darker than active_row_bg to stay visible as the cursor row
-selection_bg = "#b2b2b2"
+panel_bg = "#ffffff" # True white hex (NOT the ANSI "white" name, which is gray)
+active_row_bg = "#d4d4d4" # Light grey row highlights visible on white background (#ffffff)
+selection_bg = "#b2b2b2" # Must be darker than active_row_bg to stay visible as the cursor row
 
 [terminal]
-# Matches -c "#{pane_current_path}" on every split, window, and session
 new_cwd = "follow"
 
 [keys]
