@@ -33,10 +33,7 @@ packages=(
 
   # LSP servers
   lua-language-server
-  typescript-language-server
   tailwindcss-language-server
-  rust-analyzer
-  gopls
 
   # Audio/media/brightness
   pamixer
