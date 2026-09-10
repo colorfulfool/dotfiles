@@ -31,10 +31,8 @@ in
   services.displayManager.sddm.enable = true;
   services.displayManager.sddm.wayland.enable = true;
 
-  # Enable Hyprland
   programs.hyprland.enable = true;
 
-  # Enable neovim
   programs.neovim = {
     enable = true;
     defaultEditor = true;
@@ -45,7 +43,6 @@ in
     localNetworkGameTransfers.openFirewall = true;
   };
 
-  # Enable zsh shell
   programs.zsh.enable = true;
 
   nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
@@ -62,26 +59,40 @@ in
     kitty
     zellij
     nerd-fonts.jetbrains-mono
-    swaybg # for wallpaper
+    hyprpaper # wallpaper (hyprland.lua launches hyprpaper)
     stow
     mise
     git
     gh # GitHub CLI
+    starship # prompt (zsh init)
+    fzf # fuzzy finder (zsh init/aliases)
+    bat # file preview in fzf alias
+    zoxide # directory jumping (zsh init)
     ruby
-    kdePackages.dolphin # File manager
+    nautilus # file manager (hyprland.lua)
+    xdg-utils # xdg-open etc.
     hyprshot  # Screenshot tool
+    hypridle # idle daemon (hypridle.conf)
+    hyprlock # screen locker
     pamixer  # Audio control
     playerctl # Media control
     brightnessctl # Brightness control
+    wl-clipboard # Wayland clipboard (pbcopy alias)
+    imagemagick
+    ffmpeg
+    curl
+    libnotify # notify-send
+    qt6Packages.qt6ct # Qt theming
+    glib # GTK/GNOME integration
     ani-cli
     chromium
+    zathura
     lua-language-server
     tailwindcss-language-server
-    typescript-language-server # for typescript-tools in neovim
+    typescript # Go-based TypeScript LSP (tsgo binary, used by neovim; formerly typescript-go)
     btop
     uwsm
-    overskride # Bluetooth GUI
-    networkmanagerapplet # WiFi GUI
+    # NOTE: omarchy, better-control, yin-yang are AUR-only, unavailable in nixpkgs
   ];
 
   # Activation script to handle dotfiles and wallpaper
