@@ -10,4 +10,5 @@ QtObject {
     readonly property color charged: "#a6e3a1"
     readonly property color low: "#ff0048"
     readonly property color blinkTo: "#f38ba8"
+    readonly property int pillAnimDuration: 250
 }
