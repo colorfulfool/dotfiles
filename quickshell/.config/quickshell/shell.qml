@@ -19,8 +19,14 @@ Scope {
                 top: 8
             }
             color: "transparent"
-            implicitWidth: pill.implicitWidth + 28
+            implicitWidth: barRow.implicitWidth + 12 + 16 + 28
             implicitHeight: pill.implicitHeight + 28
+            Behavior on implicitWidth {
+                NumberAnimation {
+                    duration: BarTheme.pillAnimDuration
+                    easing.type: Easing.OutCubic
+                }
+            }
             BackgroundEffect.blurRegion: Region {
                 item: pill
                 shape: RegionShape.Rect
@@ -28,9 +34,16 @@ Scope {
             }
 
             Rectangle {
+                id: pillBlur
                 anchors.centerIn: parent
                 implicitWidth: barRow.implicitWidth + 12 + 16
                 implicitHeight: barRow.implicitHeight
+                Behavior on implicitWidth {
+                    NumberAnimation {
+                        duration: BarTheme.pillAnimDuration
+                        easing.type: Easing.OutCubic
+                    }
+                }
                 radius: 16
                 color: "#28000000"
                 layer.enabled: true
@@ -48,6 +61,13 @@ Scope {
                 implicitHeight: barRow.implicitHeight
                 color: BarTheme.pill
                 radius: 16
+                clip: true
+                Behavior on implicitWidth {
+                    NumberAnimation {
+                        duration: BarTheme.pillAnimDuration
+                        easing.type: Easing.OutCubic
+                    }
+                }
 
                 RowLayout {
                     id: barRow
