@@ -1,0 +1,12 @@
+[Unit]
+Description=lid-guard: block lid suspend while agents work
+After=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=%h/.local/bin/lid-guard daemon 5
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=default.target
