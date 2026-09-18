@@ -1,0 +1,14 @@
+[Unit]
+Description=Herdr headless server (terminal workspace manager)
+Documentation=https://herdr.dev/docs/
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/herdr server
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=default.target
