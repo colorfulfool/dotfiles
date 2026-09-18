@@ -143,9 +143,9 @@ hl.window_rule({ match = { class = ".*" }, suppress_event = "maximize" })
 hl.layer_rule({ match = { namespace = "wofi" }, animation = "fade" })
 hl.layer_rule({ match = { namespace = "wofi" }, blur = true })
 
-hl.bind("SUPER + X", hl.dsp.window.kill())
-hl.bind("SUPER + C", hl.dsp.window.kill())
-hl.bind("SUPER + W", hl.dsp.window.kill())
+hl.bind("SUPER + X", hl.dsp.window.close())
+hl.bind("SUPER + C", hl.dsp.window.close())
+hl.bind("SUPER + W", hl.dsp.window.close())
 hl.bind("SUPER + V", hl.dsp.window.float({ action = "toggle" }))
 hl.bind("SUPER + P", hl.dsp.window.pseudo())
 hl.bind("SUPER + F", hl.dsp.window.fullscreen())
@@ -160,14 +160,19 @@ hl.bind("SUPER + B", hl.dsp.exec_cmd(launch(browser)), { description = "Browser"
 hl.bind("SUPER + SHIFT + B", hl.dsp.exec_cmd(launch(browser .. " --private")), { description = "Browser (private)" })
 hl.bind("SUPER + ALT + SPACE", hl.dsp.exec_cmd("omarchy-menu"), { description = "Omarchy menu" })
 hl.bind("SUPER + CTRL + L", hl.dsp.exec_cmd("pidof hyprlock || hyprlock"), { description = "Lock screen" })
+hl.bind("SUPER + ALT + L", hl.dsp.exec_cmd("lid-guard toggle-skip"), { description = "Toggle skip suspend on next lid close" })
 hl.bind("SUPER + M", hl.dsp.exec_cmd("omarchy-launch-or-focus lollypop"), { description = "Music" })
 hl.bind("SUPER + A", hl.dsp.exec_cmd('omarchy-launch-webapp "https://gemini.google.com"'), { description = "Grok" })
 hl.bind("SUPER + T", hl.dsp.exec_cmd(launch(terminal .. " -e btop")), { description = "Top" })
 hl.bind("SUPER + ALT + W", hl.dsp.exec_cmd("~/.config/hypr/scripts/wallpaper.sh next"),
   { description = "Random wallpaper" })
+hl.bind("SUPER + H", hl.dsp.exec_cmd("~/.config/hypr/scripts/hubstaff-toggle.sh"),
+  { description = "Hubstaff toggle timer" })
 
 hl.bind("ALT + SHIFT + 3", hl.dsp.exec_cmd("hyprshot -m output"))
 hl.bind("ALT + SHIFT + 4", hl.dsp.exec_cmd("hyprshot -m region"))
+hl.bind("SUPER + SHIFT + R", hl.dsp.exec_cmd("omarchy screenrecord --fullscreen"),
+  { description = "Screen record fullscreen (toggle to stop)" })
 
 hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("pamixer -i 10"), { locked = true, repeating = true })
 hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("pamixer -d 10"), { locked = true, repeating = true })
