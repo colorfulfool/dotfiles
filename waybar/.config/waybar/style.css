@@ -10,7 +10,7 @@ window#waybar {
 }
 
 .modules-center {
-  background-color: rgba(24,24,24,0.7);
+  background-color: rgba(24,24,24,0.75);
   transition-property: background-color;
   transition-duration: 0.5s;
   border-radius: 16px;
