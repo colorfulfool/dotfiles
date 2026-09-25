@@ -2,7 +2,7 @@ hl.monitor({ output = "", mode = "preferred", position = "auto", scale = 1 })
 
 -- Set programs that you use
 local terminal = "kitty"
-local fileManager = "nautilus"
+local fileManager = "dolphin"
 local browser = "chromium"
 local menu = "wofi -iIa --show drun --style ~/.config/wofi/style.css -W 800"
 
@@ -13,7 +13,7 @@ local launch = function(cmd) return "uwsm-app -- " .. cmd end
 
 -- Execute your favorite apps at launch
 hl.on("hyprland.start", function()
-  hl.exec_cmd(launch("waybar"))
+  hl.exec_cmd(launch("quickshell"))
   -- hl.exec_cmd("omarchy-launch-shell")
   hl.exec_cmd(launch("hypridle"))
   hl.exec_cmd("pkill -x swaybg || true")
@@ -45,7 +45,7 @@ hl.config({
   },
   general = {
     gaps_in = 5,
-    gaps_out = { top = 6, right = 12, bottom = 12, left = 12 },
+    gaps_out = 12,
     border_size = 2,
     col = {
       active_border = { colors = { "rgba(33ccffee)", "rgba(00ff99ee)" }, angle = 45 },
@@ -142,6 +142,7 @@ hl.window_rule({ match = { class = ".*" }, suppress_event = "maximize" })
 
 hl.layer_rule({ match = { namespace = "wofi" }, animation = "fade" })
 hl.layer_rule({ match = { namespace = "wofi" }, blur = true })
+hl.layer_rule({ match = { namespace = "quickshell" }, blur = true })
 
 hl.bind("SUPER + X", hl.dsp.window.close())
 hl.bind("SUPER + C", hl.dsp.window.close())
@@ -160,7 +161,8 @@ hl.bind("SUPER + B", hl.dsp.exec_cmd(launch(browser)), { description = "Browser"
 hl.bind("SUPER + SHIFT + B", hl.dsp.exec_cmd(launch(browser .. " --private")), { description = "Browser (private)" })
 hl.bind("SUPER + ALT + SPACE", hl.dsp.exec_cmd("omarchy-menu"), { description = "Omarchy menu" })
 hl.bind("SUPER + CTRL + L", hl.dsp.exec_cmd("pidof hyprlock || hyprlock"), { description = "Lock screen" })
-hl.bind("SUPER + ALT + L", hl.dsp.exec_cmd("lid-guard toggle-skip"), { description = "Toggle skip suspend on next lid close" })
+hl.bind("SUPER + ALT + L", hl.dsp.exec_cmd("lid-guard toggle-skip"),
+  { description = "Toggle skip suspend on next lid close" })
 hl.bind("SUPER + M", hl.dsp.exec_cmd("omarchy-launch-or-focus lollypop"), { description = "Music" })
 hl.bind("SUPER + A", hl.dsp.exec_cmd('omarchy-launch-webapp "https://gemini.google.com"'), { description = "Grok" })
 hl.bind("SUPER + T", hl.dsp.exec_cmd(launch(terminal .. " -e btop")), { description = "Top" })
