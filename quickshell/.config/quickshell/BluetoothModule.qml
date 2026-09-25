@@ -3,26 +3,36 @@ import Quickshell.Bluetooth
 import QtQuick
 import QtQuick.Layouts
 
-Text {
-    Layout.leftMargin: 3
-    Layout.rightMargin: 3
-    leftPadding: 9
-    rightPadding: 9
-    topPadding: 6
-    bottomPadding: 6
-    font.family: BarTheme.fontFamily
-    font.pixelSize: BarTheme.fontPx
-    color: BarTheme.fg
-    opacity: BarTheme.dim
+BarText {
+    Layout.preferredWidth: 16
+    Layout.fillHeight: true
+    verticalAlignment: Text.AlignVCenter
+    opacity: {
+        const adapter = Bluetooth.defaultAdapter;
+        if (!adapter || !adapter.enabled)
+            return BarTheme.dim * 0.45;
+        return BarTheme.dim;
+    }
     horizontalAlignment: Text.AlignHCenter
 
-    property int connectedCount: Bluetooth.devices ? Bluetooth.devices.values.length : 0
+    property int connectedCount: {
+        if (!Bluetooth.devices)
+            return 0;
+        const vals = Bluetooth.devices.values;
+        let n = 0;
+        for (let i = 0; i < vals.length; ++i)
+            if (vals[i] && vals[i].connected)
+                ++n;
+        return n;
+    }
 
     text: {
         const adapter = Bluetooth.defaultAdapter;
         if (!adapter || !adapter.enabled)
-            return "󰂲";
-        return "";
+            return "";
+        if (connectedCount > 0)
+            return "";
+        return "";
     }
 
     MouseArea {

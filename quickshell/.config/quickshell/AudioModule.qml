@@ -3,19 +3,12 @@ import Quickshell.Services.Pipewire
 import QtQuick
 import QtQuick.Layouts
 
-Text {
+BarText {
     id: audioRoot
 
-    Layout.minimumWidth: 14
-    Layout.leftMargin: 3
-    Layout.rightMargin: 3
-    leftPadding: 6
-    rightPadding: 12
-    topPadding: 6
-    bottomPadding: 6
-    font.family: BarTheme.fontFamily
-    font.pixelSize: BarTheme.fontPx
-    color: BarTheme.fg
+    Layout.preferredWidth: 16
+    Layout.fillHeight: true
+    verticalAlignment: Text.AlignVCenter
     opacity: BarTheme.dim
     horizontalAlignment: Text.AlignHCenter
 

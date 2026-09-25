@@ -5,32 +5,18 @@ import QtQuick.Layouts
 Row {
     id: cpuRoot
 
-    Layout.minimumWidth: 50
-    Layout.leftMargin: 3
-    Layout.rightMargin: 3
+    Layout.minimumWidth: 40
     spacing: 5
 
     property string cpuValue: "--.-GHz"
 
-    Text {
-        leftPadding: 12
-        topPadding: 6
-        bottomPadding: 6
+    BarText {
         text: "󰍛"
-        font.family: BarTheme.fontFamily
-        font.pixelSize: BarTheme.fontPx
-        color: BarTheme.fg
         opacity: BarTheme.dim
     }
 
-    Text {
-        rightPadding: 12
-        topPadding: 6
-        bottomPadding: 6
+    BarText {
         text: cpuRoot.cpuValue
-        font.family: BarTheme.fontFamily
-        font.pixelSize: BarTheme.fontPx
-        color: BarTheme.fg
         opacity: BarTheme.dim
         horizontalAlignment: Text.AlignLeft
     }

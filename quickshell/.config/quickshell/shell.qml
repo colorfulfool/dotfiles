@@ -1,7 +1,8 @@
+//@ pragma IconTheme breeze-dark
+//@ pragma Env XDG_CONFIG_HOME = /home/colorfulfool/.config/qs-env
 import Quickshell
 import Quickshell.Wayland
 import QtQuick
-import QtQuick.Effects
 import QtQuick.Layouts
 
 Scope {
@@ -19,8 +20,8 @@ Scope {
                 top: 8
             }
             color: "transparent"
-            implicitWidth: barRow.implicitWidth + 12 + 16 + 28
-            implicitHeight: pill.implicitHeight + 28
+            implicitWidth: pill.implicitWidth
+            implicitHeight: pill.implicitHeight
             Behavior on implicitWidth {
                 NumberAnimation {
                     duration: BarTheme.pillAnimDuration
@@ -34,33 +35,12 @@ Scope {
             }
 
             Rectangle {
-                id: pillBlur
-                anchors.centerIn: parent
-                implicitWidth: barRow.implicitWidth + 12 + 16
-                implicitHeight: barRow.implicitHeight
-                Behavior on implicitWidth {
-                    NumberAnimation {
-                        duration: BarTheme.pillAnimDuration
-                        easing.type: Easing.OutCubic
-                    }
-                }
-                radius: 16
-                color: "#28000000"
-                layer.enabled: true
-                layer.effect: MultiEffect {
-                    blurEnabled: true
-                    blur: 0.7
-                    blurMax: 12
-                }
-            }
-
-            Rectangle {
                 id: pill
                 anchors.centerIn: parent
-                implicitWidth: barRow.implicitWidth + 12 + 16
-                implicitHeight: barRow.implicitHeight
+                implicitWidth: barRow.implicitWidth + 48
+                implicitHeight: 42
                 color: BarTheme.pill
-                radius: 16
+                radius: 32
                 clip: true
                 Behavior on implicitWidth {
                     NumberAnimation {
@@ -72,7 +52,7 @@ Scope {
                 RowLayout {
                     id: barRow
                     anchors.centerIn: parent
-                    spacing: 6
+                    spacing: 20
 
                     WorkspaceModule {
                         screen: modelData
@@ -83,12 +63,18 @@ Scope {
                     }
                     MemoryModule {
                     }
-                    NetworkModule {
+
+                    RowLayout {
+                        spacing: 8
+
+                        NetworkModule {
+                        }
+                        BluetoothModule {
+                        }
+                        AudioModule {
+                        }
                     }
-                    BluetoothModule {
-                    }
-                    AudioModule {
-                    }
+
                     BatteryModule {
                     }
                 }

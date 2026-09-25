@@ -3,17 +3,9 @@ import Quickshell.Services.UPower
 import QtQuick
 import QtQuick.Layouts
 
-Text {
+BarText {
     id: battRoot
 
-    Layout.leftMargin: 3
-    Layout.rightMargin: 6
-    leftPadding: 12
-    rightPadding: 12
-    topPadding: 6
-    bottomPadding: 6
-    font.family: BarTheme.fontFamily
-    font.pixelSize: BarTheme.fontPx
     opacity: BarTheme.dim
 
     property var dev: UPower.displayDevice
@@ -34,13 +26,13 @@ Text {
         if (!ready)
             return "--% ";
         const p = Math.round(pct) + "% ";
+        const idx = Math.min(9, Math.max(0, Math.floor(pct / 10)));
+        if (charging)
+            return p + ["󰢜", "󰂆", "󰂇", "󰂈", "󰢝", "󰂉", "󰢞", "󰂊", "󰂋", "󰂅"][idx];
         if (full)
             return p + "";
         if (!UPower.onBattery)
             return p + "";
-        const idx = Math.min(9, Math.max(0, Math.floor(pct / 10)));
-        if (charging)
-            return p + ["󰢜", "󰂆", "󰂇", "󰂈", "󰢝", "󰂉", "󰢞", "󰂊", "󰂋", "󰂅"][idx];
         return p + ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"][idx];
     }
 

@@ -1,16 +1,16 @@
 import Quickshell
 import Quickshell.Services.SystemTray
 import Quickshell.Widgets
+import Quickshell.Hyprland
 import QtQuick
 import QtQuick.Layouts
 
 Row {
-    Layout.leftMargin: 3
-    Layout.rightMargin: 3
-    Layout.topMargin: 6
-    Layout.bottomMargin: 6
-    spacing: 5
+    id: trayRow
+    spacing: 4
     opacity: 0.7
+
+    property var openMenuCell: null
 
     Repeater {
         model: SystemTray.items
@@ -21,6 +21,33 @@ Row {
             implicitWidth: 16
             implicitHeight: 16
 
+            property bool menuOpen: false
+            property string expandedText: ""
+
+            function subHandle() {
+                if (!trayCell.expandedText)
+                    return null;
+                const kids = menuOpener.children.values;
+                for (let i = 0; i < kids.length; ++i)
+                    if (kids[i] && kids[i].text === trayCell.expandedText)
+                        return kids[i];
+                return null;
+            }
+
+            function closeMenu() {
+                menuOpen = false;
+                expandedText = "";
+                if (trayRow.openMenuCell === trayCell)
+                    trayRow.openMenuCell = null;
+            }
+
+            function openMenu() {
+                if (trayRow.openMenuCell && trayRow.openMenuCell !== trayCell)
+                    trayRow.openMenuCell.closeMenu();
+                trayRow.openMenuCell = trayCell;
+                menuOpen = true;
+            }
+
             IconImage {
                 anchors.centerIn: parent
                 width: 16
@@ -30,12 +57,198 @@ Row {
                 source: modelData.icon
             }
 
-            QsMenuAnchor {
-                id: trayMenu
+            QsMenuOpener {
+                id: menuOpener
                 menu: trayCell.modelData.menu
+            }
+
+            QsMenuOpener {
+                id: subOpener
+                menu: trayCell.subHandle()
+            }
+
+            HyprlandFocusGrab {
+                active: trayCell.menuOpen && menuWin.backingWindowVisible
+                windows: [menuWin]
+                onCleared: trayCell.closeMenu()
+            }
+
+            PopupWindow {
+                id: menuWin
+                visible: trayCell.menuOpen && trayCell.modelData.hasMenu
+                anchor.window: trayCell.QsWindow.window
                 anchor.item: trayCell
-                anchor.edges: Edges.Bottom
-                anchor.gravity: Edges.Bottom
+                anchor.edges: Edges.Bottom | Edges.Right
+                anchor.gravity: Edges.Bottom | Edges.Right
+                color: "transparent"
+                implicitWidth: menuLayout.implicitWidth + 20
+                implicitHeight: menuLayout.implicitHeight + 16
+
+                Rectangle {
+                    anchors.fill: parent
+                    radius: 8
+                    color: "#131822"
+                    clip: true
+
+                    ColumnLayout {
+                        id: menuLayout
+                        anchors.fill: parent
+                        anchors.margins: 8
+                        spacing: 0
+
+                        Repeater {
+                            model: menuOpener.children.values
+
+                            delegate: Item {
+                                required property var modelData
+                                property bool expanded: !modelData.isSeparator && modelData.hasChildren && trayCell.expandedText !== "" && trayCell.expandedText === modelData.text
+                                Layout.fillWidth: true
+                                Layout.preferredHeight: visible ? ((modelData.isSeparator ? 9 : 28) + (expanded ? subLayout.implicitHeight : 0)) : 0
+                                visible: modelData.text !== "" || modelData.isSeparator
+                                implicitWidth: modelData.isSeparator ? 0 : rowLabel.implicitWidth + 52
+
+                                Rectangle {
+                                    anchors.centerIn: parent
+                                    width: parent.width
+                                    height: 1
+                                    visible: modelData.isSeparator
+                                    color: "#3a3a3a"
+                                }
+
+                                Item {
+                                    id: rowItem
+                                    anchors.left: parent.left
+                                    anchors.right: parent.right
+                                    anchors.top: parent.top
+                                    height: 28
+                                    visible: !modelData.isSeparator
+
+                                    Rectangle {
+                                        anchors.fill: parent
+                                        radius: 4
+                                        color: entryMa.containsMouse ? "#3a3a3a" : "transparent"
+                                    }
+
+                                    RowLayout {
+                                        anchors.fill: parent
+                                        anchors.leftMargin: 10
+                                        anchors.rightMargin: 10
+                                        spacing: 8
+
+                                        BarText {
+                                            id: rowLabel
+                                            Layout.fillWidth: true
+                                            verticalAlignment: Text.AlignVCenter
+                                            text: {
+                                                let t = modelData.text || "";
+                                                if (modelData.buttonType !== QsMenuButtonType.None)
+                                                    t = (modelData.checkState !== Qt.Unchecked ? "✓ " : "    ") + t;
+                                                return t;
+                                            }
+                                            color: modelData.enabled ? BarTheme.fg : "#585b70"
+                                            elide: Text.ElideRight
+                                        }
+
+                                        BarText {
+                                            visible: modelData.hasChildren
+                                            text: trayCell.expandedText !== "" && trayCell.expandedText === modelData.text ? "⌄" : ">"
+                                            color: "#585b70"
+                                        }
+                                    }
+
+                                    MouseArea {
+                                        id: entryMa
+                                        anchors.fill: parent
+                                        hoverEnabled: true
+                                        cursorShape: modelData.enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
+                                        onEntered: {
+                                            if (!modelData.isSeparator)
+                                                trayCell.expandedText = modelData.hasChildren ? modelData.text : "";
+                                        }
+                                        onClicked: {
+                                            if (!modelData.enabled)
+                                                return;
+                                            if (modelData.hasChildren) {
+                                                trayCell.expandedText = modelData.text;
+                                            } else {
+                                                modelData.triggered();
+                                                trayCell.closeMenu();
+                                            }
+                                        }
+                                    }
+                                }
+
+                                ColumnLayout {
+                                    id: subLayout
+                                    anchors.left: parent.left
+                                    anchors.right: parent.right
+                                    anchors.top: rowItem.bottom
+                                    visible: trayCell.expandedText !== "" && trayCell.expandedText === modelData.text && !modelData.isSeparator
+                                    spacing: 0
+
+                                    Repeater {
+                                        model: subOpener.children.values
+
+                                        delegate: Item {
+                                            required property var modelData
+                                            Layout.fillWidth: true
+                                            Layout.preferredHeight: modelData.isSeparator ? 9 : 28
+                                            visible: modelData.text !== "" || modelData.isSeparator
+                                            implicitWidth: modelData.isSeparator ? 0 : subLabel.implicitWidth + 44
+
+                                            Rectangle {
+                                                anchors.centerIn: parent
+                                                width: parent.width
+                                                height: 1
+                                                visible: modelData.isSeparator
+                                                color: "#3a3a3a"
+                                            }
+
+                                            Item {
+                                                anchors.left: parent.left
+                                                anchors.right: parent.right
+                                                anchors.top: parent.top
+                                                anchors.leftMargin: 12
+                                                height: 28
+                                                visible: !modelData.isSeparator
+
+                                                Rectangle {
+                                                    anchors.fill: parent
+                                                    radius: 4
+                                                    color: subMa.containsMouse ? "#3a3a3a" : "transparent"
+                                                }
+
+                                                BarText {
+                                                    id: subLabel
+                                                    anchors.fill: parent
+                                                    anchors.leftMargin: 10
+                                                    anchors.rightMargin: 10
+                                                    verticalAlignment: Text.AlignVCenter
+                                                    text: modelData.text || ""
+                                                    color: modelData.enabled ? BarTheme.fg : "#585b70"
+                                                    elide: Text.ElideRight
+                                                }
+
+                                                MouseArea {
+                                                    id: subMa
+                                                    anchors.fill: parent
+                                                    hoverEnabled: true
+                                                    cursorShape: modelData.enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
+                                                    onClicked: {
+                                                        if (!modelData.enabled)
+                                                            return;
+                                                        modelData.triggered();
+                                                        trayCell.closeMenu();
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
 
             MouseArea {
@@ -45,10 +258,10 @@ Row {
                     if (mouse.button === Qt.LeftButton) {
                         modelData.activate();
                     } else if (modelData.hasMenu) {
-                        if (trayMenu.visible)
-                            trayMenu.close();
+                        if (trayCell.menuOpen)
+                            trayCell.closeMenu();
                         else
-                            trayMenu.open();
+                            trayCell.openMenu();
                     } else {
                         modelData.secondaryActivate();
                     }
