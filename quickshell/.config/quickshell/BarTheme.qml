@@ -2,7 +2,7 @@ pragma Singleton
 import QtQuick
 
 QtObject {
-    readonly property color pill: Qt.rgba(24 / 255, 24 / 255, 24 / 255, 0.8)
+    readonly property color pill: Qt.rgba(24 / 255, 24 / 255, 24 / 255, 0.6)
     readonly property color fg: "#ffffff"
     readonly property real dim: 0.6
     readonly property color charged: "#a6e3a1"

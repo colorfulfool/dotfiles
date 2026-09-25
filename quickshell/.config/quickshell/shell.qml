@@ -4,6 +4,7 @@ import Quickshell
 import Quickshell.Wayland
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Effects
 
 Scope {
     Variants {
@@ -17,11 +18,13 @@ Scope {
                 top: true
             }
             margins {
-                top: 8
+                top: 0
             }
             color: "transparent"
-            implicitWidth: pill.implicitWidth
-            implicitHeight: pill.implicitHeight
+            exclusionMode: ExclusionMode.Normal
+            exclusiveZone: 50
+            implicitWidth: pill.implicitWidth + 28
+            implicitHeight: pill.implicitHeight + 28
             Behavior on implicitWidth {
                 NumberAnimation {
                     duration: BarTheme.pillAnimDuration
@@ -34,25 +37,39 @@ Scope {
                 radius: 16
             }
 
-            Rectangle {
-                id: pill
-                anchors.centerIn: parent
-                implicitWidth: barRow.implicitWidth + 48
-                implicitHeight: 42
-                color: BarTheme.pill
-                radius: 32
-                clip: true
-                Behavior on implicitWidth {
-                    NumberAnimation {
-                        duration: BarTheme.pillAnimDuration
-                        easing.type: Easing.OutCubic
-                    }
+            Item {
+                anchors.fill: parent
+
+                RectangularShadow {
+                    anchors.fill: pill
+                    offset: Qt.vector2d(0, 2)
+                    color: Qt.rgba(0, 0, 0, 0.55)
+                    blur: 12
+                    spread: 0
+                    radius: 32
                 }
 
-                RowLayout {
-                    id: barRow
-                    anchors.centerIn: parent
-                    spacing: 20
+                Rectangle {
+                    id: pill
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.top: parent.top
+                    anchors.topMargin: 8
+                    implicitWidth: barRow.implicitWidth + 48
+                    implicitHeight: 42
+                    color: BarTheme.pill
+                    radius: 32
+                    clip: true
+                    Behavior on implicitWidth {
+                        NumberAnimation {
+                            duration: BarTheme.pillAnimDuration
+                            easing.type: Easing.OutCubic
+                        }
+                    }
+
+                    RowLayout {
+                        id: barRow
+                        anchors.centerIn: parent
+                        spacing: 20
 
                     WorkspaceModule {
                         screen: modelData
@@ -77,6 +94,7 @@ Scope {
 
                     BatteryModule {
                     }
+                }
                 }
             }
         }
