@@ -24,6 +24,10 @@ Row {
 
             property bool menuOpen: false
             property string expandedText: ""
+            // Dropbox only ships a dark glyph plus a tiny state emblem that
+            // washes out at 16px, so pin its readable base glyph in light mode.
+            // (Vendored copy: dropbox auto-updates change its versioned image path.)
+            readonly property bool isDropbox: ((trayCell.modelData.id || "") + " " + (trayCell.modelData.title || "")).toLowerCase().indexOf("dropbox") !== -1
 
             function subHandle() {
                 if (!trayCell.expandedText)
@@ -55,7 +59,7 @@ Row {
                 height: 16
                 smooth: true
                 mipmap: true
-                source: modelData.icon
+                source: trayCell.isDropbox && BarTheme.isLight ? Qt.resolvedUrl("icons/dropbox-idle-dark.png") : modelData.icon
             }
 
             QsMenuOpener {
