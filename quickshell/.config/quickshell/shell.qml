@@ -1,4 +1,3 @@
-//@ pragma IconTheme breeze-dark
 //@ pragma Env XDG_CONFIG_HOME = /home/colorfulfool/.config/qs-env
 import Quickshell
 import Quickshell.Wayland

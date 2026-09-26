@@ -87,7 +87,7 @@ Row {
                 Rectangle {
                     anchors.fill: parent
                     radius: 8
-                    color: "#131822"
+                    color: BarTheme.menu
                     clip: true
 
                     ColumnLayout {
@@ -112,7 +112,7 @@ Row {
                                     width: parent.width
                                     height: 1
                                     visible: modelData.isSeparator
-                                    color: "#3a3a3a"
+                                    color: BarTheme.separator
                                 }
 
                                 Item {
@@ -126,7 +126,7 @@ Row {
                                     Rectangle {
                                         anchors.fill: parent
                                         radius: 4
-                                        color: entryMa.containsMouse ? "#3a3a3a" : "transparent"
+                                        color: entryMa.containsMouse ? BarTheme.hover : "transparent"
                                     }
 
                                     RowLayout {
@@ -145,14 +145,14 @@ Row {
                                                     t = (modelData.checkState !== Qt.Unchecked ? "✓ " : "    ") + t;
                                                 return t;
                                             }
-                                            color: modelData.enabled ? BarTheme.fg : "#585b70"
+                                            color: modelData.enabled ? BarTheme.fg : BarTheme.subdued
                                             elide: Text.ElideRight
                                         }
 
                                         BarText {
                                             visible: modelData.hasChildren
                                             text: trayCell.expandedText !== "" && trayCell.expandedText === modelData.text ? "⌄" : ">"
-                                            color: "#585b70"
+                                            color: BarTheme.subdued
                                         }
                                     }
 
@@ -201,7 +201,7 @@ Row {
                                                 width: parent.width
                                                 height: 1
                                                 visible: modelData.isSeparator
-                                                color: "#3a3a3a"
+                                                color: BarTheme.separator
                                             }
 
                                             Item {
@@ -215,7 +215,7 @@ Row {
                                                 Rectangle {
                                                     anchors.fill: parent
                                                     radius: 4
-                                                    color: subMa.containsMouse ? "#3a3a3a" : "transparent"
+                                                    color: subMa.containsMouse ? BarTheme.hover : "transparent"
                                                 }
 
                                                 BarText {
@@ -225,7 +225,7 @@ Row {
                                                     anchors.rightMargin: 10
                                                     verticalAlignment: Text.AlignVCenter
                                                     text: modelData.text || ""
-                                                    color: modelData.enabled ? BarTheme.fg : "#585b70"
+                                                    color: modelData.enabled ? BarTheme.fg : BarTheme.subdued
                                                     elide: Text.ElideRight
                                                 }
 

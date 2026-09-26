@@ -2,7 +2,7 @@ import Quickshell.Io
 import QtQuick
 import QtQuick.Layouts
 
-Row {
+RowLayout {
     id: memRoot
 
     Layout.minimumWidth: 40
@@ -13,12 +13,14 @@ Row {
     BarText {
         text: ""
         opacity: BarTheme.dim
+        Layout.alignment: Qt.AlignBaseline
     }
 
     BarText {
         text: memRoot.memValue
         opacity: BarTheme.dim
         horizontalAlignment: Text.AlignLeft
+        Layout.alignment: Qt.AlignBaseline
     }
 
     Process {
