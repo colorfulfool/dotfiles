@@ -3,6 +3,8 @@ import QtQuick
 import Quickshell.Io
 
 Item {
+    property string theme: "auto" // "dark" | "light" | "auto" (auto follows ~/.cache/quickshell-mode)
+
     FileView {
         id: modeFile
         path: "/home/colorfulfool/.cache/quickshell-mode"
@@ -10,7 +12,7 @@ Item {
         blockLoading: true
         onFileChanged: reload()
     }
-    readonly property bool isLight: modeFile.text().trim() === "light"
+    readonly property bool isLight: theme === "light" ? true : theme === "dark" ? false : modeFile.text().trim() === "light"
 
     readonly property color pill: isLight ? Qt.rgba(1, 1, 1, 0.6) : Qt.rgba(24 / 255, 24 / 255, 24 / 255, 0.6)
     readonly property color fg: isLight ? "#000000" : "#ffffff"
