@@ -4,6 +4,7 @@ import Quickshell.Widgets
 import Quickshell.Hyprland
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Effects
 
 Row {
     id: trayRow
@@ -78,21 +79,32 @@ Row {
                 visible: trayCell.menuOpen && trayCell.modelData.hasMenu
                 anchor.window: trayCell.QsWindow.window
                 anchor.item: trayCell
-                anchor.edges: Edges.Bottom | Edges.Right
-                anchor.gravity: Edges.Bottom | Edges.Right
+                anchor.rect.x: -menuBg.anchors.margins
+                anchor.rect.y: trayCell.height
                 color: "transparent"
-                implicitWidth: menuLayout.implicitWidth + 20
-                implicitHeight: menuLayout.implicitHeight + 16
+                implicitWidth: menuLayout.implicitWidth + 48
+                implicitHeight: menuLayout.implicitHeight + 44
+
+                RectangularShadow {
+                    anchors.fill: menuBg
+                    offset: Qt.vector2d(0, 2)
+                    color: Qt.rgba(0, 0, 0, 0.55)
+                    blur: 12
+                    spread: 0
+                    radius: 8
+                }
 
                 Rectangle {
+                    id: menuBg
                     anchors.fill: parent
+                    anchors.margins: 14
                     radius: 8
                     color: BarTheme.menu
                     clip: true
 
                     ColumnLayout {
                         id: menuLayout
-                        anchors.fill: parent
+                        anchors.fill: menuBg
                         anchors.margins: 8
                         spacing: 0
 
