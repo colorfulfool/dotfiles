@@ -16,7 +16,7 @@ Item {
 
     readonly property color pill: isLight ? Qt.rgba(1, 1, 1, 0.6) : Qt.rgba(24 / 255, 24 / 255, 24 / 255, 0.6)
     readonly property color fg: isLight ? "#000000" : "#ffffff"
-    readonly property color menu: isLight ? "#ffffff" : "#131822"
+    readonly property color menu: isLight ? "#ffffff" : Qt.rgba(24 / 255, 24 / 255, 24 / 255, 0.9)
     readonly property color hover: isLight ? "#e4e4e4" : "#3a3a3a"
     readonly property color separator: isLight ? "#d5d5d5" : "#3a3a3a"
     readonly property color subdued: isLight ? "#8a8f98" : "#585b70"
