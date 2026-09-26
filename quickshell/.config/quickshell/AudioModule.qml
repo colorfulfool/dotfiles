@@ -18,13 +18,21 @@ Item {
     Layout.preferredWidth: showingBar ? iconWidth + barSpacing + barWidth : iconWidth
     Layout.fillHeight: true
 
+    Behavior on Layout.preferredWidth {
+        NumberAnimation {
+            duration: BarTheme.pillResizeDuration
+            easing.type: BarTheme.pillResizeEasing
+        }
+    }
+
     property var sink: Pipewire.defaultAudioSink
     property real volume: (sink && sink.audio) ? sink.audio.volume : 0
     property bool muted: (sink && sink.audio) ? sink.audio.muted : true
     property bool showingBar: false
     property bool _ready: false
     property bool leaving: false
-    readonly property bool barActive: showingBar && !leaving
+    property bool expanded: false
+    readonly property bool barActive: showingBar && !leaving && expanded
 
     readonly property real fillFraction: muted ? 0 : Math.min(1, Math.max(0, volume))
 
@@ -33,7 +41,11 @@ Item {
             return;
         leaving = false;
         leaveTimer.stop();
-        showingBar = true;
+        if (!showingBar) {
+            showingBar = true;
+            expanded = false;
+            expandTimer.restart();
+        }
         hideTimer.restart();
     }
 
@@ -73,7 +85,15 @@ Item {
         onTriggered: {
             audioRoot.showingBar = false;
             audioRoot.leaving = false;
+            audioRoot.expanded = false;
         }
+    }
+
+    Timer {
+        id: expandTimer
+        interval: BarTheme.pillResizeDuration
+        repeat: false
+        onTriggered: audioRoot.expanded = true
     }
 
     BarText {
@@ -125,7 +145,7 @@ Item {
         anchors.left: iconText.right
         anchors.leftMargin: audioRoot.barSpacing
         anchors.verticalCenter: parent.verticalCenter
-        width: audioRoot.barWidth
+        width: Math.max(0, audioRoot.width - audioRoot.iconWidth - audioRoot.barSpacing)
         height: audioRoot.barHeight
         radius: height / 2
         color: audioRoot.trackColor

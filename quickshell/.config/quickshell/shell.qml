@@ -22,8 +22,11 @@ Scope {
             color: "transparent"
             exclusionMode: ExclusionMode.Normal
             exclusiveZone: 50
-            implicitWidth: pill.implicitWidth + 28
+            implicitWidth: 1000
             implicitHeight: pill.implicitHeight + 28
+            mask: Region {
+                item: pill
+            }
             BackgroundEffect.blurRegion: Region {
                 item: pill
                 shape: RegionShape.Rect
@@ -52,12 +55,6 @@ Scope {
                     color: BarTheme.pill
                     radius: 32
                     clip: true
-                    Behavior on implicitWidth {
-                        NumberAnimation {
-                            duration: BarTheme.pillResizeDuration
-                            easing.type: BarTheme.pillResizeEasing
-                        }
-                    }
 
                     RowLayout {
                         id: barRow
