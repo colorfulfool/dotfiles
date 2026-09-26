@@ -80,7 +80,9 @@ Row {
                 anchor.window: trayCell.QsWindow.window
                 anchor.item: trayCell
                 anchor.rect.x: -menuBg.anchors.margins
-                anchor.rect.y: trayCell.height
+                // Pill is 42 high (shell.qml) with the 16px icon centered,
+                // so this puts the popup top at the pill bottom and menuBg below with shadow clearance.
+                anchor.rect.y: trayCell.height + (42 - trayCell.height) / 2
                 color: "transparent"
                 implicitWidth: menuLayout.implicitWidth + 48
                 implicitHeight: menuLayout.implicitHeight + 44
