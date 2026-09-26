@@ -176,8 +176,10 @@ hl.bind("ALT + SHIFT + 4", hl.dsp.exec_cmd("hyprshot -m region"))
 hl.bind("SUPER + SHIFT + R", hl.dsp.exec_cmd("omarchy screenrecord --fullscreen"),
   { description = "Screen record fullscreen (toggle to stop)" })
 
-hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("pamixer -i 10; date +%s%N > $HOME/.cache/quickshell-audio-poke"), { locked = true, repeating = true })
-hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("pamixer -d 10; date +%s%N > $HOME/.cache/quickshell-audio-poke"), { locked = true, repeating = true })
+hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("pamixer -i 10; date +%s%N > $HOME/.cache/quickshell-audio-poke"),
+  { locked = true, repeating = true })
+hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("pamixer -d 10; date +%s%N > $HOME/.cache/quickshell-audio-poke"),
+  { locked = true, repeating = true })
 hl.bind("XF86AudioMicMute", hl.dsp.exec_cmd("pamixer --default-source -m"), { locked = true, repeating = true })
 hl.bind("XF86AudioMute", hl.dsp.exec_cmd("pamixer -t"), { locked = true })
 hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
