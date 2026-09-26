@@ -36,3 +36,17 @@ kwriteconfig6 --file ~/.config/gtk-4.0/settings.ini --group Settings --key gtk-t
 rm -f ~/.config/gtk-3.0/gtk.css ~/.config/gtk-3.0/colors.css ~/.config/gtk-3.0/gtk-dark.css ~/.config/gtk-4.0/gtk.css ~/.config/gtk-4.0/gtk-dark.css ~/.config/gtk-4.0/colors.css
 printf 'dark\n' > ~/.cache/quickshell-mode
 kwriteconfig6 --file ~/.config/qs-env/kdeglobals --group Icons --key Theme breeze-dark
+(
+  sleep 0.8
+  command -v herdr >/dev/null 2>&1 || exit 0
+  for _pass in 1 2; do
+    panes=$(herdr pane list 2>/dev/null | python3 -c 'import json,sys
+for p in json.load(sys.stdin).get("result", {}).get("panes", []):
+    if p.get("agent") in ("claude", "opencode"):
+        print(p["pane_id"])') || break
+    for _pane in $panes; do
+      herdr pane send-text "$_pane" "$(printf '\033[?997;1n')" >/dev/null 2>&1 || true
+    done
+    sleep 1.5
+  done
+) >/dev/null 2>&1 &
