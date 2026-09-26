@@ -25,4 +25,7 @@ Item {
     readonly property color low: "#ff0048"
     readonly property color blinkTo: "#f38ba8"
     readonly property int pillAnimDuration: 100
+    readonly property int animEasing: Easing.Linear
+    readonly property int pillResizeDuration: 220
+    readonly property int pillResizeEasing: Easing.InOutQuad
 }

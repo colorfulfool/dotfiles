@@ -24,12 +24,6 @@ Scope {
             exclusiveZone: 50
             implicitWidth: pill.implicitWidth + 28
             implicitHeight: pill.implicitHeight + 28
-            Behavior on implicitWidth {
-                NumberAnimation {
-                    duration: BarTheme.pillAnimDuration
-                    easing.type: Easing.OutCubic
-                }
-            }
             BackgroundEffect.blurRegion: Region {
                 item: pill
                 shape: RegionShape.Rect
@@ -60,8 +54,8 @@ Scope {
                     clip: true
                     Behavior on implicitWidth {
                         NumberAnimation {
-                            duration: BarTheme.pillAnimDuration
-                            easing.type: Easing.OutCubic
+                            duration: BarTheme.pillResizeDuration
+                            easing.type: BarTheme.pillResizeEasing
                         }
                     }
 
