@@ -36,13 +36,3 @@ kwriteconfig6 --file ~/.config/gtk-4.0/settings.ini --group Settings --key gtk-t
 rm -f ~/.config/gtk-3.0/gtk.css ~/.config/gtk-3.0/colors.css ~/.config/gtk-3.0/gtk-dark.css ~/.config/gtk-4.0/gtk.css ~/.config/gtk-4.0/gtk-dark.css ~/.config/gtk-4.0/colors.css
 printf 'light\n' > ~/.cache/quickshell-mode
 kwriteconfig6 --file ~/.config/qs-env/kdeglobals --group Icons --key Theme breeze
-if pgrep -x quickshell >/dev/null 2>&1; then
-  pkill -x quickshell
-  sleep 0.5
-  if command -v uwsm-app >/dev/null 2>&1; then
-    uwsm-app -- quickshell >/dev/null 2>&1 &
-  else
-    quickshell >/dev/null 2>&1 &
-  fi
-  disown 2>/dev/null || true
-fi
