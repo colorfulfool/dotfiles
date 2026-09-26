@@ -1,4 +1,5 @@
 import Quickshell
+import Quickshell.Io
 import Quickshell.Services.Pipewire
 import QtQuick
 import QtQuick.Layouts
@@ -43,6 +44,16 @@ Item {
 
     PwObjectTracker {
         objects: Pipewire.defaultAudioSink ? [Pipewire.defaultAudioSink] : []
+    }
+
+    // Hardware volume keys at the clamp (100% + up, 0% + down) produce no
+    // PipeWire value change, so onVolumeChanged never fires. The Hyprland
+    // bindings touch this file on every keypress so the OSD still appears.
+    FileView {
+        path: "/home/colorfulfool/.cache/quickshell-audio-poke"
+        watchChanges: true
+        blockLoading: true
+        onFileChanged: audioRoot.poke()
     }
 
     Timer {
