@@ -1,2 +1,3 @@
 packer_compiled.lua
 nix/result
+*.target.wants/
