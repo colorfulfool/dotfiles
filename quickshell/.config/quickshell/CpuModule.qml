@@ -5,10 +5,13 @@ import QtQuick.Layouts
 RowLayout {
     id: cpuRoot
 
+    // No cpufreq on some machines (e.g. VMs): hide instead of a stuck "--.-GHz".
+    visible: cpuRoot.available
     Layout.minimumWidth: 40
     spacing: 5
 
     property string cpuValue: "--.-GHz"
+    property bool available: false
 
     BarText {
         text: "󰍛"
@@ -30,8 +33,12 @@ RowLayout {
         stdout: StdioCollector {
             onStreamFinished: {
                 const khz = parseInt(text.trim(), 10);
-                if (!isNaN(khz) && khz > 0)
+                if (!isNaN(khz) && khz > 0) {
                     cpuRoot.cpuValue = (khz / 1000000).toFixed(1) + "GHz";
+                    cpuRoot.available = true;
+                } else {
+                    cpuRoot.available = false;
+                }
             }
         }
     }

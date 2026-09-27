@@ -6,6 +6,8 @@ import QtQuick.Layouts
 BarText {
     id: battRoot
 
+    // No battery hardware (e.g. desktops/VMs): hide instead of a stuck "--%".
+    visible: battRoot.ready
     opacity: BarTheme.dim
 
     property var dev: UPower.displayDevice

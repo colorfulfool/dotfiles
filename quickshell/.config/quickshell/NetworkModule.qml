@@ -36,8 +36,9 @@ BarText {
         netRoot.wifiOff = !Networking.wifiEnabled;
         if (wifi)
             return "";
+        // nf-md-ethernet: U+F796 (nf-fa-ethernet) is missing from JetBrainsMono Nerd Font.
         if (wired)
-            return "";
+            return "󰈀";
         if (!Networking.wifiEnabled)
             return " •‿•";
         return "⚠";

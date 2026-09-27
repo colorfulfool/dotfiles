@@ -11,6 +11,9 @@ Row {
     spacing: 4
     opacity: 0.7
 
+    // Empty tray must not reserve a layout slot (and its 20px bar spacing).
+    visible: SystemTray.items.values.length > 0
+
     property var openMenuCell: null
 
     Repeater {
