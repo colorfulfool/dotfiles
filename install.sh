@@ -75,6 +75,7 @@ packages=(
   omarchy
   better-control
   yin-yang
+  breezex-cursor-theme # BreezeX-Black (hyprland.lua, kcminputrc)
 
   # Optional apps
   chromium
