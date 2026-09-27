@@ -59,7 +59,7 @@ in
     kitty
     zellij
     nerd-fonts.jetbrains-mono
-    hyprpaper # wallpaper (hyprland.lua launches hyprpaper)
+    swaybg # wallpaper (wallpaper.sh uses swaybg, ARM-safe)
     stow
     mise
     git

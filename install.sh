@@ -8,7 +8,7 @@ packages=(
   hyprland
   waybar
   wofi
-  hyprpaper
+  swaybg
   hypridle
   hyprlock
   hyprshot
