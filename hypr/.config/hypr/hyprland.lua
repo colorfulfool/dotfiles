@@ -1,7 +1,7 @@
-hl.monitor({ output = "", mode = "preferred", position = "auto", scale = 1 })
+hl.monitor({ output = "", mode = "preferred", position = "auto", scale = "auto" })
 
 -- Set programs that you use
-local terminal = "kitty"
+local terminal = "foot"
 local fileManager = "dolphin"
 local browser = "chromium"
 local menu = "wofi -iIa --show drun --style ~/.config/wofi/style.css -W 800"
@@ -14,10 +14,7 @@ local launch = function(cmd) return "uwsm-app -- " .. cmd end
 -- Execute your favorite apps at launch
 hl.on("hyprland.start", function()
   hl.exec_cmd(launch("quickshell"))
-  -- hl.exec_cmd("omarchy-launch-shell")
   hl.exec_cmd(launch("hypridle"))
-  hl.exec_cmd("pkill -x swaybg || true")
-  hl.exec_cmd(launch("hyprpaper"))
   hl.exec_cmd("~/.config/hypr/scripts/wallpaper.sh restore")
   hl.exec_cmd("hyprctl setcursor " .. cursorTheme .. " " .. cursorSize)
   hl.exec_cmd(launch("yin_yang --minimized"))
@@ -167,7 +164,7 @@ hl.bind("SUPER + M", hl.dsp.exec_cmd("omarchy-launch-or-focus lollypop"), { desc
 hl.bind("SUPER + A", hl.dsp.exec_cmd('omarchy-launch-webapp "https://gemini.google.com"'), { description = "Grok" })
 hl.bind("SUPER + T", hl.dsp.exec_cmd(launch(terminal .. " -e btop")), { description = "Top" })
 hl.bind("SUPER + ALT + W", hl.dsp.exec_cmd("~/.config/hypr/scripts/wallpaper.sh next"),
-  { description = "Random wallpaper" })
+  { description = "Random wallpaper (swaybg, ARM-safe)" })
 hl.bind("SUPER + H", hl.dsp.exec_cmd("~/.config/hypr/scripts/hubstaff-toggle.sh"),
   { description = "Hubstaff toggle timer" })
 
