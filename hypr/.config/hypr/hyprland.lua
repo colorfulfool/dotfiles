@@ -1,4 +1,12 @@
 hl.monitor({ output = "", mode = "preferred", position = "auto", scale = "auto" })
+hl.monitor({ output = "eDP-1", mode = "preferred", position = "auto", scale = 1 })
+
+local environment = require("environment")
+
+if environment.omarchy_kernel_option_enabled("omarchy.qemu_virgl=1") then
+  hl.config({ cursor = { invisible = true } })
+  hl.on("hyprland.start", function() hl.exec_cmd("/usr/local/bin/omarchy-native-display-sync") end)
+end
 
 -- Set programs that you use
 local terminal = "foot"
@@ -101,6 +109,12 @@ hl.config({
   }
 })
 
+-- Natural scroll: global keys cover mouse (input.natural_scroll) and touchpad
+-- (input.touchpad.natural_scroll), but Hyprland resolves per-device config
+-- separately and classifies some devices (e.g. qemu-virtio-tablet) as touchpads.
+-- Set it per-device too so the global value can't be shadowed (see hyprwm/Hyprland#2458).
+hl.device({ name = "qemu-virtio-tablet", natural_scroll = true })
+
 hl.animation({ leaf = "windows", enabled = true, speed = 7, bezier = "default" })
 hl.animation({ leaf = "windowsOut", enabled = true, speed = 7, bezier = "default", style = "popin 80%" })
 hl.animation({ leaf = "border", enabled = true, speed = 10, bezier = "default" })
@@ -109,9 +123,6 @@ hl.animation({ leaf = "fade", enabled = true, speed = 7, bezier = "default" })
 hl.animation({ leaf = "fadeLayers", enabled = true, speed = 3, bezier = "default" })
 hl.animation({ leaf = "fadeLayersOut", enabled = true, speed = 1, bezier = "default" })
 hl.animation({ leaf = "workspaces", enabled = true, speed = 6, bezier = "default", style = "slidevert" })
-
--- Source omarchy bindings
--- source = ~/.local/share/omarchy/default/hypr/bindings/utilities.conf
 
 hl.window_rule({ match = { tag = "floating-window" }, float = true, center = true, size = "800 600" })
 hl.window_rule({
