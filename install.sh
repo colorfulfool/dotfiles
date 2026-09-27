@@ -95,6 +95,8 @@ else
   exit 1
 fi
 
+sudo pacman -Syy
+
 $aur_helper -S --needed --noconfirm "${packages[@]}"
 
 for p in "${x86_only[@]}"; do
