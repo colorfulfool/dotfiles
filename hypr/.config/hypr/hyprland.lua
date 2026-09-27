@@ -9,7 +9,7 @@ if environment.omarchy_kernel_option_enabled("omarchy.qemu_virgl=1") then
 end
 
 -- Set programs that you use
-local terminal = "foot"
+local terminal = "kitty"
 local fileManager = "dolphin"
 local browser = "chromium"
 local menu = "wofi -iIa --show drun --style ~/.config/wofi/style.css -W 800"
