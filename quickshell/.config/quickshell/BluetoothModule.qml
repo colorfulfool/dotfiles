@@ -7,12 +7,7 @@ BarText {
     Layout.preferredWidth: 16
     Layout.fillHeight: true
     verticalAlignment: Text.AlignVCenter
-    opacity: {
-        const adapter = Bluetooth.defaultAdapter;
-        if (!adapter || !adapter.enabled)
-            return BarTheme.dim * 0.45;
-        return BarTheme.dim;
-    }
+    opacity: BarTheme.dim
     horizontalAlignment: Text.AlignHCenter
 
     property int connectedCount: {
