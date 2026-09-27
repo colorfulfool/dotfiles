@@ -38,6 +38,23 @@ packages=(
   pamixer
   playerctl
   brightnessctl
+  pipewire-pulse
+  gammastep
+
+  # better-control runtime deps (fork installed via `make install` below)
+  gtk3
+  bluez
+  bluez-utils
+  python-gobject
+  python-dbus
+  python-psutil
+  python-qrcode
+  python-setproctitle
+  python-pydbus
+  python-requests
+  python-pillow
+  power-profiles-daemon
+  make
 
   # System monitor
   btop
@@ -83,7 +100,6 @@ packages=(
 x86_only=(
   mise
   omarchy
-  better-control
 )
 
 if command -v yay &>/dev/null; then
@@ -102,3 +118,22 @@ $aur_helper -S --needed --noconfirm "${packages[@]}"
 for p in "${x86_only[@]}"; do
   $aur_helper -S --needed --noconfirm "$p" || echo "warning: skipping $p (not available on this architecture)"
 done
+
+# better-control: install my fork (PR #172) instead of the AUR package,
+# until it gets merged upstream.
+# https://github.com/better-ecosystem/better-control/pull/172
+BETTER_CONTROL_REPO="https://github.com/colorfulfool/better-control.git"
+BETTER_CONTROL_BRANCH="read-tab-from-file"
+
+# `make install` writes to the same paths as the AUR package, so remove
+# any AUR-installed version first to avoid file conflicts.
+for p in better-control-git better-control; do
+  if pacman -Qq "$p" &>/dev/null; then
+    $aur_helper -Rns --noconfirm "$p"
+  fi
+done
+
+tmp_dir=$(mktemp -d)
+trap 'rm -rf "$tmp_dir"' EXIT
+git clone --depth 1 --branch "$BETTER_CONTROL_BRANCH" "$BETTER_CONTROL_REPO" "$tmp_dir/better-control"
+sudo make -C "$tmp_dir/better-control" install
