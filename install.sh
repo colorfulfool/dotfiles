@@ -29,7 +29,6 @@ packages=(
   neovim
   git
   github-cli
-  mise
 
   # LSP servers
   lua-language-server
@@ -72,14 +71,19 @@ packages=(
   networkmanager
 
   # AUR/third-party
-  omarchy
-  better-control
   yin-yang
   breezex-cursor-theme # BreezeX-Black (hyprland.lua, kcminputrc)
 
   # Optional apps
   chromium
   zathura
+)
+
+# Not available on ARM/aarch64 — kept last so they can't break the install above
+x86_only=(
+  mise
+  omarchy
+  better-control
 )
 
 if command -v yay &>/dev/null; then
@@ -91,4 +95,8 @@ else
   exit 1
 fi
 
-$aur_helper -S --needed "${packages[@]}"
+$aur_helper -S --needed --noconfirm "${packages[@]}"
+
+for p in "${x86_only[@]}"; do
+  $aur_helper -S --needed --noconfirm "$p" || echo "warning: skipping $p (not available on this architecture)"
+done
