@@ -22,8 +22,8 @@ Item {
     readonly property color subdued: isLight ? "#8a8f98" : "#585b70"
     readonly property real dim: 0.6
     readonly property color charged: isLight ? "#1a7f37" : "#a6e3a1"
-    readonly property color low: "#ff0048"
-    readonly property color blinkTo: "#f38ba8"
+    readonly property color low: isLight ? "#c81e1e" : "#ff0048"
+    readonly property color blinkTo: isLight ? "#7f1d1d" : "#f38ba8"
     readonly property int pillAnimDuration: 100
     readonly property int animEasing: Easing.Linear
     readonly property int pillResizeDuration: 150

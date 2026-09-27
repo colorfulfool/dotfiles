@@ -11,7 +11,7 @@ Item {
     readonly property int barWidth: 80
     readonly property int barHeight: 10
     readonly property int barSpacing: 8
-    readonly property color fillColor: "#3DAEE9"
+    readonly property color fillColor: BarTheme.isLight ? "#1818B2" : "#3DAEE9"
     readonly property color trackColor: Qt.rgba(0, 0, 0, 0.35)
     readonly property int hideDelayMs: 1200
 
