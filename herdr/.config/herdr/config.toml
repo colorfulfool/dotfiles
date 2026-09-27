@@ -53,3 +53,12 @@ mouse_capture = true
 # the basename of the pane cwd. This is what Hyprland shows in the group bar,
 # and it resolves on the server so remote sessions name the remote host.
 window_title = "{hostname}: {workspace}"
+
+# Delete active worktree checkout without TUI confirmation (bypasses
+# "Delete worktree checkout..." prompt; --force also skips the dirty-tree
+# second prompt and deletes modified/untracked files).
+[[keys.command]]
+key = "prefix+alt+d"
+type = "shell"
+command = "\"$HERDR_BIN_PATH\" worktree remove --workspace \"$HERDR_ACTIVE_WORKSPACE_ID\" --force"
+description = "force delete worktree without confirmation"
