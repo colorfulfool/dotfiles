@@ -1,3 +1,5 @@
 packer_compiled.lua
 nix/result
 *.target.wants/
+gtk/.config/gtk-3.0/settings.ini
+gtk/.config/gtk-4.0/settings.ini
