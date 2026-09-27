@@ -49,8 +49,11 @@ Item {
         hideTimer.restart();
     }
 
-    onVolumeChanged: poke()
-    onMutedChanged: poke()
+    // The progress bar is a keyboard-key OSD only: the sole trigger is the
+    // poke file touched by the Hyprland XF86Audio* bindings. PipeWire
+    // volume/mute changes from any other source (apps, bluetooth
+    // auto-restore, sliders, this widget's own scroll wheel) must NOT
+    // pop the bar up.
 
     Component.onCompleted: _ready = true
 
@@ -58,9 +61,9 @@ Item {
         objects: Pipewire.defaultAudioSink ? [Pipewire.defaultAudioSink] : []
     }
 
-    // Hardware volume keys at the clamp (100% + up, 0% + down) produce no
-    // PipeWire value change, so onVolumeChanged never fires. The Hyprland
-    // bindings touch this file on every keypress so the OSD still appears.
+    // Sole OSD trigger. The Hyprland XF86Audio* bindings touch this file on
+    // every keypress — including at the clamp (100% + up, 0% + down) where
+    // PipeWire produces no value change at all.
     FileView {
         path: "/home/colorfulfool/.cache/quickshell-audio-poke"
         watchChanges: true
@@ -189,7 +192,6 @@ Item {
             const cur = audioRoot.sink.audio.volume;
             const next = Math.min(1, Math.max(0, cur + (wheel.angleDelta.y > 0 ? 0.05 : -0.05)));
             audioRoot.sink.audio.volume = next;
-            audioRoot.poke();
         }
     }
 }

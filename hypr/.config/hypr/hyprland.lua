@@ -189,7 +189,7 @@ hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("pamixer -i 10; date +%s%N > $HO
 hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("pamixer -d 10; date +%s%N > $HOME/.cache/quickshell-audio-poke"),
   { locked = true, repeating = true })
 hl.bind("XF86AudioMicMute", hl.dsp.exec_cmd("pamixer --default-source -m"), { locked = true, repeating = true })
-hl.bind("XF86AudioMute", hl.dsp.exec_cmd("pamixer -t"), { locked = true })
+hl.bind("XF86AudioMute", hl.dsp.exec_cmd("pamixer -t; date +%s%N > $HOME/.cache/quickshell-audio-poke"), { locked = true })
 hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
 hl.bind("XF86AudioPause", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
 hl.bind("XF86AudioNext", hl.dsp.exec_cmd("playerctl next"), { locked = true })
