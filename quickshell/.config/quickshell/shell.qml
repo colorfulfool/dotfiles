@@ -51,10 +51,6 @@ Scope {
                     }
                     TrayModule {
                     }
-                    CpuModule {
-                    }
-                    MemoryModule {
-                    }
                 }
 
                 // Empty space inside the pill for the MacBook notch
