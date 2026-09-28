@@ -20,16 +20,16 @@ Item {
         color: Qt.rgba(0, 0, 0, 0.55)
         blur: 12
         spread: 0
-        radius: 32
+        radius: 8
     }
 
     Rectangle {
         id: pillRect
         anchors.fill: parent
         implicitWidth: barRow.implicitWidth + 48
-        implicitHeight: 42
+        implicitHeight: 40
         color: BarTheme.pill
-        radius: 32
+        radius: 8
         clip: true
 
         RowLayout {

@@ -23,44 +23,62 @@ Scope {
             exclusionMode: ExclusionMode.Normal
             exclusiveZone: 50
             implicitWidth: 1000
-            implicitHeight: pill.implicitHeight + 28
+            implicitHeight: Math.max(leftPill.implicitHeight, rightPill.implicitHeight) + 28
             mask: Region {
-                item: pill.pillItem
+                item: leftPill.pillItem
+                Region {
+                    item: rightPill.pillItem
+                }
             }
             BackgroundEffect.blurRegion: Region {
-                item: pill.pillItem
+                item: leftPill.pillItem
                 shape: RegionShape.Rect
                 radius: 16
+                Region {
+                    item: rightPill.pillItem
+                    shape: RegionShape.Rect
+                    radius: 16
+                }
             }
 
-            Pill {
-                id: pill
+            RowLayout {
                 anchors.horizontalCenter: parent.horizontalCenter
+                // Shift so the notch gap stays centered even when the pills differ in width
+                anchors.horizontalCenterOffset: (rightPill.width - leftPill.width) / 2
                 anchors.top: parent.top
                 anchors.topMargin: 8
+                spacing: 200 // space for the MacBook notch
 
-                WorkspaceModule {
-                    screen: modelData
-                }
-                TrayModule {
-                }
-                CpuModule {
-                }
-                MemoryModule {
-                }
+                Pill {
+                    id: leftPill
 
-                RowLayout {
-                    spacing: 8
-
-                    NetworkModule {
+                    WorkspaceModule {
+                        screen: modelData
                     }
-                    BluetoothModule {
+                    TrayModule {
                     }
-                    AudioModule {
+                    CpuModule {
+                    }
+                    MemoryModule {
                     }
                 }
 
-                BatteryModule {
+                Pill {
+                    id: rightPill
+
+                    RowLayout {
+                        spacing: 8
+
+                        NetworkModule {
+                        }
+                        BluetoothModule {
+                        }
+                        AudioModule {
+                        }
+                    }
+
+                    BatteryModule {
+                    }
                 }
             }
         }
