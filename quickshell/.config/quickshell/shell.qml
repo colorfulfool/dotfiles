@@ -21,7 +21,7 @@ Scope {
             }
             color: "transparent"
             exclusionMode: ExclusionMode.Normal
-            exclusiveZone: 40
+            exclusiveZone: BarTheme.barHeight
             implicitWidth: 1000
             implicitHeight: pill.implicitHeight + 28
             mask: Region {

@@ -28,4 +28,5 @@ Item {
     readonly property int animEasing: Easing.Linear
     readonly property int pillResizeDuration: 150
     readonly property int pillResizeEasing: Easing.OutQuad
+    readonly property int barHeight: 40
 }
