@@ -14,7 +14,7 @@ STATE_FILE="$STATE_DIR/current-wallpaper"
 # keep hyprpaper state in sync for compat if user switches back
 HYPR_STATE_DIR="$HOME/.local/state/hyprpaper"
 HYPR_STATE_FILE="$HYPR_STATE_DIR/current-wallpaper"
-FALLBACK="$HOME/dotfiles/nix/city.jpg"
+FALLBACK="$HOME/.dotfiles/nix/city.jpg"
 MAX_KEEP=50
 
 notify() {
@@ -35,11 +35,18 @@ apply_wallpaper() {
     echo "wallpaper: swaybg not installed (pacman -S swaybg)" >&2
     return 1
   fi
-  # Kill old swaybg so new one replaces it (swaybg doesn't support reload)
-  pkill -x swaybg 2>/dev/null || true
-  # Give it a moment to exit before starting new one
-  sleep 0.2
+  # Start the new instance BEFORE stopping the old one so the screen never
+  # shows an unpainted (black) background in between. swaybg has no
+  # crossfade support (and swww, which does fades, isn't packaged for Arch
+  # ARM), so the switch is a hard cut — but with no black flash.
+  # Remember PIDs first so we only kill the instance(s) we replace.
+  local -a olds=()
+  mapfile -t olds < <(pgrep -x swaybg 2>/dev/null || true)
   swaybg -i "$img" -m fill >/dev/null 2>&1 &
+  sleep 0.5 # let the new layer-shell surface paint a frame first
+  if ((${#olds[@]})); then
+    kill "${olds[@]}" 2>/dev/null || true
+  fi
   # Remember for restore
   mkdir -p "$STATE_DIR" "$HYPR_STATE_DIR"
   printf '%s\n' "$img" >"$STATE_FILE"

@@ -150,6 +150,10 @@ hl.window_rule({ match = { class = ".*" }, suppress_event = "maximize" })
 hl.layer_rule({ match = { namespace = "wofi" }, animation = "fade" })
 hl.layer_rule({ match = { namespace = "wofi" }, blur = true })
 hl.layer_rule({ match = { namespace = "quickshell" }, blur = true })
+-- swaybg swaps (wallpaper.sh) must be instant: with fadeLayersOut enabled,
+-- killing the old instance replays the old image fading out on top of the
+-- new one. (swaybg's layer namespace is "wallpaper".)
+hl.layer_rule({ match = { namespace = "wallpaper" }, no_anim = true, animation = "none" })
 
 hl.bind("SUPER + X", hl.dsp.window.close())
 hl.bind("SUPER + C", hl.dsp.window.close())

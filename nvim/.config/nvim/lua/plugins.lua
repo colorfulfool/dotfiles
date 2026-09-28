@@ -230,6 +230,7 @@ return packer.startup(function(use)
 
   use {
     "nvim-treesitter/nvim-treesitter",
+    branch = "master",
     run = ":TSUpdate",
     config = function()
       vim.keymap.set("n", "<space>ti",
