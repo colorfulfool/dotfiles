@@ -25,66 +25,42 @@ Scope {
             implicitWidth: 1000
             implicitHeight: pill.implicitHeight + 28
             mask: Region {
-                item: pill
+                item: pill.pillItem
             }
             BackgroundEffect.blurRegion: Region {
-                item: pill
+                item: pill.pillItem
                 shape: RegionShape.Rect
                 radius: 16
             }
 
-            Item {
-                anchors.fill: parent
+            Pill {
+                id: pill
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.top: parent.top
+                anchors.topMargin: 8
 
-                RectangularShadow {
-                    anchors.fill: pill
-                    offset: Qt.vector2d(0, 2)
-                    color: Qt.rgba(0, 0, 0, 0.55)
-                    blur: 12
-                    spread: 0
-                    radius: 32
+                WorkspaceModule {
+                    screen: modelData
+                }
+                TrayModule {
+                }
+                CpuModule {
+                }
+                MemoryModule {
                 }
 
-                Rectangle {
-                    id: pill
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.top: parent.top
-                    anchors.topMargin: 8
-                    implicitWidth: barRow.implicitWidth + 48
-                    implicitHeight: 42
-                    color: BarTheme.pill
-                    radius: 32
-                    clip: true
+                RowLayout {
+                    spacing: 8
 
-                    RowLayout {
-                        id: barRow
-                        anchors.centerIn: parent
-                        spacing: 20
-
-                    WorkspaceModule {
-                        screen: modelData
+                    NetworkModule {
                     }
-                    TrayModule {
+                    BluetoothModule {
                     }
-                    CpuModule {
-                    }
-                    MemoryModule {
-                    }
-
-                    RowLayout {
-                        spacing: 8
-
-                        NetworkModule {
-                        }
-                        BluetoothModule {
-                        }
-                        AudioModule {
-                        }
-                    }
-
-                    BatteryModule {
+                    AudioModule {
                     }
                 }
+
+                BatteryModule {
                 }
             }
         }
