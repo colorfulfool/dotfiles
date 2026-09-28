@@ -21,7 +21,7 @@ Scope {
             }
             color: "transparent"
             exclusionMode: ExclusionMode.Normal
-            exclusiveZone: 50
+            exclusiveZone: BarTheme.barHeight + BarTheme.barMarginTop
             implicitWidth: 1000
             implicitHeight: pill.implicitHeight + 28
             mask: Region {
@@ -37,7 +37,7 @@ Scope {
                 id: pill
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: parent.top
-                anchors.topMargin: 8
+                anchors.topMargin: BarTheme.barMarginTop
 
                 WorkspaceModule {
                     screen: modelData

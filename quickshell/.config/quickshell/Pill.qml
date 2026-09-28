@@ -27,7 +27,7 @@ Item {
         id: pillRect
         anchors.fill: parent
         implicitWidth: barRow.implicitWidth + 48
-        implicitHeight: 42
+        implicitHeight: BarTheme.barHeight
         color: BarTheme.pill
         radius: 32
         clip: true
