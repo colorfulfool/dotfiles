@@ -29,7 +29,10 @@ Item {
         implicitWidth: barRow.implicitWidth + 48
         implicitHeight: 40
         color: BarTheme.pill
-        radius: 8
+        topLeftRadius: 0
+        topRightRadius: 0
+        bottomLeftRadius: 8
+        bottomRightRadius: 8
         clip: true
 
         RowLayout {

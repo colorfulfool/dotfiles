@@ -21,36 +21,30 @@ Scope {
             }
             color: "transparent"
             exclusionMode: ExclusionMode.Normal
-            exclusiveZone: 50
+            exclusiveZone: 40
             implicitWidth: 1000
-            implicitHeight: Math.max(leftPill.implicitHeight, rightPill.implicitHeight) + 28
+            implicitHeight: pill.implicitHeight + 28
             mask: Region {
-                item: leftPill.pillItem
-                Region {
-                    item: rightPill.pillItem
-                }
+                item: pill.pillItem
             }
             BackgroundEffect.blurRegion: Region {
-                item: leftPill.pillItem
+                item: pill.pillItem
                 shape: RegionShape.Rect
-                radius: 16
-                Region {
-                    item: rightPill.pillItem
-                    shape: RegionShape.Rect
-                    radius: 16
-                }
+                radius: 8
             }
 
-            RowLayout {
+            Pill {
+                id: pill
                 anchors.horizontalCenter: parent.horizontalCenter
-                // Shift so the notch gap stays centered even when the pills differ in width
-                anchors.horizontalCenterOffset: (rightPill.width - leftPill.width) / 2
+                // Shift the natural-width pill so the notch gap lands on screen center
+                anchors.horizontalCenterOffset: (rightGroup.implicitWidth - leftGroup.implicitWidth) / 2
                 anchors.top: parent.top
-                anchors.topMargin: 8
-                spacing: 200 // space for the MacBook notch
+                anchors.topMargin: 0
+                spacing: 0
 
-                Pill {
-                    id: leftPill
+                RowLayout {
+                    id: leftGroup
+                    spacing: 20
 
                     WorkspaceModule {
                         screen: modelData
@@ -63,8 +57,15 @@ Scope {
                     }
                 }
 
-                Pill {
-                    id: rightPill
+                // Empty space inside the pill for the MacBook notch
+                Item {
+                    implicitWidth: 210
+                    implicitHeight: 1
+                }
+
+                RowLayout {
+                    id: rightGroup
+                    spacing: 20
 
                     RowLayout {
                         spacing: 8
