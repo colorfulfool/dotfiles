@@ -85,12 +85,12 @@ Row {
                 id: menuWin
                 visible: trayCell.menuOpen && trayCell.modelData.hasMenu
                 anchor.item: trayCell
-                anchor.rect.x: -menuBg.anchors.margins
+                anchor.rect.x: 0 - (menuBg.anchors.margins + trayCell.width/2)
                 // Pill is 42 high (shell.qml) with the 16px icon centered.
-                // Popup top is placed so the visible menuBg sits 6px below
+                // Popup top is placed so the visible menuBg sits 4px below
                 // the pill bottom (the 14px transparent margin is shadow
                 // bleed, not gap).
-                anchor.rect.y: trayCell.height + (42 - trayCell.height) / 2 - menuBg.anchors.margins + 6
+                anchor.rect.y: trayCell.height + (42 - trayCell.height) / 2 - menuBg.anchors.margins
                 color: "transparent"
                 implicitWidth: menuLayout.implicitWidth + 48
                 implicitHeight: menuLayout.implicitHeight + 44
@@ -108,7 +108,8 @@ Row {
                     id: menuBg
                     anchors.fill: parent
                     anchors.margins: 14
-                    radius: 8
+                    bottomLeftRadius: 8
+                    bottomRightRadius: 8
                     color: BarTheme.menu
                     clip: true
 
