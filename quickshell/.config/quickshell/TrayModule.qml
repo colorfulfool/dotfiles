@@ -84,12 +84,13 @@ Row {
             PopupWindow {
                 id: menuWin
                 visible: trayCell.menuOpen && trayCell.modelData.hasMenu
-                anchor.window: trayCell.QsWindow.window
                 anchor.item: trayCell
                 anchor.rect.x: -menuBg.anchors.margins
-                // Pill is 42 high (shell.qml) with the 16px icon centered,
-                // so this puts the popup top at the pill bottom and menuBg below with shadow clearance.
-                anchor.rect.y: trayCell.height + (42 - trayCell.height) / 2
+                // Pill is 42 high (shell.qml) with the 16px icon centered.
+                // Popup top is placed so the visible menuBg sits 6px below
+                // the pill bottom (the 14px transparent margin is shadow
+                // bleed, not gap).
+                anchor.rect.y: trayCell.height + (42 - trayCell.height) / 2 - menuBg.anchors.margins + 6
                 color: "transparent"
                 implicitWidth: menuLayout.implicitWidth + 48
                 implicitHeight: menuLayout.implicitHeight + 44
