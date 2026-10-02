@@ -90,7 +90,7 @@ Row {
                 // Popup top is placed so the visible menuBg sits 4px below
                 // the pill bottom (the 14px transparent margin is shadow
                 // bleed, not gap).
-                anchor.rect.y: trayCell.height + (42 - trayCell.height) / 2 - menuBg.anchors.margins
+                anchor.rect.y: trayCell.height + (42 - trayCell.height) / 2 - menuBg.anchors.margins - 1
                 color: "transparent"
                 implicitWidth: menuLayout.implicitWidth + 48
                 implicitHeight: menuLayout.implicitHeight + 44
