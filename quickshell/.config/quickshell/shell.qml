@@ -84,7 +84,7 @@ Scope {
                     anchors.left: mainPill.right
                     anchors.leftMargin: 8
                     anchors.verticalCenter: parent.verticalCenter
-                    padding: 14
+                    padding: 16
 
                     PluginsModule {
                     }
