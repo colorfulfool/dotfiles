@@ -1,0 +1,200 @@
+#!/usr/bin/env bash
+# lid-guard: stay-awake modes for lid-close suspend + idle/sleep inhibition.
+#
+# Three modes (persisted in $STATE_DIR/mode, default `agents`):
+#   allow   faded cup        sleep as usual, lid suspends normally
+#   agents  cup with badge   don't sleep on lid close / screen fade while
+#                            herdr reports a working claude/opencode agent
+#   awake   lit cup          don't sleep at all
+#
+# Inhibitors (single daemon, fixed reasons — never restarted while held,
+# so agent churn can't open a suspend gap):
+#   handle-lid-switch  while: mode=awake, or mode=agents with agents working
+#   sleep:idle         while: mode=awake, or mode=agents with agents working
+#
+# The bar's PluginsModule is a pure UI over this: it watches the mode file
+# and calls `lid-guard mode <next>` on click. No second inhibitor anywhere.
+#
+# Usage:
+#   lid-guard status            show mode + agent + inhibitor state
+#   lid-guard mode [allow|agents|awake|toggle]
+#                               print or set the sleep mode
+#   lid-guard daemon [SECS]     run the poll loop (via user service)
+set -u
+
+STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/lid-guard"
+MODE_FILE="$STATE_DIR/mode"
+LID_PIDFILE="$STATE_DIR/inhibitor.pid"
+SLEEP_PIDFILE="$STATE_DIR/sleep-inhibit.pid"
+LIDPREV="$STATE_DIR/lid-prev"
+INTERVAL="${2:-5}"
+
+LID_WHY="lid-guard: stay-awake mode (agents working or always)"
+SLEEP_WHY="lid-guard: stay-awake (agents working or always)"
+
+mkdir -p "$STATE_DIR"
+
+notify() { # $1 = message, $2 = icon (1 info, 2 warning)
+  local icon="${2:-1}"
+  if command -v hyprctl >/dev/null 2>&1; then
+    hyprctl notify "$icon" 3000 "rgb(33ccff)" "$1" >/dev/null 2>&1 || true
+  fi
+  if command -v omarchy-osd >/dev/null 2>&1; then
+    omarchy-osd -m "$1" >/dev/null 2>&1 || true
+  fi
+  echo "lid-guard: $1"
+}
+
+# Print "agent|cwd" lines for claude/opencode agents that are working.
+working_agents() {
+  timeout 10 herdr agent list 2>/dev/null | python3 -c '
+import json, sys
+try:
+    data = json.load(sys.stdin)
+except Exception:
+    sys.exit(0)
+agents = data.get("result", {}).get("agents", data.get("agents", []))
+for a in agents:
+    if a.get("agent") in ("claude", "opencode") and a.get("agent_status") == "working":
+        print(a.get("agent", "?") + "|" + a.get("cwd", "?"))
+' 2>/dev/null
+}
+
+agents_working() {
+  [[ -n "$(working_agents)" ]]
+}
+
+# allow | agents | awake. Missing/invalid reads as `agents` (the historic
+# behavior: always guard while agents work).
+read_mode() {
+  local m
+  m="$(cat "$MODE_FILE" 2>/dev/null || true)"
+  case "$m" in
+    allow|agents|awake) printf '%s\n' "$m" ;;
+    *) printf 'agents\n' ;;
+  esac
+}
+
+lid_state() {
+  awk '{print $2}' /proc/acpi/button/lid/LID0/state 2>/dev/null || echo unknown
+}
+
+inhibitor_running() { # $1 = pidfile
+  [[ -f "$1" ]] && kill -0 "$(cat "$1")" 2>/dev/null
+}
+
+start_inhibitor() { # $1 = pidfile, $2 = what, $3 = why
+  if inhibitor_running "$1"; then return 0; fi
+  systemd-inhibit --what="$2" --who="lid-guard" \
+    --why="$3" --mode=block sleep infinity &
+  echo $! >"$1"
+}
+
+stop_inhibitor() { # $1 = pidfile
+  if [[ -f "$1" ]]; then
+    local pid
+    pid="$(cat "$1" 2>/dev/null || true)"
+    if [[ -n "$pid" ]]; then
+      pkill -P "$pid" sleep 2>/dev/null || true
+      kill "$pid" 2>/dev/null || true
+    fi
+    rm -f "$1"
+  fi
+}
+
+# Echoes "<need_lid> <need_sleep>" (each 0/1) for the current state.
+guard_needs() {
+  local mode="$1" working="$2"
+  local need_lid=0 need_sleep=0
+  if [[ "$mode" == "awake" ]]; then
+    need_lid=1
+    need_sleep=1
+  elif [[ "$mode" == "agents" && "$working" == "1" ]]; then
+    need_lid=1
+    need_sleep=1
+  fi
+  echo "$need_lid $need_sleep"
+}
+
+cmd_status() {
+  echo "--- mode ---"
+  read_mode
+  echo "--- agents (claude/opencode working) ---"
+  local w
+  w="$(working_agents)"
+  [[ -n "$w" ]] && echo "$w" || echo "(none)"
+  echo "--- lid ---"
+  echo "lid: $(lid_state)"
+  echo "--- inhibitors ---"
+  systemd-inhibit --list 2>/dev/null | grep -E "lid-guard|WHAT" || true
+}
+
+cmd_mode() { # [allow|agents|awake|toggle]
+  local arg="${1:-}"
+  if [[ -z "$arg" ]]; then
+    read_mode
+    return 0
+  fi
+  local next="$arg"
+  if [[ "$arg" == "toggle" || "$arg" == "cycle" ]]; then
+    case "$(read_mode)" in
+      allow) next="awake" ;;
+      awake) next="agents" ;;
+      *) next="allow" ;;
+    esac
+  fi
+  case "$next" in
+    allow|agents|awake) ;;
+    *) echo "usage: lid-guard mode [allow|agents|awake|toggle]" >&2; return 1 ;;
+  esac
+  printf '%s\n' "$next" >"$MODE_FILE"
+  case "$next" in
+    allow) notify "Sleep as usual — lid suspends normally" 1 ;;
+    agents) notify "Stay awake while agents work" 1 ;;
+    awake) notify "Stay awake — no sleep at all" 1 ;;
+  esac
+}
+
+cmd_daemon() {
+  [[ -f "$LIDPREV" ]] || echo "$(lid_state)" >"$LIDPREV"
+  local prev cur mode working needs need_lid need_sleep
+  while true; do
+    prev="$(cat "$LIDPREV" 2>/dev/null || lid_state)"
+    cur="$(lid_state)"
+    echo "$cur" >"$LIDPREV"
+
+    mode="$(read_mode)"
+    working=0
+    # Only ask herdr when the answer matters.
+    if [[ "$mode" == "agents" ]] && agents_working; then
+      working=1
+    fi
+    needs="$(guard_needs "$mode" "$working")"
+    need_lid="${needs%% *}"
+    need_sleep="${needs##* }"
+
+    if [[ "$need_lid" == "1" ]]; then
+      # Lock on close (suspend path would lock anyway; blocked path would not).
+      if [[ "$prev" == "open" ]] && [[ "$cur" == "closed" ]]; then
+        loginctl lock-session 2>/dev/null || true
+      fi
+      start_inhibitor "$LID_PIDFILE" "handle-lid-switch" "$LID_WHY"
+    else
+      stop_inhibitor "$LID_PIDFILE"
+    fi
+
+    if [[ "$need_sleep" == "1" ]]; then
+      start_inhibitor "$SLEEP_PIDFILE" "sleep:idle" "$SLEEP_WHY"
+    else
+      stop_inhibitor "$SLEEP_PIDFILE"
+    fi
+    sleep "$INTERVAL"
+  done
+}
+
+case "${1:-status}" in
+  status) cmd_status ;;
+  mode) cmd_mode "${2:-}" ;;
+  daemon) cmd_daemon ;;
+  *) echo "usage: lid-guard {status|mode [allow|agents|awake|toggle]|daemon [SECS]}" >&2; exit 1 ;;
+esac

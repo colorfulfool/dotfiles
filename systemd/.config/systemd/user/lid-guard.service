@@ -1,5 +1,5 @@
 [Unit]
-Description=lid-guard: block lid suspend while agents work
+Description=lid-guard: stay-awake modes for lid suspend and idle sleep
 After=graphical-session.target
 
 [Service]

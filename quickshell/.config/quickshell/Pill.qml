@@ -6,6 +6,7 @@ Item {
     id: root
 
     property real spacing: 20
+    property real padding: 24
     default property alias content: barRow.children
     readonly property alias pillItem: pillRect
 
@@ -26,7 +27,7 @@ Item {
     Rectangle {
         id: pillRect
         anchors.fill: parent
-        implicitWidth: barRow.implicitWidth + 48
+        implicitWidth: barRow.implicitWidth + root.padding * 2
         implicitHeight: BarTheme.barHeight
         color: BarTheme.pill
         radius: 32

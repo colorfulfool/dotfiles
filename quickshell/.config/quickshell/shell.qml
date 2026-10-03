@@ -23,44 +23,71 @@ Scope {
             exclusionMode: ExclusionMode.Normal
             exclusiveZone: BarTheme.barHeight + BarTheme.barMarginTop
             implicitWidth: 1000
-            implicitHeight: pill.implicitHeight + 28
+            implicitHeight: mainPill.implicitHeight + 28
             mask: Region {
-                item: pill.pillItem
+                item: mainPill.pillItem
+                Region {
+                    item: pluginsPill.pillItem
+                }
             }
             BackgroundEffect.blurRegion: Region {
-                item: pill.pillItem
+                item: mainPill.pillItem
                 shape: RegionShape.Rect
                 radius: 16
+                Region {
+                    item: pluginsPill.pillItem
+                    shape: RegionShape.Rect
+                    radius: 16
+                }
             }
 
-            Pill {
-                id: pill
+            Item {
+                id: pillsRow
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: parent.top
                 anchors.topMargin: BarTheme.barMarginTop
+                width: mainPill.implicitWidth
+                height: mainPill.implicitHeight
 
-                WorkspaceModule {
-                    screen: modelData
-                }
-                TrayModule {
-                }
-                CpuModule {
-                }
-                MemoryModule {
-                }
+                Pill {
+                    id: mainPill
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
 
-                RowLayout {
-                    spacing: 8
-
-                    NetworkModule {
+                    WorkspaceModule {
+                        screen: modelData
                     }
-                    BluetoothModule {
+                    TrayModule {
                     }
-                    AudioModule {
+                    CpuModule {
+                    }
+                    MemoryModule {
+                    }
+
+                    RowLayout {
+                        spacing: 8
+
+                        NetworkModule {
+                        }
+                        BluetoothModule {
+                        }
+                        AudioModule {
+                        }
+                    }
+
+                    BatteryModule {
                     }
                 }
 
-                BatteryModule {
+                Pill {
+                    id: pluginsPill
+                    anchors.left: mainPill.right
+                    anchors.leftMargin: 8
+                    anchors.verticalCenter: parent.verticalCenter
+                    padding: 14
+
+                    PluginsModule {
+                    }
                 }
             }
         }
