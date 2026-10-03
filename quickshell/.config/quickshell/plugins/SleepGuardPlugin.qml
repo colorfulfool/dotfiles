@@ -30,7 +30,7 @@ Item {
     // Small, tucked into the bottom-right corner clear of the handle.
     readonly property real badgeSizeFrac: 0.38
     readonly property real badgeCX: 0.92
-    readonly property real badgeCY: 0.72
+    readonly property real badgeCY: 0.75
 
     function nextMode(mode) {
         if (mode === "allow")
@@ -76,7 +76,7 @@ Item {
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
             ctx.fillStyle = BarTheme.fg;
-            ctx.fillText("󰅶", parent.width / 2, parent.height / 1.4);
+            ctx.fillText("󰅶", parent.width / 2.3, parent.height / 1.4);
             if (sleepCell.showBadge) {
                 var bw = parent.width * sleepCell.badgeSizeFrac;
                 ctx.save();
