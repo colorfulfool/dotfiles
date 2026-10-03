@@ -7,9 +7,9 @@ Row {
     spacing: 4
     opacity: 0.7
 
-    SleepGuardPlugin {
+    TailscalePlugin {
     }
 
-    TailscalePlugin {
+    SleepGuardPlugin {
     }
 }
