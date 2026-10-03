@@ -175,7 +175,7 @@ hl.bind("SUPER + SHIFT + B", hl.dsp.exec_cmd(launch(browser .. " --private")), {
 hl.bind("SUPER + ALT + SPACE", hl.dsp.exec_cmd("omarchy-menu"), { description = "Omarchy menu" })
 hl.bind("SUPER + K", hl.dsp.exec_cmd("omarchy-menu-keybindings"), { description = "Keybindings" })
 hl.bind("SUPER + CTRL + L", hl.dsp.exec_cmd("pidof hyprlock || hyprlock"), { description = "Lock screen" })
-hl.bind("SUPER + CTRL + I", hl.dsp.exec_cmd("lid-guard mode toggle"),
+hl.bind("SUPER + SHIFT + L", hl.dsp.exec_cmd("lid-guard mode toggle"),
   { description = "Cycle sleep mode (allow / awake / agents)" })
 hl.bind("SUPER + M", hl.dsp.exec_cmd("omarchy-launch-or-focus lollypop"), { description = "Music" })
 hl.bind("SUPER + A", hl.dsp.exec_cmd('omarchy-launch-webapp "https://gemini.google.com"'), { description = "Grok" })

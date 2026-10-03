@@ -154,11 +154,20 @@ Item {
     }
 
     FileView {
-        id: stateDirWatcher
-        path: sleepCell.stateDir
+        id: modeFileWatcher
+        path: sleepCell.stateDir + "/mode"
         watchChanges: true
         printErrors: false
         onFileChanged: sleepCell.refreshMode()
+    }
+
+    // Fallback: FileView doesn't notice the file being created if it
+    // didn't exist at startup, so poll cheaply as well.
+    Timer {
+        interval: 2000
+        running: true
+        repeat: true
+        onTriggered: sleepCell.refreshMode()
     }
 
     Component.onCompleted: refreshMode()
