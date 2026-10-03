@@ -19,6 +19,12 @@ Item {
     implicitWidth: 16
     implicitHeight: 16
 
+    Rectangle {
+        anchors.fill: parent
+        color: "red"
+        opacity: 0.25
+    }
+
     readonly property string home: Quickshell.env("HOME")
     readonly property string stateDir: home + "/.local/state/lid-guard"
     // "allow" | "awake" | "agents". Defaults to agents to match the daemon.
@@ -29,8 +35,8 @@ Item {
     // Badge geometry, shared by the knockout below and the badge item.
     // Small, tucked into the bottom-right corner clear of the handle.
     readonly property real badgeSizeFrac: 0.38
-    readonly property real badgeCX: 0.95
-    readonly property real badgeCY: 0.738
+    readonly property real badgeCX: 0.92
+    readonly property real badgeCY: 0.72
 
     function nextMode(mode) {
         if (mode === "allow")
@@ -63,23 +69,26 @@ Item {
     // negative space; the frozen arc spinner floats in it.
     Canvas {
         id: cupLayer
-        anchors.fill: parent
+        x: 0
+        y: 0
+        width: parent.width + 4
+        height: parent.height
         opacity: sleepCell.lit ? 1.0 : 0.35
         onPaint: {
             var ctx = getContext("2d");
             ctx.clearRect(0, 0, width, height);
-            var s = Math.round(height);
+            var s = Math.round(parent.height);
             ctx.font = "600 " + s + "px 'JetBrainsMono Nerd Font'";
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
             ctx.fillStyle = BarTheme.fg;
-            ctx.fillText("󰅶", width / 2, height / 1.4);
+            ctx.fillText("󰅶", parent.width / 2, parent.height / 1.4);
             if (sleepCell.showBadge) {
-                var bw = width * sleepCell.badgeSizeFrac;
+                var bw = parent.width * sleepCell.badgeSizeFrac;
                 ctx.save();
                 ctx.globalCompositeOperation = "destination-out";
                 ctx.beginPath();
-                ctx.arc(width * sleepCell.badgeCX, height * sleepCell.badgeCY, bw / 2 + 1.5, 0, Math.PI * 2);
+                ctx.arc(parent.width * sleepCell.badgeCX, parent.height * sleepCell.badgeCY, bw / 2 + 1.0, 0, Math.PI * 2);
                 ctx.fill();
                 ctx.restore();
             }
