@@ -35,18 +35,11 @@ SLEEP_WHY="lid-guard: stay-awake (agents working or always)"
 mkdir -p "$STATE_DIR"
 
 notify() { # $1 = message, $2 = icon (1 info, 2 warning)
-  local icon="${2:-1}"
-  if command -v hyprctl >/dev/null 2>&1; then
-    hyprctl notify "$icon" 3000 "rgb(33ccff)" "$1" >/dev/null 2>&1 || true
-  fi
-  if command -v omarchy-osd >/dev/null 2>&1; then
-    omarchy-osd -m "$1" >/dev/null 2>&1 || true
-  fi
   echo "lid-guard: $1"
 }
 
-# Print "agent|cwd" lines for claude/opencode agents that are working.
-working_agents() {
+# Print "status|agent|cwd" lines for claude/opencode agents (any status).
+agent_states() {
   timeout 10 herdr agent list 2>/dev/null | python3 -c '
 import json, sys
 try:
@@ -55,13 +48,62 @@ except Exception:
     sys.exit(0)
 agents = data.get("result", {}).get("agents", data.get("agents", []))
 for a in agents:
-    if a.get("agent") in ("claude", "opencode") and a.get("agent_status") == "working":
-        print(a.get("agent", "?") + "|" + a.get("cwd", "?"))
+    if a.get("agent") in ("claude", "opencode"):
+        print((a.get("agent_status") or "unknown") + "|" + a.get("agent", "?") + "|" + a.get("cwd", "?"))
 ' 2>/dev/null
+}
+
+# Print "agent|cwd" lines for claude/opencode agents that are working.
+working_agents() {
+  agent_states | awk -F'|' '$1 == "working" {print $2 "|" $3}'
+}
+
+# Print "agent|cwd" lines for claude/opencode agents that are blocked
+# (yellow herdr — approval/question prompt, i.e. stuck waiting).
+blocked_agents() {
+  agent_states | awk -F'|' '$1 == "blocked" {print $2 "|" $3}'
 }
 
 agents_working() {
   [[ -n "$(working_agents)" ]]
+}
+
+agents_blocked() {
+  [[ -n "$(blocked_agents)" ]]
+}
+
+BLOCKED_SINCE="$STATE_DIR/blocked-since"
+STUCK_GRACE=3600 # seconds a blocked (yellow) agent keeps us awake
+
+# Echoes 1/0. Blocked agents keep the guard for STUCK_GRACE seconds
+# (in case they resume); after that we treat them as done and allow sleep.
+# Working agents always guard. Done/idle (green) agents never guard.
+guard_active() {
+  local w b now ts
+  w="$(working_agents)"
+  if [[ -n "$w" ]]; then
+    rm -f "$BLOCKED_SINCE"
+    echo 1
+    return
+  fi
+  b="$(blocked_agents)"
+  if [[ -z "$b" ]]; then
+    rm -f "$BLOCKED_SINCE"
+    echo 0
+    return
+  fi
+  now="$(date +%s)"
+  if [[ ! -f "$BLOCKED_SINCE" ]]; then
+    echo "$now" >"$BLOCKED_SINCE"
+    echo 1
+    return
+  fi
+  ts="$(cat "$BLOCKED_SINCE" 2>/dev/null || echo "$now")"
+  if (( now - ts < STUCK_GRACE )); then
+    echo 1
+  else
+    echo 0
+  fi
 }
 
 # allow | agents | awake. Missing/invalid reads as `agents` (the historic
@@ -123,6 +165,13 @@ cmd_status() {
   local w
   w="$(working_agents)"
   [[ -n "$w" ]] && echo "$w" || echo "(none)"
+  echo "--- agents (blocked/yellow) ---"
+  local b
+  b="$(blocked_agents)"
+  [[ -n "$b" ]] && echo "$b" || echo "(none)"
+  if [[ -f "$BLOCKED_SINCE" ]]; then
+    echo "--- blocked since $(date -d "@$(cat "$BLOCKED_SINCE")" '+%H:%M:%S' 2>/dev/null || cat "$BLOCKED_SINCE") ---"
+  fi
   echo "--- lid ---"
   echo "lid: $(lid_state)"
   echo "--- inhibitors ---"
@@ -165,9 +214,16 @@ cmd_daemon() {
 
     mode="$(read_mode)"
     working=0
-    # Only ask herdr when the answer matters.
-    if [[ "$mode" == "agents" ]] && agents_working; then
+    # Only ask herdr when the answer matters. Working agents guard always;
+    # blocked (yellow) agents guard for STUCK_GRACE seconds, then release.
+    if [[ "$mode" == "agents" ]] && [[ "$(guard_active)" == "1" ]]; then
       working=1
+      rm -f "$STATE_DIR/stuck-notified"
+    elif [[ "$mode" == "agents" ]] && agents_blocked && [[ ! -f "$STATE_DIR/stuck-notified" ]]; then
+      touch "$STATE_DIR/stuck-notified"
+      notify "Agent stuck (blocked) for over 1h — sleep allowed" 2
+    elif [[ "$mode" == "agents" ]] && ! agents_blocked; then
+      rm -f "$STATE_DIR/stuck-notified"
     fi
     needs="$(guard_needs "$mode" "$working")"
     need_lid="${needs%% *}"
