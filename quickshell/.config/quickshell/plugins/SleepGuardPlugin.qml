@@ -19,12 +19,6 @@ Item {
     implicitWidth: 16
     implicitHeight: 16
 
-    Rectangle {
-        anchors.fill: parent
-        color: "red"
-        opacity: 0.25
-    }
-
     readonly property string home: Quickshell.env("HOME")
     readonly property string stateDir: home + "/.local/state/lid-guard"
     // "allow" | "awake" | "agents". Defaults to agents to match the daemon.

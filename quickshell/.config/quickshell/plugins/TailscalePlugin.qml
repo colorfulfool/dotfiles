@@ -11,12 +11,6 @@ Item {
     implicitHeight: 16
     visible: installed
 
-    Rectangle {
-        anchors.fill: parent
-        color: "lime"
-        opacity: 0.25
-    }
-
     property bool installed: false
     property bool connected: false
     property bool retried: false
