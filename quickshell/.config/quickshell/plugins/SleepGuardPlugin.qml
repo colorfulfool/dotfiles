@@ -25,7 +25,10 @@ Item {
     property string sleepMode: "agents"
 
     readonly property bool lit: sleepMode !== "allow"
-    readonly property bool showBadge: sleepMode === "agents"
+    readonly property bool showBadge: sleepMode === "agents" && !blink
+    // Blink feedback when the mode changes from outside the click handler
+    // (e.g. the SUPER+SHIFT+L keybinding), like a macOS menu-bar flash.
+    property bool blink: false
     // Badge geometry, shared by the knockout below and the badge item.
     // Small, tucked into the bottom-right corner clear of the handle.
     readonly property real badgeSizeFrac: 0.38
@@ -67,7 +70,7 @@ Item {
         y: 0
         width: parent.width + 4
         height: parent.height
-        opacity: sleepCell.lit ? 1.0 : 0.35
+        opacity: (sleepCell.lit ? 1.0 : 0.35) * (sleepCell.blink ? 0.2 : 1.0)
         onPaint: {
             var ctx = getContext("2d");
             ctx.clearRect(0, 0, width, height);
@@ -125,12 +128,15 @@ Item {
         }
     }
 
-    Connections {
-        target: sleepCell
-        function onSleepModeChanged() {
-            cupLayer.requestPaint();
+        Connections {
+            target: sleepCell
+            function onSleepModeChanged() {
+                cupLayer.requestPaint();
+            }
+            function onBlinkChanged() {
+                cupLayer.requestPaint();
+            }
         }
-    }
 
     MouseArea {
         anchors.fill: parent
@@ -147,8 +153,15 @@ Item {
         stdout: StdioCollector {
             onStreamFinished: {
                 var mode = text.trim();
-                if (mode === "allow" || mode === "awake" || mode === "agents")
+                if (mode === "allow" || mode === "awake" || mode === "agents") {
+                    // External change (keybinding) rather than our own
+                    // optimistic click update: flash the icon.
+                    if (mode !== sleepCell.sleepMode) {
+                        blinkTimer.count = 0;
+                        blinkTimer.restart();
+                    }
                     sleepCell.applyMode(mode);
+                }
             }
         }
     }
@@ -168,6 +181,25 @@ Item {
         running: true
         repeat: true
         onTriggered: sleepCell.refreshMode()
+    }
+
+    Timer {
+        id: blinkTimer
+        interval: 90
+        repeat: true
+        property int count: 0
+        onTriggered: {
+            count++;
+            sleepCell.blink = (count % 2 === 0);
+            if (count >= 4) {
+                running = false;
+                count = 0;
+                sleepCell.blink = false;
+            }
+        }
+        onRunningChanged: {
+            if (running) { count = 0; sleepCell.blink = true; }
+        }
     }
 
     Component.onCompleted: refreshMode()
