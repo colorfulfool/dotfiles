@@ -26,7 +26,11 @@ Row {
 
     // "allow" | "awake" | "agents". Defaults to agents to match the daemon.
     property string sleepMode: "agents"
-    property bool agentsWorking: false
+    property bool tailscaleInstalled: false
+    property bool tailscaleConnected: false
+    property bool tailscaleRetried: false
+    property string tailscaleUser: Quickshell.env("USER") || Quickshell.env("LOGNAME") || ""
+    readonly property bool tailscaleBusy: toggleProc.running || operatorProc.running
 
     function nextMode(mode) {
         if (mode === "allow")
@@ -45,14 +49,6 @@ Row {
         if (mode !== "allow" && mode !== "awake" && mode !== "agents")
             return;
         pluginsRow.sleepMode = mode;
-        if (mode === "agents") {
-            agentsPoll.restart();
-            if (!agentsProbe.running)
-                agentsProbe.running = true;
-        } else {
-            agentsPoll.stop();
-            pluginsRow.agentsWorking = false;
-        }
     }
 
     function cycleMode() {
@@ -60,6 +56,23 @@ Row {
         // Optimistic: the dir watcher confirms once lid-guard persists it.
         pluginsRow.applyMode(next);
         Quickshell.execDetached(["lid-guard", "mode", next]);
+    }
+
+    function refreshTailscale() {
+        if (pluginsRow.tailscaleInstalled && !tailscaleProbe.running)
+            tailscaleProbe.running = true;
+    }
+
+    function runTailscaleToggle() {
+        toggleProc.command = pluginsRow.tailscaleConnected ? ["tailscale", "down"] : ["tailscale", "up"];
+        toggleProc.running = true;
+    }
+
+    function toggleTailscale() {
+        if (!pluginsRow.tailscaleInstalled || pluginsRow.tailscaleBusy)
+            return;
+        pluginsRow.tailscaleRetried = false;
+        pluginsRow.runTailscaleToggle();
     }
 
     Item {
@@ -153,6 +166,44 @@ Row {
         }
     }
 
+    // Tailscale 3x3 mark, lit when the backend is Running, faded
+    // otherwise. Click toggles up/down.
+    Item {
+        id: tailscaleCell
+        implicitWidth: 16
+        implicitHeight: 16
+        visible: pluginsRow.tailscaleInstalled
+
+        Item {
+            anchors.centerIn: parent
+            width: 14
+            height: 14
+            opacity: pluginsRow.tailscaleConnected ? 1.0 : BarTheme.dim
+
+            Repeater {
+                model: [0.24, 0.24, 0.24, 1, 1, 1, 0.24, 1, 0.24]
+                Rectangle {
+                    required property real modelData
+                    required property int index
+                    width: 4
+                    height: 4
+                    radius: 2
+                    x: (index % 3) * 5
+                    y: Math.floor(index / 3) * 5
+                    color: BarTheme.fg
+                    opacity: modelData
+                }
+            }
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            acceptedButtons: Qt.LeftButton
+            cursorShape: pluginsRow.tailscaleBusy ? Qt.WaitCursor : Qt.PointingHandCursor
+            onClicked: pluginsRow.toggleTailscale()
+        }
+    }
+
     // Reads lid-guard's mode file. Missing/invalid reads as agents,
     // mirroring the daemon default.
     Process {
@@ -175,26 +226,83 @@ Row {
         onFileChanged: pluginsRow.refreshMode()
     }
 
-    // herdr is the working signal for the badge only (the daemon owns
-    // the actual hold): missing or failing probe reads as not working.
+    // status --json reports BackendState Running/Stopped/NeedsLogin/...;
+    // anything but Running reads as disconnected.
+    Process {
+        id: tailscaleProbe
+        command: ["tailscale", "status", "--json"]
+        stdout: StdioCollector {
+            onStreamFinished: {
+                var connected = false;
+                try {
+                    connected = JSON.parse(text).BackendState === "Running";
+                } catch (e) {
+                    connected = false;
+                }
+                pluginsRow.tailscaleConnected = connected;
+            }
+        }
+    }
+
     Timer {
-        id: agentsPoll
-        interval: 10000
+        id: tailscalePoll
+        interval: 15000
         repeat: true
-        running: pluginsRow.sleepMode === "agents"
-        onTriggered: {
-            if (!agentsProbe.running)
-                agentsProbe.running = true;
+        running: pluginsRow.tailscaleInstalled
+        onTriggered: pluginsRow.refreshTailscale()
+    }
+
+    Timer {
+        id: tailscaleRefreshSoon
+        interval: 2500
+        repeat: false
+        onTriggered: pluginsRow.refreshTailscale()
+    }
+
+    Process {
+        id: toggleProc
+        stdout: StdioCollector {
+            id: toggleStdout
+        }
+        stderr: StdioCollector {
+            id: toggleStderr
+        }
+        onExited: function(exitCode, exitStatus) {
+            var err = String(toggleStderr.text || "");
+            if (exitCode !== 0 && err.indexOf("Access denied") !== -1 && !pluginsRow.tailscaleRetried && pluginsRow.tailscaleUser !== "") {
+                pluginsRow.tailscaleRetried = true;
+                operatorProc.running = true;
+            } else {
+                tailscaleRefreshSoon.restart();
+            }
+        }
+    }
+
+    // One-time authorization so up/down work without sudo afterwards,
+    // same as omarchy's own tailscale panel. Pops a polkit dialog.
+    Process {
+        id: operatorProc
+        command: ["pkexec", "tailscale", "set", "--operator=" + pluginsRow.tailscaleUser]
+        onExited: function(exitCode, exitStatus) {
+            if (exitCode === 0)
+                pluginsRow.runTailscaleToggle();
+            else
+                tailscaleRefreshSoon.restart();
         }
     }
 
     Process {
-        id: agentsProbe
-        command: ["bash", "-c", "timeout 10 herdr agent list 2>/dev/null | python3 -c 'import json,sys\ntry:\n data=json.load(sys.stdin)\nexcept Exception:\n sys.exit(1)\nagents=data.get(\"result\",{}).get(\"agents\",data.get(\"agents\",[]))\nws=[a for a in agents if a.get(\"agent\") in (\"claude\",\"opencode\") and a.get(\"agent_status\")==\"working\"]\nsys.exit(0 if ws else 1)'"]
+        id: whichProc
+        command: ["bash", "-c", "command -v tailscale >/dev/null"]
         onExited: function(exitCode, exitStatus) {
-            pluginsRow.agentsWorking = exitCode === 0;
+            pluginsRow.tailscaleInstalled = exitCode === 0;
+            if (exitCode === 0)
+                pluginsRow.refreshTailscale();
         }
     }
 
-    Component.onCompleted: refreshMode()
+    Component.onCompleted: {
+        refreshMode();
+        whichProc.running = true;
+    }
 }
