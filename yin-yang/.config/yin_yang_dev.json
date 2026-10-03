@@ -2,16 +2,16 @@
     "version": 4.0,
     "running": false,
     "dark_mode": true,
-    "mode": "manual",
+    "mode": "sunset to sunrise",
     "coordinates": [
         0.0,
         0.0
     ],
-    "update_location": false,
+    "update_location": true,
     "update_interval": 60,
     "times": [
-        "07:00",
-        "20:00"
+        "07:00:00",
+        "20:00:00"
     ],
     "boot_offset": 10,
     "plugins": {
@@ -26,9 +26,9 @@
             "dark_theme": ""
         },
         "gtk": {
-            "enabled": false,
-            "light_theme": "Default",
-            "dark_theme": "Default"
+            "enabled": true,
+            "light_theme": "Adwaita",
+            "dark_theme": "Adwaita-dark"
         },
         "icons": {
             "enabled": false,
@@ -46,7 +46,7 @@
             "dark_theme": ""
         },
         "firefox": {
-            "enabled": false,
+            "enabled": true,
             "light_theme": "firefox-compact-light@mozilla.org",
             "dark_theme": "firefox-compact-dark@mozilla.org"
         },
@@ -71,9 +71,9 @@
             "dark_theme": "Breeze"
         },
         "custom": {
-            "enabled": false,
-            "light_theme": "",
-            "dark_theme": ""
+            "enabled": true,
+            "light_theme": "/home/colorfulfool/.dotfiles/.theme-script/go-light.sh",
+            "dark_theme": "/home/colorfulfool/.dotfiles/.theme-script/go-dark.sh"
         },
         "notification": {
             "enabled": false,
