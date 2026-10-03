@@ -23,7 +23,6 @@ Item {
     readonly property string stateDir: home + "/.local/state/lid-guard"
     // "allow" | "awake" | "agents". Defaults to agents to match the daemon.
     property string sleepMode: "agents"
-    property string prevMode: ""
 
     readonly property bool lit: sleepMode !== "allow"
     readonly property bool showBadge: sleepMode === "agents"
@@ -33,15 +32,12 @@ Item {
     readonly property real badgeCX: 0.95
     readonly property real badgeCY: 0.738
 
-    function nextMode(mode, prev) {
-        // Ping-pong through agents: allow -> agents -> awake -> agents -> allow.
-        // Agents is the junction both sides pass through, so its exit
-        // depends on where it was entered from.
+    function nextMode(mode) {
         if (mode === "allow")
-            return "agents";
+            return "awake";
         if (mode === "awake")
             return "agents";
-        return prev === "awake" ? "allow" : "awake";
+        return "allow";
     }
 
     function refreshMode() {
@@ -56,8 +52,7 @@ Item {
     }
 
     function cycleMode() {
-        var next = nextMode(sleepMode, prevMode);
-        prevMode = sleepMode;
+        var next = nextMode(sleepMode);
         // Optimistic: the dir watcher confirms once lid-guard persists it.
         applyMode(next);
         Quickshell.execDetached(["lid-guard", "mode", next]);
