@@ -92,6 +92,13 @@ Item {
         }
         onWidthChanged: requestPaint()
         onHeightChanged: requestPaint()
+
+        Connections {
+            target: BarTheme
+            function onFgChanged() {
+                cupLayer.requestPaint();
+            }
+        }
     }
 
     Item {
