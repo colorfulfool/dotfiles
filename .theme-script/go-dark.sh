@@ -78,16 +78,31 @@ kwriteconfig6 --file ~/.config/qs-env/kdeglobals --group Icons --key Theme breez
 # foot doesn't watch gsettings or the portal: switch running instances
 # explicitly. SIGUSR1 = dark ([colors-dark]), SIGUSR2 = light. See foot(1).
 command -v pkill >/dev/null 2>&1 && pkill -USR1 foot 2>/dev/null || true
+# Herdr never answers DECRPM 2031 or forwards color-scheme changes, so the
+# mode-2031/997 auto theme in claude/opencode can't update live inside herdr.
+# Raw `\e[?997;Ps n` injection is ignored by those apps. nvim is fixable:
+# force its background variable; it re-picks the matching colorscheme.
 (
   sleep 0.8
   command -v herdr >/dev/null 2>&1 || exit 0
   for _pass in 1 2; do
     panes=$(herdr pane list 2>/dev/null | python3 -c 'import json,sys
 for p in json.load(sys.stdin).get("result", {}).get("panes", []):
-    if p.get("agent") in ("claude", "opencode"):
-        print(p["pane_id"])') || break
+    print(p["pane_id"])') || break
     for _pane in $panes; do
-      herdr pane send-text "$_pane" "$(printf '\033[?997;1n')" >/dev/null 2>&1 || true
+      fg=$(herdr pane process-info --pane "$_pane" 2>/dev/null | python3 -c 'import json,sys
+try:
+    procs = json.load(sys.stdin)["result"]["process_info"]["foreground_processes"]
+    print(" ".join(p["name"] for p in procs))
+except Exception:
+    pass')
+      case "$fg" in
+        *nvim*)
+          herdr pane send-keys "$_pane" escape >/dev/null 2>&1 || true
+          herdr pane send-text "$_pane" ":set background=dark" >/dev/null 2>&1 || true
+          herdr pane send-keys "$_pane" Return >/dev/null 2>&1 || true
+          ;;
+      esac
     done
     sleep 1.5
   done
