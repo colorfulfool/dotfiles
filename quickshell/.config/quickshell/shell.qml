@@ -33,6 +33,9 @@ Scope {
                 Region {
                     item: jobsRow.active ? jobsPill.pillItem : maskNull
                 }
+                Region {
+                    item: mediaRow.hasMedia ? mediaPill.pillItem : maskNull
+                }
             }
             BackgroundEffect.blurRegion: Region {
                 item: mainPill.pillItem
@@ -45,6 +48,11 @@ Scope {
                 }
                 Region {
                     item: jobsRow.active ? jobsPill.pillItem : maskNull
+                    shape: RegionShape.Rect
+                    radius: 16
+                }
+                Region {
+                    item: mediaRow.hasMedia ? mediaPill.pillItem : maskNull
                     shape: RegionShape.Rect
                     radius: 16
                 }
@@ -110,11 +118,58 @@ Scope {
                     anchors.left: pluginsPill.right
                     anchors.leftMargin: 8
                     anchors.verticalCenter: parent.verticalCenter
-                    padding: 16
-                    visible: jobsRow.active
+                    padding: 13
+                    visible: opacity > 0.01
+                    opacity: jobsRow.active ? 1 : 0
+                    scale: jobsRow.active ? 1 : 0
+                    transformOrigin: Item.Center
+
+                    Behavior on opacity {
+                        NumberAnimation {
+                            duration: BarTheme.pillAnimDuration
+                            easing.type: BarTheme.animEasing
+                        }
+                    }
+
+                    Behavior on scale {
+                        NumberAnimation {
+                            duration: 350
+                            easing.type: BarTheme.pillResizeEasing
+                        }
+                    }
 
                     KdeJobsPlugin {
                         id: jobsRow
+                    }
+                }
+
+                Pill {
+                    id: mediaPill
+                    anchors.left: jobsRow.active ? jobsPill.right : pluginsPill.right
+                    anchors.leftMargin: 8
+                    anchors.verticalCenter: parent.verticalCenter
+                    padding: 13
+                    visible: opacity > 0.01
+                    opacity: mediaRow.hasMedia ? 1 : 0
+                    scale: mediaRow.hasMedia ? 1 : 0
+                    transformOrigin: Item.Center
+
+                    Behavior on opacity {
+                        NumberAnimation {
+                            duration: BarTheme.pillAnimDuration
+                            easing.type: BarTheme.animEasing
+                        }
+                    }
+
+                    Behavior on scale {
+                        NumberAnimation {
+                            duration: 350
+                            easing.type: BarTheme.pillResizeEasing
+                        }
+                    }
+
+                    RemovableMediaModule {
+                        id: mediaRow
                     }
                 }
             }
