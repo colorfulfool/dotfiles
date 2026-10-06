@@ -4,3 +4,9 @@ source ~/.config/zsh/aliases/common
 alias pbcopy='wl-copy'
 alias pbpaste='wl-paste'
 alias open='xdg-open'
+
+# Shells inside herdr don't inherit the UWSM/Hyprland session env, so
+# xdg-open and friends can't find a browser. Pull it from the user manager.
+if [[ -n "$HERDR_ENV" && -z "$WAYLAND_DISPLAY" ]] && command -v systemctl >/dev/null; then
+  eval "$(systemctl --user show-environment | grep -E '^(DISPLAY|WAYLAND_DISPLAY|HYPRLAND_INSTANCE_SIGNATURE|XDG_CURRENT_DESKTOP|XDG_SESSION_TYPE|DBUS_SESSION_BUS_ADDRESS)=' | sed 's/^/export /')"
+fi
