@@ -10,6 +10,29 @@ Item {
     default property alias content: barRow.children
     readonly property alias pillItem: pillRect
 
+    // Animated show/hide (fade + zoom from the center). Bind to whatever
+    // condition controls the pill, e.g. `active: jobsRow.active`.
+    // Always-on pills leave the default `true`.
+    property bool active: true
+    visible: opacity > 0.01
+    opacity: active ? 1 : 0
+    scale: active ? 1 : 0
+    transformOrigin: Item.Center
+
+    Behavior on opacity {
+        NumberAnimation {
+            duration: BarTheme.pillAnimDuration
+            easing.type: BarTheme.animEasing
+        }
+    }
+
+    Behavior on scale {
+        NumberAnimation {
+            duration: BarTheme.pillShowDuration
+            easing.type: BarTheme.pillResizeEasing
+        }
+    }
+
     implicitWidth: pillRect.implicitWidth
     implicitHeight: pillRect.implicitHeight
     width: implicitWidth

@@ -119,24 +119,7 @@ Scope {
                     anchors.leftMargin: 8
                     anchors.verticalCenter: parent.verticalCenter
                     padding: 13
-                    visible: opacity > 0.01
-                    opacity: jobsRow.active ? 1 : 0
-                    scale: jobsRow.active ? 1 : 0
-                    transformOrigin: Item.Center
-
-                    Behavior on opacity {
-                        NumberAnimation {
-                            duration: BarTheme.pillAnimDuration
-                            easing.type: BarTheme.animEasing
-                        }
-                    }
-
-                    Behavior on scale {
-                        NumberAnimation {
-                            duration: 350
-                            easing.type: BarTheme.pillResizeEasing
-                        }
-                    }
+                    active: jobsRow.active
 
                     KdeJobsPlugin {
                         id: jobsRow
@@ -149,24 +132,7 @@ Scope {
                     anchors.leftMargin: 8
                     anchors.verticalCenter: parent.verticalCenter
                     padding: 13
-                    visible: opacity > 0.01
-                    opacity: mediaRow.hasMedia ? 1 : 0
-                    scale: mediaRow.hasMedia ? 1 : 0
-                    transformOrigin: Item.Center
-
-                    Behavior on opacity {
-                        NumberAnimation {
-                            duration: BarTheme.pillAnimDuration
-                            easing.type: BarTheme.animEasing
-                        }
-                    }
-
-                    Behavior on scale {
-                        NumberAnimation {
-                            duration: 350
-                            easing.type: BarTheme.pillResizeEasing
-                        }
-                    }
+                    active: mediaRow.hasMedia
 
                     RemovableMediaModule {
                         id: mediaRow
