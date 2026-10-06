@@ -59,7 +59,7 @@ Item {
     MouseArea {
         anchors.fill: parent
         acceptedButtons: Qt.LeftButton
-        cursorShape: tailscaleCell.busy ? Qt.WaitCursor : Qt.PointingHandCursor
+        cursorShape: Qt.PointingHandCursor
         onClicked: tailscaleCell.toggle()
     }
 
