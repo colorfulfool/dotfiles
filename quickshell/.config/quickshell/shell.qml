@@ -4,6 +4,7 @@ import Quickshell.Wayland
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Effects
+import "plugins"
 
 Scope {
     Variants {
@@ -29,6 +30,9 @@ Scope {
                 Region {
                     item: pluginsPill.pillItem
                 }
+                Region {
+                    item: jobsRow.active ? jobsPill.pillItem : maskNull
+                }
             }
             BackgroundEffect.blurRegion: Region {
                 item: mainPill.pillItem
@@ -39,6 +43,17 @@ Scope {
                     shape: RegionShape.Rect
                     radius: 16
                 }
+                Region {
+                    item: jobsRow.active ? jobsPill.pillItem : maskNull
+                    shape: RegionShape.Rect
+                    radius: 16
+                }
+            }
+
+            Item {
+                id: maskNull
+                width: 0
+                height: 0
             }
 
             Item {
@@ -89,7 +104,21 @@ Scope {
                     PluginsModule {
                     }
                 }
+
+                Pill {
+                    id: jobsPill
+                    anchors.left: pluginsPill.right
+                    anchors.leftMargin: 8
+                    anchors.verticalCenter: parent.verticalCenter
+                    padding: 16
+                    visible: jobsRow.active
+
+                    KdeJobsPlugin {
+                        id: jobsRow
+                    }
+                }
             }
         }
     }
 }
+
