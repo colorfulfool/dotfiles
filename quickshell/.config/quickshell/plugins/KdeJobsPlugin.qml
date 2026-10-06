@@ -24,6 +24,8 @@ Item {
     property string jobTitle: ""
     // Dropdown visibility. Hidden by default; the icon toggles it.
     property bool jobOpen: false
+    // Friendly name for the popup visibility rule (jobOpen && active).
+    readonly property bool jobWindowVisible: jobOpen && active
     // True once the Dolphin dialog has been stashed in the special
     // workspace (i.e. the external job window is hidden by default).
     property bool inSpecial: false
@@ -69,6 +71,7 @@ Item {
 
     Item {
         id: iconCell
+        objectName: "iconCell"
         anchors.fill: parent
         implicitWidth: 16
         implicitHeight: 16
@@ -99,8 +102,11 @@ Item {
         }
 
         MouseArea {
+            id: iconMa
+            objectName: "iconMa"
             anchors.fill: parent
             acceptedButtons: Qt.LeftButton
+            hoverEnabled: true
             cursorShape: Qt.PointingHandCursor
             onClicked: root.toggleJobs()
         }
@@ -114,7 +120,8 @@ Item {
 
     PopupWindow {
         id: jobWin
-        visible: root.jobOpen && root.active
+        objectName: "jobWin"
+        visible: root.jobWindowVisible
         anchor.item: iconCell
         anchor.rect.x: 0 - (jobBg.anchors.margins + iconCell.width / 2)
         // Pill is 42 high (shell.qml) with the 16px icon centered.
@@ -137,6 +144,7 @@ Item {
 
         Rectangle {
             id: jobBg
+            objectName: "jobBg"
             anchors.fill: parent
             anchors.margins: 14
             bottomLeftRadius: 8

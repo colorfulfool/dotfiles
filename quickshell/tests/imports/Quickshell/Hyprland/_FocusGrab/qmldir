@@ -1,0 +1,3 @@
+module Quickshell.Hyprland._FocusGrab
+HyprlandFocusGrab 0.0 HyprlandFocusGrab.qml
+depends QtQuick

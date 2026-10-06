@@ -1,0 +1,5 @@
+module Quickshell.Io
+Process 0.0 Process.qml
+StdioCollector 0.0 StdioCollector.qml
+FileView 0.0 FileView.qml
+depends QtQuick

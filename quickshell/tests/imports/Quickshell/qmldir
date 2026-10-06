@@ -1,0 +1,4 @@
+module Quickshell
+singleton Quickshell 1.0 Quickshell.qml
+import Quickshell._Window
+depends QtQuick

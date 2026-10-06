@@ -16,10 +16,10 @@ Row {
     property bool hasMedia: devices.length > 0
     property var devices: []
 
-    // Dismiss the menu when focus moves to another window. The focus grab
-    // does not revoke on outside clicks on this setup. Events arriving right
-    // at open (from the opening click itself) must be ignored, hence the
-    // arming delay.
+    // Dismiss the menu when focus moves to another window. Events arriving
+    // right at open (from the opening click itself) must be ignored, hence
+    // the arming delay. Outside clicks are handled by the focus grab below
+    // (same pattern as TrayModule).
     Timer {
         id: menuArmTimer
         interval: 600
@@ -30,7 +30,7 @@ Row {
         target: Hyprland
         function onRawEvent(event) {
             if ((event.name === "activewindow" || event.name === "activewindowv2") && menu.dismissArmed)
-                menu.anchorCell = null;
+                menu.menuOpen = false;
         }
     }
 
@@ -77,8 +77,8 @@ Row {
         Item {
             id: cell
             required property var modelData
-            width: 16
-            height: 16
+            implicitWidth: 16
+            implicitHeight: 16
 
             BarText {
                 anchors.fill: parent
@@ -92,21 +92,33 @@ Row {
             MouseArea {
                 anchors.fill: parent
                 acceptedButtons: Qt.LeftButton | Qt.RightButton
+                hoverEnabled: true
                 cursorShape: Qt.PointingHandCursor
                 onClicked: mouse => {
                     if (mouse.button === Qt.LeftButton) {
                         root.ejectDevice(cell.modelData);
-                    } else if (menu.anchorCell && menu.devPath === cell.modelData.dev) {
-                        menu.anchorCell = null;
+                    } else if (menu.menuOpen && menu.devPath === cell.modelData.dev) {
+                        menu.menuOpen = false;
                     } else {
                         menu.dismissArmed = false;
                         menu.devPath = cell.modelData.dev;
                         menu.anchorCell = cell;
+                        menu.menuOpen = true;
                         menuArmTimer.restart();
                     }
                 }
             }
         }
+    }
+
+    // Same dismissal pattern as TrayModule: outside clicks revoke the grab
+    // and close the menu. The grab must wait for the popup surface to map
+    // (backingWindowVisible), otherwise it races the mapping, never
+    // engages, and outside clicks can't dismiss.
+    HyprlandFocusGrab {
+        active: menu.menuOpen && menu.backingWindowVisible
+        windows: [menu]
+        onCleared: menu.menuOpen = false
     }
 
     PopupWindow {
@@ -115,11 +127,18 @@ Row {
         property var anchorCell: null
         property var device: root.findDevice(devPath)
         property bool dismissArmed: false
+        // Open state, separate from the anchor: closing clears this first
+        // so the popup hides in place. The anchor is only cleared once
+        // hidden — nulling it while visible re-anchors the popup to the
+        // bar's left edge for a frame before it disappears.
+        property bool menuOpen: false
 
-        visible: anchorCell !== null && device !== null
+        visible: menuOpen && anchorCell !== null && device !== null
         onVisibleChanged: {
-            if (!visible)
+            if (!visible) {
+                anchorCell = null;
                 dismissArmed = false;
+            }
         }
         anchor.item: anchorCell
         anchor.rect.x: anchorCell ? -(14 + anchorCell.width / 2) : 0
@@ -130,14 +149,6 @@ Row {
         implicitWidth: menuLayout.implicitWidth + 48
         implicitHeight: menuLayout.implicitHeight + 44
 
-        // Same dismissal pattern as TrayModule: the grab must wait for the
-        // popup surface to map (backingWindowVisible), otherwise it races
-        // the mapping, never engages, and outside clicks can't dismiss.
-        HyprlandFocusGrab {
-            active: menu.visible && menu.backingWindowVisible
-            windows: [menu]
-            onCleared: menu.anchorCell = null
-        }
         RectangularShadow {
             anchors.fill: menuBg
             offset: Qt.vector2d(0, 2)
@@ -204,7 +215,7 @@ Row {
                             onClicked: {
                                 var dev = menu.device;
                                 var act = entry.modelData.action;
-                                menu.anchorCell = null;
+                                menu.menuOpen = false;
                                 if (!dev)
                                     return;
                                 if (act === "open")

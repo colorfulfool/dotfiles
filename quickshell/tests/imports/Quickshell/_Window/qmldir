@@ -1,0 +1,5 @@
+module Quickshell._Window
+PopupWindow 0.0 PopupWindow.qml
+PopupAnchor 0.0 PopupAnchor.qml
+PopupRect 0.0 PopupRect.qml
+depends QtQuick
