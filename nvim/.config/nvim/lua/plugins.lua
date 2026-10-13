@@ -281,7 +281,8 @@ return packer.startup(function(use)
     "stevearc/oil.nvim",
     config = function()
       require("oil").setup({
-        columns = {}
+        columns = {},
+        silence_scp_warning = true,
       })
 
       vim.keymap.set('n', '<space>o', ':Oil<cr>')
