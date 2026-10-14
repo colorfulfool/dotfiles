@@ -30,6 +30,10 @@ next_workspace = "alt+down"
 previous_tab = ["prefix+p", "alt+left"]
 next_tab = ["prefix+n", "alt+right"]
 
+# prefix+shift+x deletes the worktree checkout (see [[keys.command]] below),
+# so plain close-tab lives on prefix+alt+x
+close_tab = "prefix+alt+x"
+
 [ui]
 accent = "blue"
 
@@ -62,3 +66,11 @@ key = "prefix+alt+d"
 type = "shell"
 command = "\"$HERDR_BIN_PATH\" worktree remove --workspace \"$HERDR_ACTIVE_WORKSPACE_ID\" --force"
 description = "force delete worktree without confirmation"
+
+# Shift+X deletes the checkout when the active workspace is a linked worktree,
+# otherwise it closes the tab like the default close_tab binding did.
+[[keys.command]]
+key = "prefix+shift+x"
+type = "shell"
+command = "if \"$HERDR_BIN_PATH\" workspace get \"$HERDR_ACTIVE_WORKSPACE_ID\" 2>/dev/null | grep -q '\"is_linked_worktree\":true'; then \"$HERDR_BIN_PATH\" worktree remove --workspace \"$HERDR_ACTIVE_WORKSPACE_ID\" --force; else \"$HERDR_BIN_PATH\" tab close \"$HERDR_ACTIVE_TAB_ID\"; fi"
+description = "delete worktree checkout, else close tab"
