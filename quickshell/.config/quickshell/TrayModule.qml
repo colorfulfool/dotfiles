@@ -5,6 +5,7 @@ import Quickshell.Hyprland
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Effects
+import QtQuick.Shapes
 
 Row {
     id: trayRow
@@ -27,6 +28,10 @@ Row {
 
             property bool menuOpen: false
             property string expandedText: ""
+            // Row whose submenu is currently open. The submenu is rendered
+            // in its own popup to the right so it never covers the entries
+            // below the trigger.
+            property Item expandedRow: null
             // Dropbox only ships a dark glyph plus a tiny state emblem that
             // washes out at 16px, so pin its readable base glyph in light mode.
             // (Vendored copy: dropbox auto-updates change its versioned image path.)
@@ -45,6 +50,7 @@ Row {
             function closeMenu() {
                 menuOpen = false;
                 expandedText = "";
+                expandedRow = null;
                 if (trayRow.openMenuCell === trayCell)
                     trayRow.openMenuCell = null;
             }
@@ -73,12 +79,6 @@ Row {
             QsMenuOpener {
                 id: subOpener
                 menu: trayCell.subHandle()
-            }
-
-            HyprlandFocusGrab {
-                active: trayCell.menuOpen && menuWin.backingWindowVisible
-                windows: [menuWin]
-                onCleared: trayCell.closeMenu()
             }
 
             PopupWindow {
@@ -124,9 +124,8 @@ Row {
 
                             delegate: Item {
                                 required property var modelData
-                                property bool expanded: !modelData.isSeparator && modelData.hasChildren && trayCell.expandedText !== "" && trayCell.expandedText === modelData.text
                                 Layout.fillWidth: true
-                                Layout.preferredHeight: visible ? ((modelData.isSeparator ? 9 : 28) + (expanded ? subLayout.implicitHeight : 0)) : 0
+                                Layout.preferredHeight: visible ? (modelData.isSeparator ? 9 : 28) : 0
                                 visible: modelData.text !== "" || modelData.isSeparator
                                 implicitWidth: modelData.isSeparator ? 0 : rowLabel.implicitWidth + 52
 
@@ -172,10 +171,31 @@ Row {
                                             elide: Text.ElideRight
                                         }
 
-                                        BarText {
+                                        Shape {
                                             visible: modelData.hasChildren
-                                            text: trayCell.expandedText !== "" && trayCell.expandedText === modelData.text ? "⌄" : ">"
-                                            color: BarTheme.subdued
+                                            Layout.preferredWidth: 5
+                                            Layout.preferredHeight: 8
+                                            Layout.alignment: Qt.AlignVCenter
+                                            antialiasing: true
+
+                                            ShapePath {
+                                                fillColor: BarTheme.subdued
+                                                strokeColor: "transparent"
+                                                startX: 0
+                                                startY: 0
+                                                PathLine {
+                                                    x: 5
+                                                    y: 4
+                                                }
+                                                PathLine {
+                                                    x: 0
+                                                    y: 8
+                                                }
+                                                PathLine {
+                                                    x: 0
+                                                    y: 0
+                                                }
+                                            }
                                         }
                                     }
 
@@ -185,85 +205,20 @@ Row {
                                         hoverEnabled: true
                                         cursorShape: modelData.enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
                                         onEntered: {
-                                            if (!modelData.isSeparator)
+                                            if (!modelData.isSeparator) {
                                                 trayCell.expandedText = modelData.hasChildren ? modelData.text : "";
+                                                trayCell.expandedRow = modelData.hasChildren ? rowItem : null;
+                                            }
                                         }
                                         onClicked: {
                                             if (!modelData.enabled)
                                                 return;
                                             if (modelData.hasChildren) {
                                                 trayCell.expandedText = modelData.text;
+                                                trayCell.expandedRow = rowItem;
                                             } else {
                                                 modelData.triggered();
                                                 trayCell.closeMenu();
-                                            }
-                                        }
-                                    }
-                                }
-
-                                ColumnLayout {
-                                    id: subLayout
-                                    anchors.left: parent.left
-                                    anchors.right: parent.right
-                                    anchors.top: rowItem.bottom
-                                    visible: trayCell.expandedText !== "" && trayCell.expandedText === modelData.text && !modelData.isSeparator
-                                    spacing: 0
-
-                                    Repeater {
-                                        model: subOpener.children.values
-
-                                        delegate: Item {
-                                            required property var modelData
-                                            Layout.fillWidth: true
-                                            Layout.preferredHeight: modelData.isSeparator ? 9 : 28
-                                            visible: modelData.text !== "" || modelData.isSeparator
-                                            implicitWidth: modelData.isSeparator ? 0 : subLabel.implicitWidth + 44
-
-                                            Rectangle {
-                                                anchors.centerIn: parent
-                                                width: parent.width
-                                                height: 1
-                                                visible: modelData.isSeparator
-                                                color: BarTheme.separator
-                                            }
-
-                                            Item {
-                                                anchors.left: parent.left
-                                                anchors.right: parent.right
-                                                anchors.top: parent.top
-                                                anchors.leftMargin: 12
-                                                height: 28
-                                                visible: !modelData.isSeparator
-
-                                                Rectangle {
-                                                    anchors.fill: parent
-                                                    radius: 4
-                                                    color: subMa.containsMouse ? BarTheme.hover : "transparent"
-                                                }
-
-                                                BarText {
-                                                    id: subLabel
-                                                    anchors.fill: parent
-                                                    anchors.leftMargin: 10
-                                                    anchors.rightMargin: 10
-                                                    verticalAlignment: Text.AlignVCenter
-                                                    text: modelData.text || ""
-                                                    color: modelData.enabled ? BarTheme.fg : BarTheme.subdued
-                                                    elide: Text.ElideRight
-                                                }
-
-                                                MouseArea {
-                                                    id: subMa
-                                                    anchors.fill: parent
-                                                    hoverEnabled: true
-                                                    cursorShape: modelData.enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
-                                                    onClicked: {
-                                                        if (!modelData.enabled)
-                                                            return;
-                                                        modelData.triggered();
-                                                        trayCell.closeMenu();
-                                                    }
-                                                }
                                             }
                                         }
                                     }
@@ -272,6 +227,126 @@ Row {
                         }
                     }
                 }
+            }
+
+            PopupWindow {
+                id: subWin
+                objectName: "submenuWin"
+                visible: trayCell.menuOpen && trayCell.expandedRow !== null && trayCell.expandedText !== ""
+                anchor.item: trayCell.expandedRow
+                // Leave a small 2px gap from the parent menu background and
+                // offset the popup up by its layout margin (8) so the first
+                // submenu text lines up with the trigger row's text. Row
+                // width + layout margin (8) + gap (2) - shadow margin (14)
+                // positions the window itself.
+                anchor.rect.x: trayCell.expandedRow ? trayCell.expandedRow.width + 8 + 2 - 14 : 0
+                anchor.rect.y: -14 - 8
+                color: "transparent"
+                implicitWidth: subMenuLayout.implicitWidth + 48
+                implicitHeight: subMenuLayout.implicitHeight + 44
+
+                // Re-anchor when switching directly from one submenu trigger
+                // to another while the popup is already visible.
+                Connections {
+                    target: subWin.anchor
+                    function onItemChanged() {
+                        subWin.anchor.updateAnchor();
+                    }
+                }
+
+                RectangularShadow {
+                    anchors.fill: subMenuBg
+                    offset: Qt.vector2d(0, 2)
+                    color: Qt.rgba(0, 0, 0, 0.55)
+                    blur: 12
+                    spread: 0
+                    radius: 8
+                }
+
+                Rectangle {
+                    id: subMenuBg
+                    anchors.fill: parent
+                    anchors.margins: 14
+                    radius: 8
+                    color: BarTheme.menu
+                    clip: true
+
+                    ColumnLayout {
+                        id: subMenuLayout
+                        anchors.fill: subMenuBg
+                        anchors.margins: 8
+                        spacing: 0
+
+                        Repeater {
+                            model: subOpener.children.values
+
+                            delegate: Item {
+                                required property var modelData
+                                Layout.fillWidth: true
+                                Layout.preferredHeight: visible ? (modelData.isSeparator ? 9 : 28) : 0
+                                visible: modelData.text !== "" || modelData.isSeparator
+                                implicitWidth: modelData.isSeparator ? 0 : subLabel.implicitWidth + 52
+
+                                Rectangle {
+                                    anchors.centerIn: parent
+                                    width: parent.width
+                                    height: 1
+                                    visible: modelData.isSeparator
+                                    color: BarTheme.separator
+                                }
+
+                                Item {
+                                    anchors.left: parent.left
+                                    anchors.right: parent.right
+                                    anchors.top: parent.top
+                                    height: 28
+                                    visible: !modelData.isSeparator
+
+                                    Rectangle {
+                                        anchors.fill: parent
+                                        radius: 4
+                                        color: subMa.containsMouse ? BarTheme.hover : "transparent"
+                                    }
+
+                                    BarText {
+                                        id: subLabel
+                                        anchors.fill: parent
+                                        anchors.leftMargin: 10
+                                        anchors.rightMargin: 10
+                                        verticalAlignment: Text.AlignVCenter
+                                        text: {
+                                            let t = modelData.text || "";
+                                            if (modelData.buttonType !== QsMenuButtonType.None)
+                                                t = (modelData.checkState !== Qt.Unchecked ? "✓ " : "    ") + t;
+                                            return t;
+                                        }
+                                        color: modelData.enabled ? BarTheme.fg : BarTheme.subdued
+                                        elide: Text.ElideRight
+                                    }
+
+                                    MouseArea {
+                                        id: subMa
+                                        anchors.fill: parent
+                                        hoverEnabled: true
+                                        cursorShape: modelData.enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
+                                        onClicked: {
+                                            if (!modelData.enabled)
+                                                return;
+                                            modelData.triggered();
+                                            trayCell.closeMenu();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            HyprlandFocusGrab {
+                active: trayCell.menuOpen && menuWin.backingWindowVisible
+                windows: [menuWin, subWin]
+                onCleared: trayCell.closeMenu()
             }
 
             MouseArea {
