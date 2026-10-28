@@ -22,6 +22,7 @@ local launch = function(cmd) return "uwsm-app -- " .. cmd end
 hl.on("hyprland.start", function()
   hl.exec_cmd(launch("quickshell"))
   hl.exec_cmd(launch("hypridle"))
+  hl.exec_cmd("~/.config/hypr/scripts/mako.sh --start")
   hl.exec_cmd("~/.config/hypr/scripts/wallpaper.sh restore")
   hl.exec_cmd("hyprctl setcursor " .. cursorTheme .. " " .. cursorSize)
   hl.exec_cmd(launch("yin_yang --minimized"))

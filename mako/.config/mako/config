@@ -1,0 +1,18 @@
+include=~/.cache/mako-theme
+
+default-timeout=5000
+ignore-timeout=1
+
+font=Noto Sans 10
+width=360
+height=160
+padding=12
+margin=8
+outer-margin=12
+border-size=1
+border-radius=8
+max-visible=4
+max-icon-size=48
+icon-border-radius=4
+anchor=top-right
+format=<b>%s</b>\n%b

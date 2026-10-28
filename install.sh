@@ -68,6 +68,9 @@ packages=(
   # Wayland clipboard
   wl-clipboard
 
+  # Notifications
+  mako
+
   # Image/video tools
   imagemagick
   ffmpeg

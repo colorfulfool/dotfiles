@@ -77,6 +77,7 @@ kwriteconfig6 --file ~/.config/gtk-3.0/settings.ini --group Settings --key gtk-t
 kwriteconfig6 --file ~/.config/gtk-4.0/settings.ini --group Settings --key gtk-theme-name Breeze-Dark
 rm -f ~/.config/gtk-3.0/gtk.css ~/.config/gtk-3.0/colors.css ~/.config/gtk-3.0/gtk-dark.css ~/.config/gtk-4.0/gtk.css ~/.config/gtk-4.0/gtk-dark.css ~/.config/gtk-4.0/colors.css
 printf 'dark\n' > ~/.cache/quickshell-mode
+"$HOME/.config/hypr/scripts/mako.sh"
 kwriteconfig6 --file ~/.config/qs-env/kdeglobals --group Icons --key Theme breeze-dark
 # foot doesn't watch gsettings or the portal: switch running instances
 # explicitly. SIGUSR1 = dark ([colors-dark]), SIGUSR2 = light. See foot(1).
