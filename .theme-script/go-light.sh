@@ -62,6 +62,9 @@ else:
     with open(p, "w", encoding="utf-8") as f:
         dst.write(f)
 EOF
+# Running KDE apps (Dolphin daemon etc.) don't watch kdeglobals; tell them
+# the palette changed, as plasma-apply-colorscheme would.
+dbus-send --session --type=signal /KGlobalSettings org.kde.KGlobalSettings.notifyChange int32:0 int32:0 2>/dev/null || true
 kwriteconfig6 --file ~/.config/qt6ct/qt6ct.conf --group Appearance --key color_scheme_path /usr/share/color-schemes/BreezeLight.colors
 kwriteconfig6 --file ~/.config/qt6ct/qt6ct.conf --group Appearance --key custom_palette false
 # GTK3/GTK4 (wofi reads these, not gsettings): stop forcing dark.
