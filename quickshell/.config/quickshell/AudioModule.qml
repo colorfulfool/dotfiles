@@ -129,11 +129,6 @@ Item {
                 return "󰝟";
             if (sink.audio.muted)
                 return "󰝟";
-            const desc = ((sink.description || "") + " " + (sink.name || "")).toLowerCase();
-            if (desc.indexOf("bluez") !== -1 || desc.indexOf("bluetooth") !== -1)
-                return "󰂰";
-            if (desc.indexOf("headphone") !== -1 || desc.indexOf("headset") !== -1)
-                return "";
             const v = sink.audio.volume;
             if (v <= 0.01)
                 return "󰖀";
