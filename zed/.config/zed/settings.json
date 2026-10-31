@@ -27,7 +27,7 @@
       "formatter": "language_server"
     },
     "TSX": {
-      "show_edit_predictions": false,
+      "show_edit_predictions": false
     },
     "Markdown": {
       "soft_wrap": "editor_width"
@@ -68,7 +68,7 @@
     "dock": "right"
   },
   "chat_panel": {
-    "button": "never"
+    "button": false
   },
   "agent": {
     "default_model": {
@@ -103,5 +103,5 @@
   "preferred_line_length": 80,
   "tab_size": 2,
   "vertical_scroll_margin": 6,
-  "relative_line_numbers": "enabled"
+  "relative_line_numbers": true
 }
