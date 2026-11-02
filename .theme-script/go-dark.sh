@@ -37,6 +37,10 @@ gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'
 kwriteconfig6 --file ~/.config/kdeglobals --group General --key ColorScheme BreezeDark
 kwriteconfig6 --file ~/.config/kdeglobals --group Icons --key Theme breeze-dark
+# Quickshell reads its palette from the separate XDG_CONFIG_HOME set in
+# shell.qml (qs-env). Sync both, or symbolic icons resolve `currentColor`
+# from a stale light palette and turn dark on the dark notification card.
+kwriteconfig6 --file ~/.config/qs-env/kdeglobals --group General --key ColorScheme BreezeDark
 # kwriteconfig6 only flips the label; merge the real [Colors:*] palette.
 # plasma-apply-colorscheme can't do it: it crashes outside a Plasma session.
 # Skip (without touching kdeglobals) when the Breeze palette isn't installed.
@@ -44,23 +48,25 @@ python3 - <<'EOF'
 import configparser, os
 src_path = "/usr/share/color-schemes/BreezeDark.colors"
 if not os.path.exists(src_path):
-    print(f"skip: {src_path} not installed, leaving ~/.config/kdeglobals palette as-is")
+    print(f"skip: {src_path} not installed, leaving kdeglobals palettes as-is")
 else:
     src = configparser.RawConfigParser()
     src.optionxform = str
     src.read(src_path, encoding="utf-8")
-    dst = configparser.RawConfigParser()
-    dst.optionxform = str
-    p = os.path.expanduser("~/.config/kdeglobals")
-    dst.read(p, encoding="utf-8")
-    for sec in src.sections():
-        if sec.startswith("Colors") or sec.startswith("ColorEffects"):
-            if not dst.has_section(sec):
-                dst.add_section(sec)
-            for k, v in src.items(sec):
-                dst.set(sec, k, v)
-    with open(p, "w", encoding="utf-8") as f:
-        dst.write(f)
+    for target in ("~/.config/kdeglobals", "~/.config/qs-env/kdeglobals"):
+        p = os.path.expanduser(target)
+        os.makedirs(os.path.dirname(p), exist_ok=True)
+        dst = configparser.RawConfigParser()
+        dst.optionxform = str
+        dst.read(p, encoding="utf-8")
+        for sec in src.sections():
+            if sec.startswith("Colors") or sec.startswith("ColorEffects"):
+                if not dst.has_section(sec):
+                    dst.add_section(sec)
+                for k, v in src.items(sec):
+                    dst.set(sec, k, v)
+        with open(p, "w", encoding="utf-8") as f:
+            dst.write(f)
 EOF
 # Running KDE apps (Dolphin daemon etc.) don't watch kdeglobals; tell them
 # the palette changed, as plasma-apply-colorscheme would.
@@ -77,8 +83,12 @@ kwriteconfig6 --file ~/.config/gtk-3.0/settings.ini --group Settings --key gtk-t
 kwriteconfig6 --file ~/.config/gtk-4.0/settings.ini --group Settings --key gtk-theme-name Breeze-Dark
 rm -f ~/.config/gtk-3.0/gtk.css ~/.config/gtk-3.0/colors.css ~/.config/gtk-3.0/gtk-dark.css ~/.config/gtk-4.0/gtk.css ~/.config/gtk-4.0/gtk-dark.css ~/.config/gtk-4.0/colors.css
 printf 'dark\n' > ~/.cache/quickshell-mode
-"$HOME/.config/hypr/scripts/mako.sh"
 kwriteconfig6 --file ~/.config/qs-env/kdeglobals --group Icons --key Theme breeze-dark
+# Quickshell resolves symbolic-icon `currentColor` from the KDE palette once
+# at startup, so it must restart to pick up the dark icon theme.
+if pgrep -x quickshell >/dev/null; then
+  omarchy restart app quickshell >/dev/null 2>&1 || true
+fi
 # foot doesn't watch gsettings or the portal: switch running instances
 # explicitly. SIGUSR1 = dark ([colors-dark]), SIGUSR2 = light. See foot(1).
 command -v pkill >/dev/null 2>&1 && pkill -USR1 foot 2>/dev/null || true
