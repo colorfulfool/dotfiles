@@ -2,7 +2,7 @@
     "version": 4.0,
     "running": false,
     "dark_mode": true,
-    "mode": "sunset to sunrise",
+    "mode": "manual time",
     "coordinates": [
         0.0,
         0.0
@@ -11,7 +11,7 @@
     "update_interval": 60,
     "times": [
         "07:00:00",
-        "20:00:00"
+        "16:30:00"
     ],
     "boot_offset": 10,
     "plugins": {
