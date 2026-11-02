@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 # Arch Linux dependencies for dotfiles
 
 packages=(
@@ -68,9 +70,6 @@ packages=(
 
   # Wayland clipboard
   wl-clipboard
-
-  # Notifications
-  mako
 
   # Image/video tools
   imagemagick
@@ -141,3 +140,9 @@ tmp_dir=$(mktemp -d)
 trap 'rm -rf "$tmp_dir"' EXIT
 git clone --depth 1 --branch "$BETTER_CONTROL_BRANCH" "$BETTER_CONTROL_REPO" "$tmp_dir/better-control"
 sudo make -C "$tmp_dir/better-control" install
+
+# I2C-HID touchpad (MSFT0001:01 on the IdeaPad 3) stays bound but dead after
+# hibernation. Reset it on resume; systemd only looks in /usr/lib, not /etc.
+sudo install -Dm755 \
+  "$script_dir/system/usr/lib/systemd/system-sleep/i2c-hid-touchpad-reset" \
+  /usr/lib/systemd/system-sleep/i2c-hid-touchpad-reset
