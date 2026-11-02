@@ -1,0 +1,15 @@
+[Unit]
+Description=Hold a mouse button to scroll horizontally with the wheel
+After=default.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 %h/.config/systemd/user/horizontal-wheel.py
+Restart=always
+RestartSec=2
+Environment="MOUSE_NAME=ProtoArc EM11 NL"
+Environment=MOUSE_BUTTON=BTN_SIDE
+Environment=HORIZONTAL_INVERT=0
+
+[Install]
+WantedBy=default.target

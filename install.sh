@@ -48,6 +48,7 @@ packages=(
   python-gobject
   python-dbus
   python-psutil
+  python-evdev
   python-qrcode
   python-setproctitle
   python-pydbus
