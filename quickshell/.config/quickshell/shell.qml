@@ -36,6 +36,9 @@ Scope {
                 Region {
                     item: mediaRow.hasMedia ? mediaPill.pillItem : maskNull
                 }
+                Region {
+                    item: weatherPill.pillItem
+                }
             }
             BackgroundEffect.blurRegion: Region {
                 item: mainPill.pillItem
@@ -53,6 +56,11 @@ Scope {
                 }
                 Region {
                     item: mediaRow.hasMedia ? mediaPill.pillItem : maskNull
+                    shape: RegionShape.Rect
+                    radius: 16
+                }
+                Region {
+                    item: weatherPill.pillItem
                     shape: RegionShape.Rect
                     radius: 16
                 }
@@ -138,8 +146,22 @@ Scope {
                         id: mediaRow
                     }
                 }
+
+                Pill {
+                    id: weatherPill
+                    anchors.left: mediaRow.hasMedia ? mediaPill.right : (jobsRow.active ? jobsPill.right : pluginsPill.right)
+                    anchors.leftMargin: 8
+                    anchors.verticalCenter: parent.verticalCenter
+                    padding: 16
+
+                    OutsidePlugin {
+                    }
+                }
             }
         }
+    }
+
+    Notifications {
     }
 }
 
