@@ -22,10 +22,14 @@ local launch = function(cmd) return "uwsm-app -- " .. cmd end
 hl.on("hyprland.start", function()
   hl.exec_cmd(launch("quickshell"))
   hl.exec_cmd(launch("hypridle"))
-  hl.exec_cmd("~/.config/hypr/scripts/mako.sh --start")
   hl.exec_cmd("~/.config/hypr/scripts/wallpaper.sh restore")
   hl.exec_cmd("hyprctl setcursor " .. cursorTheme .. " " .. cursorSize)
   hl.exec_cmd(launch("yin_yang --minimized"))
+  -- Claim org.freedesktop.FileManager1 for Dolphin before Nautilus can.
+  -- "Show in folder" (Plasma Studio, browsers, Electron apps) uses this
+  -- D-Bus name, not the inode/directory mime default, so whoever owns it
+  -- first wins regardless of xdg-mime settings.
+  hl.exec_cmd(launch("dolphin --daemon"))
 end)
 
 hl.env("XCURSOR_THEME", cursorTheme)
@@ -146,6 +150,11 @@ hl.window_rule({
   rounding = 10,
   opacity = "0.95"
 })
+-- The OS keyring/Wi-Fi password prompt is plasma-nm's NetworkManager secret
+-- agent, running inside kded6 (D-Bus org.kde.plasmanetworkmanagement), so its
+-- window class is the kded6 desktop-file name. Float it instead of tiling.
+hl.window_rule({ match = { class = "^(org\\.kde\\.)?kded6$" }, float = true, center = true })
+hl.window_rule({ match = { class = "^org\\.gnome\\.Calculator$" }, float = true, center = true })
 hl.window_rule({ match = { class = ".*" }, suppress_event = "maximize" })
 
 hl.layer_rule({ match = { namespace = "wofi" }, animation = "fade" })
@@ -186,14 +195,15 @@ hl.bind("SUPER + ALT + W", hl.dsp.exec_cmd("~/.config/hypr/scripts/wallpaper.sh 
 hl.bind("SUPER + H", hl.dsp.exec_cmd("~/.config/hypr/scripts/hubstaff-toggle.sh"),
   { description = "Hubstaff toggle timer" })
 
+hl.bind("Print", hl.dsp.exec_cmd("hyprshot -m output"))
 hl.bind("ALT + SHIFT + 3", hl.dsp.exec_cmd("hyprshot -m output"))
 hl.bind("ALT + SHIFT + 4", hl.dsp.exec_cmd("hyprshot -m region"))
 hl.bind("SUPER + SHIFT + R", hl.dsp.exec_cmd("omarchy screenrecord --fullscreen"),
   { description = "Screen record fullscreen (toggle to stop)" })
 
-hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("pamixer -u; pamixer -i 10; date +%s%N > $HOME/.cache/quickshell-audio-poke"),
+hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("pamixer -u; pamixer -i 5; date +%s%N > $HOME/.cache/quickshell-audio-poke"),
   { locked = true, repeating = true })
-hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("pamixer -u; pamixer -d 10; date +%s%N > $HOME/.cache/quickshell-audio-poke"),
+hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("pamixer -u; pamixer -d 5; date +%s%N > $HOME/.cache/quickshell-audio-poke"),
   { locked = true, repeating = true })
 hl.bind("XF86AudioMicMute", hl.dsp.exec_cmd("pamixer --default-source -m"), { locked = true, repeating = true })
 hl.bind("XF86AudioMute", hl.dsp.exec_cmd("pamixer -t; date +%s%N > $HOME/.cache/quickshell-audio-poke"),
