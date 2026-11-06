@@ -4,7 +4,7 @@ import QtQuick.Layouts
 RowLayout {
     id: root
 
-    readonly property real temperature: WeatherState.apparentTemperature
+    readonly property real temperature: WeatherState.temperature
     readonly property real aqi: WeatherState.aqi
     readonly property int code: WeatherState.weatherCode
     readonly property bool day: WeatherState.isDay

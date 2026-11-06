@@ -8,6 +8,7 @@ import QtQuick
 Item {
     id: root
 
+    property real temperature: NaN
     property real apparentTemperature: NaN
     property real aqi: NaN
     property int weatherCode: -1
@@ -32,9 +33,12 @@ Item {
                 if (raw) {
                     try {
                         var data = JSON.parse(raw);
+                        var temp = parseFloat(data.temperature);
                         var apparent = parseFloat(data.apparent);
                         var aqi = parseFloat(data.aqi);
                         var weather = parseInt(data.weather, 10);
+                        if (!isNaN(temp))
+                            root.temperature = temp;
                         if (!isNaN(apparent))
                             root.apparentTemperature = apparent;
                         if (!isNaN(aqi))

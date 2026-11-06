@@ -18,7 +18,7 @@ fi
 
 [[ -n $lat && -n $lon && $lat != "null" && $lon != "null" ]] || exit 1
 
-forecast=$(curl -fsS --max-time 8 "https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=apparent_temperature,weather_code,is_day&timezone=auto" 2>/dev/null) || exit 1
+forecast=$(curl -fsS --max-time 8 "https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,apparent_temperature,weather_code,is_day&timezone=auto" 2>/dev/null) || exit 1
 
 aqi=""
 iqair=$(curl -fsS --max-time 15 "https://r.jina.ai/https://www.iqair.com/air-quality/kazakhstan/almaty-oblysy/almaty/audit-commission-for-the-city-of-almaty" 2>/dev/null || true)
@@ -38,4 +38,4 @@ fi
 [[ $aqi =~ ^[0-9]+$ ]] || aqi=null
 
 jq -cn --argjson f "$forecast" --argjson aqi "$aqi" \
-  '{apparent: ($f.current.apparent_temperature // null), aqi: $aqi, weather: ($f.current.weather_code // null), day: ($f.current.is_day // null)}'
+  '{temperature: ($f.current.temperature_2m // null), apparent: ($f.current.apparent_temperature // null), aqi: $aqi, weather: ($f.current.weather_code // null), day: ($f.current.is_day // null)}'
