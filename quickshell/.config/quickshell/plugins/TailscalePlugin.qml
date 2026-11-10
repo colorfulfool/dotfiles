@@ -13,7 +13,12 @@ Item {
 
     property bool installed: false
     property bool connected: false
+    property bool workNetwork: false
     property bool retried: false
+    // Work tailnet color. No badge/chip: the mark itself changes color so
+    // the asvla.com state is unmistakable next to the personal state.
+    readonly property color workTint: BarTheme.isLight ? "#343958" : "#8FB3FF"
+    readonly property color dotColor: workNetwork ? workTint : BarTheme.fg
     readonly property string user: Quickshell.env("USER") || Quickshell.env("LOGNAME") || ""
     readonly property bool busy: toggleProc.running || operatorProc.running
 
@@ -50,7 +55,7 @@ Item {
                 radius: 2
                 x: (index % 3) * 5
                 y: Math.floor(index / 3) * 5
-                color: BarTheme.fg
+                color: tailscaleCell.dotColor
                 opacity: tailscaleCell.connected ? modelData : 0.24
             }
         }
@@ -64,19 +69,25 @@ Item {
     }
 
     // status --json reports BackendState Running/Stopped/NeedsLogin/...;
-    // anything but Running reads as disconnected.
+    // anything but Running reads as disconnected. CurrentTailnet.Name
+    // identifies which tailnet the profile is logged into.
     Process {
         id: tailscaleProbe
         command: ["tailscale", "status", "--json"]
         stdout: StdioCollector {
             onStreamFinished: {
                 var connected = false;
+                var work = false;
                 try {
-                    connected = JSON.parse(text).BackendState === "Running";
+                    var status = JSON.parse(text);
+                    connected = status.BackendState === "Running";
+                    var tailnet = status.CurrentTailnet || {};
+                    work = connected && String(tailnet.Name || "").toLowerCase() === "asvla.com";
                 } catch (e) {
                     connected = false;
                 }
                 tailscaleCell.connected = connected;
+                tailscaleCell.workNetwork = work;
             }
         }
     }
