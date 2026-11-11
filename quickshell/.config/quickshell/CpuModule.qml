@@ -1,3 +1,4 @@
+import Quickshell
 import Quickshell.Io
 import QtQuick
 import QtQuick.Layouts
@@ -48,5 +49,13 @@ RowLayout {
         running: true
         repeat: true
         onTriggered: cpuProc.running = true
+    }
+
+    TapHandler {
+        onTapped: Quickshell.execDetached(["toggle-better-control", "-B"])
+    }
+
+    HoverHandler {
+        cursorShape: Qt.PointingHandCursor
     }
 }
