@@ -1,0 +1,9 @@
+# Keep the 1TB data HDD (/dev/sda) quiet: arm a 5 minute idle timer and put it
+# in standby as soon as it is added.
+#
+# This must stay a single line. udev has no line continuation, so splitting it
+# put the bare RUN+= on its own line, where it matched every device event. That
+# made hdparm poke /dev/sda on every Bluetooth, USB and AC/DC uevent, so the
+# disk spun up whenever the BT mouse reconnected, and the mouse's input device
+# only settled after the disk command finished.
+ACTION=="add", SUBSYSTEM=="block", KERNEL=="sda", RUN+="/usr/bin/hdparm -S 60 -y /dev/sda"

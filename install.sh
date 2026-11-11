@@ -146,3 +146,11 @@ sudo make -C "$tmp_dir/better-control" install
 sudo install -Dm755 \
   "$script_dir/system/usr/lib/systemd/system-sleep/i2c-hid-touchpad-reset" \
   /usr/lib/systemd/system-sleep/i2c-hid-touchpad-reset
+
+# Keep the data HDD quiet: arm the idle spindown when the disk is added. The
+# rule must be one line, otherwise the RUN+= matches every uevent and hdparm
+# starts poking the disk whenever an unrelated device (e.g. the BT mouse)
+# reconnects.
+sudo install -Dm644 \
+  "$script_dir/system/etc/udev/rules.d/69-hdd-spindown.rules" \
+  /etc/udev/rules.d/69-hdd-spindown.rules
