@@ -109,7 +109,8 @@ hl.config({
   },
   misc = {
     disable_hyprland_logo = true,
-    disable_splash_rendering = true
+    disable_splash_rendering = true,
+    enable_anr_dialog = false
   }
 })
 
@@ -160,8 +161,6 @@ hl.window_rule({ match = { class = ".*" }, suppress_event = "maximize" })
 hl.layer_rule({ match = { namespace = "wofi" }, animation = "fade" })
 hl.layer_rule({ match = { namespace = "wofi" }, blur = true })
 hl.layer_rule({ match = { namespace = "quickshell" }, blur = true })
-hl.layer_rule({ match = { namespace = "omarchy-menu" }, animation = "popin 80%" })
-hl.layer_rule({ match = { namespace = "omarchy-menu" }, blur = true })
 -- swaybg swaps (wallpaper.sh) must be instant: with fadeLayersOut enabled,
 -- killing the old instance replays the old image fading out on top of the
 -- new one. (swaybg's layer namespace is "wallpaper".)
@@ -182,13 +181,10 @@ hl.bind("SUPER + R", hl.dsp.exec_cmd(menu))
 hl.bind("SUPER + E", hl.dsp.exec_cmd(launch(fileManager)))
 hl.bind("SUPER + B", hl.dsp.exec_cmd(launch(browser)), { description = "Browser" })
 hl.bind("SUPER + SHIFT + B", hl.dsp.exec_cmd(launch(browser .. " --private")), { description = "Browser (private)" })
-hl.bind("SUPER + ALT + SPACE", hl.dsp.exec_cmd("omarchy-menu"), { description = "Omarchy menu" })
-hl.bind("SUPER + K", hl.dsp.exec_cmd("omarchy-menu-keybindings"), { description = "Keybindings" })
 hl.bind("SUPER + CTRL + L", hl.dsp.exec_cmd("pidof hyprlock || hyprlock"), { description = "Lock screen" })
 hl.bind("SUPER + SHIFT + L", hl.dsp.exec_cmd("lid-guard mode toggle"),
   { description = "Cycle sleep mode (allow / awake / agents)" })
 hl.bind("SUPER + M", hl.dsp.exec_cmd("omarchy-launch-or-focus lollypop"), { description = "Music" })
-hl.bind("SUPER + A", hl.dsp.exec_cmd('omarchy-launch-webapp "https://gemini.google.com"'), { description = "Grok" })
 hl.bind("SUPER + T", hl.dsp.exec_cmd(launch(terminal .. " -e btop")), { description = "Top" })
 hl.bind("SUPER + ALT + W", hl.dsp.exec_cmd("~/.config/hypr/scripts/wallpaper.sh next"),
   { description = "Random wallpaper (swaybg, ARM-safe)" })
@@ -201,9 +197,11 @@ hl.bind("ALT + SHIFT + 4", hl.dsp.exec_cmd("hyprshot -m region"))
 hl.bind("SUPER + SHIFT + R", hl.dsp.exec_cmd("omarchy screenrecord --fullscreen"),
   { description = "Screen record fullscreen (toggle to stop)" })
 
-hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("pamixer -u; pamixer -i 5; date +%s%N > $HOME/.cache/quickshell-audio-poke"),
+hl.bind("XF86AudioRaiseVolume",
+  hl.dsp.exec_cmd("pamixer -u; pamixer -i 5; date +%s%N > $HOME/.cache/quickshell-audio-poke"),
   { locked = true, repeating = true })
-hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("pamixer -u; pamixer -d 5; date +%s%N > $HOME/.cache/quickshell-audio-poke"),
+hl.bind("XF86AudioLowerVolume",
+  hl.dsp.exec_cmd("pamixer -u; pamixer -d 5; date +%s%N > $HOME/.cache/quickshell-audio-poke"),
   { locked = true, repeating = true })
 hl.bind("XF86AudioMicMute", hl.dsp.exec_cmd("pamixer --default-source -m"), { locked = true, repeating = true })
 hl.bind("XF86AudioMute", hl.dsp.exec_cmd("pamixer -t; date +%s%N > $HOME/.cache/quickshell-audio-poke"),
