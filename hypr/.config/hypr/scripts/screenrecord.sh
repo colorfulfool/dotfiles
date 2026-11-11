@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 # Toggle a fullscreen screen recording with gpu-screen-recorder.
 #
 # Usage:
@@ -7,6 +7,9 @@
 #
 # Recordings -> ${XDG_VIDEOS_DIR:-$HOME/Videos}/screenrecording-<date>.mp4
 # State      -> $XDG_RUNTIME_DIR/screenrecord.state (pid on line 1, file on 2)
+#
+# Works without Hyprland tooling: if hyprctl/jq aren't available the recorder
+# falls back to gpu-screen-recorder's own "focused" target.
 set -euo pipefail
 
 [[ -f $HOME/.config/user-dirs.dirs ]] && . "$HOME/.config/user-dirs.dirs"
@@ -48,12 +51,6 @@ command -v gpu-screen-recorder >/dev/null 2>&1 || {
   exit 1
 }
 
-monitor="$(hyprctl monitors -j | jq -r '.[] | select(.focused) | .name')"
-[[ -n $monitor ]] || {
-  notify "No focused monitor"
-  exit 1
-}
-
 audio=()
 for arg in "$@"; do
   case "$arg" in
@@ -65,13 +62,26 @@ for arg in "$@"; do
   esac
 done
 
+# Prefer the explicit focused monitor; fall back to gsr's own "focused" target
+# when hyprctl/jq are missing. || true keeps pipefail from aborting on a
+# not-yet-ready Hyprland socket.
+target=(-w focused)
+if command -v hyprctl >/dev/null 2>&1 && command -v jq >/dev/null 2>&1; then
+  monitor="$(
+    hyprctl monitors -j 2>/dev/null |
+      jq -r '.[] | select(.focused) | .name' 2>/dev/null |
+      head -n1 || true
+  )"
+  [[ -n $monitor ]] && target=(-w "$monitor")
+fi
+
 mkdir -p "$OUT_DIR"
 file="$OUT_DIR/screenrecording-$(date +'%Y-%m-%d_%H-%M-%S').mp4"
 
 # nohup execs in place, so $! is gpu-screen-recorder itself; it also keeps the
 # recorder alive after the compositor's exec shell is gone.
 nohup gpu-screen-recorder \
-  -w "$monitor" -s "${SCREENRECORD_RESOLUTION:-0x0}" \
+  "${target[@]}" -s "${SCREENRECORD_RESOLUTION:-0x0}" \
   -k auto -f 60 -fm cfr -fallback-cpu-encoding yes \
   -o "$file" "${audio[@]}" >/dev/null 2>&1 &
 pid=$!

@@ -25,10 +25,6 @@ hl.on("hyprland.start", function()
   hl.exec_cmd("~/.config/hypr/scripts/wallpaper.sh restore")
   hl.exec_cmd("hyprctl setcursor " .. cursorTheme .. " " .. cursorSize)
   hl.exec_cmd(launch("yin_yang --minimized"))
-  -- Claim org.freedesktop.FileManager1 for Dolphin before Nautilus can.
-  -- "Show in folder" (Plasma Studio, browsers, Electron apps) uses this
-  -- D-Bus name, not the inode/directory mime default, so whoever owns it
-  -- first wins regardless of xdg-mime settings.
   hl.exec_cmd(launch("dolphin --daemon"))
 end)
 
@@ -184,8 +180,7 @@ hl.bind("SUPER + SHIFT + B", hl.dsp.exec_cmd(launch(browser .. " --private")), {
 hl.bind("SUPER + CTRL + L", hl.dsp.exec_cmd("pidof hyprlock || hyprlock"), { description = "Lock screen" })
 hl.bind("SUPER + SHIFT + L", hl.dsp.exec_cmd("lid-guard mode toggle"),
   { description = "Cycle sleep mode (allow / awake / agents)" })
-hl.bind("SUPER + M", hl.dsp.exec_cmd("~/.config/hypr/scripts/launch-or-focus.sh lollypop uwsm-app -- lollypop"),
-  { description = "Music" })
+hl.bind("SUPER + M", hl.dsp.exec_cmd("launch-or-focus lollypop"), { description = "Music" })
 hl.bind("SUPER + T", hl.dsp.exec_cmd(launch(terminal .. " -e btop")), { description = "Top" })
 hl.bind("SUPER + ALT + W", hl.dsp.exec_cmd("~/.config/hypr/scripts/wallpaper.sh next"),
   { description = "Random wallpaper (swaybg, ARM-safe)" })
@@ -195,7 +190,7 @@ hl.bind("SUPER + H", hl.dsp.exec_cmd("~/.config/hypr/scripts/hubstaff-toggle.sh"
 hl.bind("Print", hl.dsp.exec_cmd("hyprshot -m output"))
 hl.bind("ALT + SHIFT + 3", hl.dsp.exec_cmd("hyprshot -m output"))
 hl.bind("ALT + SHIFT + 4", hl.dsp.exec_cmd("hyprshot -m region"))
-hl.bind("SUPER + SHIFT + R", hl.dsp.exec_cmd("~/.config/hypr/scripts/screenrecord.sh"),
+hl.bind("SUPER + SHIFT + R", hl.dsp.exec_cmd("screenrecord"),
   { description = "Screen record fullscreen (toggle to stop)" })
 
 hl.bind("XF86AudioRaiseVolume",

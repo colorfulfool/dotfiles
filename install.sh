@@ -107,7 +107,6 @@ packages=(
 # Not available on ARM/aarch64 — kept last so they can't break the install above
 x86_only=(
   mise
-  omarchy
 )
 
 if command -v yay &>/dev/null; then
@@ -125,6 +124,15 @@ $aur_helper -S --needed --noconfirm "${packages[@]}"
 
 for p in "${x86_only[@]}"; do
   $aur_helper -S --needed --noconfirm "$p" || echo "warning: skipping $p (not available on this architecture)"
+done
+
+# Expose the hypr helper scripts as commands, so keybinds (and anything else)
+# can call them by name instead of hardcoding ~/.config/hypr/scripts/<x>.sh.
+# ~/.local/bin is on PATH via ~/.config/environment.d/10-path.conf (stowed with
+# the systemd package) and the interactive shell rc.
+mkdir -p "$HOME/.local/bin"
+for s in launch-or-focus screenrecord; do
+  ln -sf "$script_dir/hypr/.config/hypr/scripts/$s.sh" "$HOME/.local/bin/$s"
 done
 
 # better-control: install my fork (PR #172) instead of the AUR package,
