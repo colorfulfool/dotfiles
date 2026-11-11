@@ -314,14 +314,26 @@ return packer.startup(function(use)
       lspconfig.rust_analyzer.setup({ capabilities = capabilities })
       lspconfig.gopls.setup({ capabilities = capabilities })
       lspconfig.svelte.setup({ capabilities = capabilities })
+      -- asvla-site-frontend sets `html { font-size: 20px }`, so 1rem = 20px
+      -- there (e.g. `mt-1` is 0.25rem = 5px, not the usual 4px). Its worktrees
+      -- live under .../asvla-site-frontend/<branch>, so match the project name
+      -- anywhere in the root path rather than only as the directory basename.
+      local function tailwind_root_font_size(root_dir)
+        local path = root_dir
+        if not path or path == '' then
+          path = vim.fn.getcwd()
+        end
+        return path:find('asvla-site-frontend', 1, true) and 20 or 16
+      end
+
       lspconfig.tailwindcss.setup({
         capabilities = capabilities,
         cmd_env = { NODE_OPTIONS = "--max-old-space-size=8192" },
-        settings = {
-          tailwindCSS = {
-            rootFontSize = vim.fn.fnamemodify(vim.fn.getcwd(), ':t') == 'asvla-site-frontend' and 20 or 16,
-          },
-        },
+        on_new_config = function(config, root_dir)
+          config.settings = config.settings or {}
+          config.settings.tailwindCSS = config.settings.tailwindCSS or {}
+          config.settings.tailwindCSS.rootFontSize = tailwind_root_font_size(root_dir)
+        end,
       })
 
       -- Resolve Tailwind v4 var(--*) refs in tailwindcss LSP hover to literal
