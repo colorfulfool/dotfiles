@@ -154,3 +154,16 @@ sudo install -Dm755 \
 sudo install -Dm644 \
   "$script_dir/system/etc/udev/rules.d/69-hdd-spindown.rules" \
   /etc/udev/rules.d/69-hdd-spindown.rules
+
+# Docker's bridge FDB forgets idle MACs after 5 minutes. The next frame to any
+# container is then flooded to every port on the bridge, which resets the idle
+# timer of every lazyloaded container on it. Keep dynamic entries for 24h.
+# The udev rule covers bridges created later (e.g. after a Docker restart).
+sudo install -Dm644 \
+  "$script_dir/system/etc/udev/rules.d/90-docker-bridge-ageing.rules" \
+  /etc/udev/rules.d/90-docker-bridge-ageing.rules
+sudo udevadm control --reload
+for bridge in /sys/class/net/br-* /sys/class/net/docker0; do
+  [ -e "$bridge" ] || continue
+  sudo ip link set dev "${bridge##*/}" type bridge ageing_time 8640000
+done

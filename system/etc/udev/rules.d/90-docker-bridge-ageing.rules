@@ -1,0 +1,8 @@
+# Docker bridges age dynamic FDB entries out after 5 minutes. Once a MAC is
+# forgotten, the next frame to that container is flooded to every port on the
+# bridge. Idle lazyloaded containers then receive those stray frames, their RX
+# counter moves, and traefik-lazyload never reaches its stopdelay.
+#
+# Keep dynamic entries around for a day. Veths are removed when their container
+# stops, so entries are still cleaned up when they should be.
+ACTION=="add", SUBSYSTEM=="net", KERNEL=="br-*|docker0", ATTR{bridge/ageing_time}="8640000"
