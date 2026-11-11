@@ -1,0 +1,21 @@
+# Wayland's clipboard is owned by the client that set it. GTK/Qt apps hand the
+# data over on their own socket, so closing them (e.g. a color picker after
+# "Copy") takes the clipboard contents with it -- the next paste is empty.
+# wl-clip-persist keeps a copy and re-offers it when the owner disappears.
+[Unit]
+Description=Persist Wayland clipboard after the owning app exits
+# Needs WAYLAND_DISPLAY/DISPLAY, which uwsm imports before graphical-session.target.
+After=graphical-session.target
+# The Wayland connection dies with the compositor, so follow the session.
+PartOf=graphical-session.target
+# Don't start from an SSH/omarchy-update context where there is no compositor.
+ConditionEnvironment=WAYLAND_DISPLAY
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/wl-clip-persist --clipboard regular
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=graphical-session.target
