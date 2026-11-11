@@ -31,6 +31,7 @@ packages=(
   neovim
   git
   github-cli
+  jq
 
   # LSP servers
   lua-language-server
@@ -70,6 +71,10 @@ packages=(
 
   # Wayland clipboard
   wl-clipboard
+  wl-clip-persist
+
+  # Screen recording (Super+Shift+R)
+  gpu-screen-recorder
 
   # Image/video tools
   imagemagick
