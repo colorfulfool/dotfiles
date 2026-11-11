@@ -1,0 +1,28 @@
+table inet ssdp_docker_block
+delete table inet ssdp_docker_block
+
+table inet ssdp_docker_block {
+	chain output {
+		type filter hook output priority filter; policy accept;
+		# SSDP discovery from the host (network printers/media servers) is
+		# flooded onto every Docker bridge and counts as "activity" for
+		# traefik-lazyload, so idle containers never stop.
+		oifname "br-*" ip daddr 239.255.255.250 udp dport 1900 drop
+		oifname "docker0" ip daddr 239.255.255.250 udp dport 1900 drop
+		# Dropbox v276+ P2P (formerly LAN sync) broadcasts to UDP 17500 on
+		# every interface every ~33s, with no UI/CLI toggle. Same problem:
+		# it keeps the RX counter moving and resets the idle timer. Drop it
+		# only towards Docker bridges; LAN sync on the physical interface
+		# keeps working.
+		oifname "br-*" udp dport 17500 drop
+		oifname "docker0" udp dport 17500 drop
+		# Even with Docker IPv6 disabled, the host side of every Docker
+		# bridge and veth gets an IPv6 link-local address, and the kernel
+		# emits MLD/NDP/RS multicasts (ff02::/16) onto them. They are
+		# flooded to containers and count as RX traffic. Nothing on the
+		# Docker network uses them, so keep them off entirely.
+		oifname "br-*" ip6 daddr ff02::/16 drop
+		oifname "docker0" ip6 daddr ff02::/16 drop
+		oifname "veth*" ip6 daddr ff02::/16 drop
+	}
+}

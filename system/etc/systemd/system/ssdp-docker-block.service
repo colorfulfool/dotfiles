@@ -1,0 +1,13 @@
+[Unit]
+Description=Drop chatty host broadcasts onto Docker bridges (keeps lazyloaded containers idle)
+After=network-pre.target
+Wants=network-pre.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/nft -f /etc/nftables.d/ssdp-docker-block.nft
+ExecStop=/usr/bin/nft delete table inet ssdp_docker_block
+
+[Install]
+WantedBy=multi-user.target

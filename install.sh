@@ -147,6 +147,17 @@ sudo install -Dm755 \
   "$script_dir/system/usr/lib/systemd/system-sleep/i2c-hid-touchpad-reset" \
   /usr/lib/systemd/system-sleep/i2c-hid-touchpad-reset
 
+# Drop SSDP and Dropbox P2P broadcasts onto Docker bridges. Otherwise they
+# count as traffic for traefik-lazyload and idle dev containers never stop.
+sudo install -Dm644 \
+  "$script_dir/system/etc/nftables.d/ssdp-docker-block.nft" \
+  /etc/nftables.d/ssdp-docker-block.nft
+sudo install -Dm644 \
+  "$script_dir/system/etc/systemd/system/ssdp-docker-block.service" \
+  /etc/systemd/system/ssdp-docker-block.service
+sudo systemctl daemon-reload
+sudo systemctl enable --now ssdp-docker-block.service
+
 # Keep the data HDD quiet: arm the idle spindown when the disk is added. The
 # rule must be one line, otherwise the RUN+= matches every uevent and hdparm
 # starts poking the disk whenever an unrelated device (e.g. the BT mouse)
