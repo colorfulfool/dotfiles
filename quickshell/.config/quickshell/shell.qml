@@ -23,7 +23,7 @@ Scope {
             color: "transparent"
             exclusionMode: ExclusionMode.Normal
             exclusiveZone: BarTheme.barHeight + BarTheme.barMarginTop
-            implicitWidth: 1000
+            implicitWidth: modelData.width
             implicitHeight: mainPill.implicitHeight + 28
             mask: Region {
                 item: mainPill.pillItem
